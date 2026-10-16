@@ -20,7 +20,8 @@
   --shadow:0 1px 2px rgba(20,30,50,.06),0 8px 24px rgba(20,30,50,.06);
 }
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;scroll-padding-top:84px}
+section,.week,.events,#talmud-torah{scroll-margin-top:84px}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:Heebo,system-ui,Arial,sans-serif;font-size:17px;line-height:1.6}
 h1,h2,h3{font-family:"Frank Ruhl Libre",Heebo,serif;line-height:1.15;margin:0 0 .4em}
 h2{font-size:clamp(26px,3.4vw,36px);color:var(--navy)}
@@ -42,6 +43,8 @@ header{position:sticky;top:0;z-index:20;background:rgba(250,248,243,.92);backdro
 nav ul{display:flex;gap:4px;list-style:none;margin:0;padding:0;flex-wrap:wrap}
 nav a{display:block;padding:8px 12px;border-radius:8px;text-decoration:none;color:var(--ink);font-weight:500;font-size:15px}
 nav a:hover{background:var(--sand-2)}
+nav a.nav-hi{background:var(--sand-2);color:#5a4718}
+nav a.nav-hi:hover{background:#e9dbb6}
 .menu-btn{display:none;background:none;border:1px solid var(--line);border-radius:8px;padding:8px 10px;font:inherit}
 
 /* hero */
@@ -174,6 +177,7 @@ footer a{color:var(--navy)}
       <ul>
         <li><a href="#tefila">זמני תפילה</a></li>
         <li><a href="#shiurim">שיעורים</a></li>
+        <li><a href="#talmud-torah" class="nav-hi">תלמוד תורה</a></li>
         <li><a href="#kids">ילדים ונוער</a></li>
         <li><a href="#kehila">הקהילה</a></li>
         <li><a href="#truma">תרומה</a></li>
@@ -344,7 +348,7 @@ footer a{color:var(--navy)}
       </div>
     </div>
 
-    <div class="card">
+    <div class="card" id="talmud-torah">
       <span class="eyebrow">ושננתם לבניך ודברת בם</span>
       <h3>תלמוד תורה "אהבת תורה" · מערכת שעות</h3>
       <p class="small muted">כל שיעור 35 דקות. חדש השנה: קבוצה לילדי גן חובה.</p>
@@ -466,7 +470,7 @@ footer a{color:var(--navy)}
       חמישים שנה של תפילה, תורה וחסד בלב שכונה ה'.
     </div>
     <div>
-      <a href="#tefila">זמני תפילה</a><br><a href="#shiurim">שיעורים</a><br><a href="#kids">ילדים ונוער</a>
+      <a href="#tefila">זמני תפילה</a><br><a href="#shiurim">שיעורים</a><br><a href="#kids">ילדים ונוער</a><br><a href="#talmud-torah">תלמוד תורה</a>
     </div>
     <div>
       <a href="#kehila">הקהילה</a><br><a href="#truma">תרומה</a><br><a href="#contact">יצירת קשר</a>
@@ -563,6 +567,14 @@ fetch('data/shiurim.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(d
   (d.weekly||[]).forEach(day=>{const c=el('div','card sh-day'); const h=el('h3',null,'יום '+day.day); if(day.day==='שבת') h.textContent='שבת'; if(day.label) h.append(el('span','small',day.label)); c.append(h); (day.items||[]).forEach(it=>c.append(item(it))); grid.append(c);});
   const u=document.getElementById('shiurim-updated'); u.textContent=[d.note, d.updated?('עודכן: '+d.updated):''].filter(Boolean).join(' · ');
 }).catch(()=>{});
+</script>
+<script>
+// קישורי עוגן (#truma וכו'): התוכן הדינמי נטען אחרי העמוד ומזיז את המיקום, אז מתקנים את הגלילה אחרי הטעינה.
+(function(){
+  function goHash(){ if(!location.hash||location.hash.length<2) return; var el=document.getElementById(location.hash.slice(1)); if(el) el.scrollIntoView({behavior:'instant',block:'start'}); }
+  window.addEventListener('load',function(){ goHash(); setTimeout(goHash,500); setTimeout(goHash,1500); setTimeout(goHash,3000); });
+  window.addEventListener('hashchange',function(){ setTimeout(goHash,50); });
+})();
 </script>
 </body>
 </html>
