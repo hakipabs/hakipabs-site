@@ -1,6 +1,6 @@
 # אתר בית הכנסת הכיפה, באר שבע
 
-אתר סטטי, מתארח ב-GitHub Pages בכתובת www.hakipabs.org.
+אתר סטטי, מתארח ב-GitHub Pages בכתובת hakipabs.org (גם www מפנה לשם).
 
 ## עדכון שבועי: מעלים את הדף השבועי (PDF) וזהו
 1. נכנסים לתיקייה `weekly/` → **Add file** → **Upload files** (עובד גם מהטלפון).
