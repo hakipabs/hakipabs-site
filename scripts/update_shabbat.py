@@ -83,6 +83,9 @@ def parse(text):
     m = re.search(r"מתחילים לבקש\s*\n?\s*\"([^\"]+)\"", norm)
     out["note"] = f"במוצאי שבת מתחילים לבקש \"{m.group(1)}\"" if m else ""
 
+    m = re.search(r"תפילת ילדים[^\n]*?" + TIME, norm)
+    if m: out["kids_tefila"] = m.group(1)
+
     return out
 
 

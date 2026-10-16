@@ -80,6 +80,9 @@ nav a:hover{background:var(--sand-2)}
 .yr .tag{margin-inline-start:6px}
 .yr .sub{display:block;font-size:12.5px;color:var(--muted);font-weight:400}
 @media (max-width:600px){.yearly summary{font-size:16px;flex-direction:column;align-items:flex-start;gap:4px}.yr td,.yr th{padding:7px 6px;font-size:14px}}
+.board td{padding:7px 8px}
+.board td:first-child{color:var(--muted);white-space:nowrap}
+.board a{text-decoration:none;font-variant-numeric:tabular-nums;white-space:nowrap}
 section{padding:72px 0}
 section.alt{background:var(--paper);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 .lead{font-size:19px;max-width:66ch}
@@ -306,9 +309,9 @@ footer a{color:var(--navy)}
       <div class="card" style="background:var(--sand-2);border-color:#e4d4ab">
         <span class="eyebrow">לגילאי 20-35</span>
         <h3>אורייתא · באר של תורה</h3>
-        <p>ערבי לימוד לצעירים בפורמט מחודש: שיעור כפול, כיבוד עשיר, ישיבה בהפרדה.</p>
+        <p>ערבי לימוד שבועיים לצעירים: שיעור כפול, כיבוד עשיר, ישיבה בהפרדה.</p>
         <p class="small"><strong>האחרון:</strong> הרב יהושע פיינה, "תפילה לעני כי יעטוף", פתיחת סדרת שיעורי תנ"ך ומדרש על חוני המעגל.</p>
-        <p class="small muted">המועד הבא יפורסם כאן ובקבוצת העדכונים.</p>
+        <p class="small"><strong>כל יום חמישי בערב, 20:00</strong>, בבית הכנסת.</p>
       </div>
     </div>
   </div>
@@ -322,7 +325,7 @@ footer a{color:var(--navy)}
     <div class="grid g3" style="margin-bottom:22px">
       <div class="card">
         <h3>תפילת ילדים <span class="tag">שבת</span></h3>
-        <p>מזה שנים רבות, בכל שבת בבוקר בבית המדרש, בשעה 10:15. עם הפתעות לילדים.</p>
+        <p>מזה שנים רבות, בכל שבת בבוקר בבית המדרש, בשעה <strong id="kids-time">10:15</strong>. עם הפתעות לילדים.</p>
         <p class="small muted">בירורים ורישום: אצל מיכאל דביר, 050-3800127.</p>
       </div>
       <div class="card">
@@ -392,8 +395,8 @@ footer a{color:var(--navy)}
       <div class="grid" style="gap:16px">
         <div class="card">
           <h3>ועד בית הכנסת</h3>
-          <p class="small">הוועד נבחר מקרב המתפללים ואחראי על התפילות, השיעורים, האירועים, האחזקה והכספים. לפנייה לוועד: <a href="mailto:vaad@hakipabs.org">vaad@hakipabs.org</a>.</p>
-          <p class="small muted" id="board-note">רשימת חברי הוועד הנוכחי תפורסם כאן.</p>
+          <table class="small board" id="board-table"><tbody></tbody></table>
+          <p class="small muted" id="board-note">לפנייה לוועד: <a href="mailto:vaad@hakipabs.org">vaad@hakipabs.org</a></p>
         </div>
         <div class="card">
           <h3>חברות בקהילה</h3>
@@ -479,7 +482,7 @@ fetch('data/shabbat.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(d
   const fill=(id,rows)=>{const dl=document.getElementById(id); if(!dl||!Array.isArray(rows)) return; dl.innerHTML='';
     rows.forEach(([k,v])=>{const dt=document.createElement('dt');dt.textContent=k;const dd=document.createElement('dd');dd.textContent=v;dl.append(dt,dd);});};
   fill('sh-friday',d.friday); fill('sh-shabbat',d.shabbat);
-  set('wd-mincha',d.weekday_mincha);
+  set('wd-mincha',d.weekday_mincha); set('kids-time',d.kids_tefila);
   if(d.zmanim) document.querySelectorAll('[data-zman]').forEach(td=>{const v=d.zmanim[td.dataset.zman]; if(v) td.textContent=v;});
 }).catch(()=>{});
 </script>
@@ -526,6 +529,22 @@ fetch('data/yearly.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(y=
   });
   const d=document.getElementById('yearly'); d.hidden=false;
   const now=tb.querySelector('tr.now'); if(now){d.addEventListener('toggle',()=>{if(d.open) now.scrollIntoView({block:'center',behavior:'smooth'});},{once:true});}
+}).catch(()=>{});
+</script>
+<script>
+// הוועד: data/board.json. טלפונים בפורמט 05X-XXX-XXXX; קישור החיוג ממיר ל-+972.
+fetch('data/board.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(b=>{
+  if(!b||!Array.isArray(b.members)) return;
+  const tb=document.querySelector('#board-table tbody'); tb.innerHTML='';
+  b.members.forEach(m=>{
+    const tr=document.createElement('tr');
+    const role=document.createElement('td'); role.textContent=m.role||'';
+    const name=document.createElement('td'); name.textContent=m.name||'';
+    const tel=document.createElement('td');
+    if(m.phone){const a=document.createElement('a'); a.href='tel:+972'+m.phone.replace(/\D/g,'').replace(/^0/,''); a.textContent=m.phone; tel.append(a);}
+    tr.append(role,name,tel); tb.append(tr);
+  });
+  if(b.email){const n=document.getElementById('board-note'); n.innerHTML=''; n.append('לפנייה לוועד: '); const a=document.createElement('a'); a.href='mailto:'+b.email; a.textContent=b.email; n.append(a);}
 }).catch(()=>{});
 </script>
 </body>
