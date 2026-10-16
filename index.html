@@ -87,6 +87,13 @@ nav a:hover{background:var(--sand-2)}
 .board td{padding:7px 8px}
 .board td:first-child{color:var(--muted);white-space:nowrap}
 .board a{text-decoration:none;font-variant-numeric:tabular-nums;white-space:nowrap}
+.sh-day h3{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.sh-day h3 .small{font-family:Heebo;font-weight:500;color:var(--muted)}
+.sh-item{padding:10px 0;border-bottom:1px dashed var(--line)}
+.sh-item:last-child{border:0}
+.sh-item .t{font-weight:700}
+.sh-item .m{font-size:14px;color:var(--muted)}
+.sh-item .when{font-weight:700;color:#6b5620;font-size:14px}
 section{padding:72px 0}
 section.alt{background:var(--paper);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 .lead{font-size:19px;max-width:66ch}
@@ -295,35 +302,19 @@ footer a{color:var(--navy)}
 <section id="shiurim" class="alt">
   <div class="wrap">
     <span class="eyebrow">תורה</span>
-    <h2>שיעורים</h2>
-    <div class="grid g3">
-      <div class="card">
+    <h2>שיעורים קבועים</h2>
+    <p class="lead" id="shiurim-note">שיעורים כל יום, בוקר וערב, ולוח שבועי לפי ימים. המחייב לשעות השבת הוא הדף השבועי.</p>
+    <div class="grid g3" id="shiurim-grid">
+      <div class="card" id="shiurim-daily">
         <h3>כל יום</h3>
         <ul class="list">
-          <li><span class="time">בוקר</span><span>דף יומי א', לאחר מניין ב' של שחרית</span></li>
-          <li><span class="time">22:00</span><span>דף יומי ב', במקלט</span></li>
-          <li><span class="time">ערב</span><span>שיעור בין מנחה לערבית</span></li>
+          <li><span class="time">6:55</span><span>הדף היומי · הרב אהרן דרשביץ · מקלט</span></li>
+          <li><span class="time">22:00</span><span>הדף היומי · הרב עובדיה יעקב · מקלט</span></li>
+          <li><span class="time">ערב</span><span>משנה ברורה בין מנחה לערבית, משניות אחרי ערבית ראשונה · היכל אהרן</span></li>
         </ul>
-      </div>
-      <div class="card">
-        <h3>שבת</h3>
-        <ul class="list" id="sh-shiurim">
-          <li><span class="time">7:15</span><span>פרשת השבוע על פי ליקוטי שיחות · ישראל גולדשטיין</span></li>
-          <li><span class="time">אחרי שחרית ב'</span><span>שיעור הלכה · הרב אייל בן-דוד</span></li>
-          <li><span class="time">13:50</span><span>שיעור הלכה בהיכל · הרב שמואל דביר</span></li>
-          <li><span class="time">15:45</span><span>שיעור נשים בבית המדרש · הרב רפאל וסרטייל</span></li>
-          <li><span class="time">16:30</span><span>גמרא, מסכת כתובות, בהיכל · ר' אביגדור שפירא</span></li>
-          <li><span class="time">17:00</span><span>שינון תהילים בבית המדרש</span></li>
-        </ul>
-      </div>
-      <div class="card" style="background:var(--sand-2);border-color:#e4d4ab">
-        <span class="eyebrow">לגילאי 20-35</span>
-        <h3>אורייתא · באר של תורה</h3>
-        <p>ערבי לימוד שבועיים לצעירים: שיעור כפול, כיבוד עשיר, ישיבה בהפרדה.</p>
-        <p class="small"><strong>האחרון:</strong> הרב יהושע פיינה, "תפילה לעני כי יעטוף", פתיחת סדרת שיעורי תנ"ך ומדרש על חוני המעגל.</p>
-        <p class="small"><strong>כל יום חמישי בערב, 20:00</strong>, בבית הכנסת.</p>
       </div>
     </div>
+    <p class="note" id="shiurim-updated"></p>
   </div>
 </section>
 
@@ -555,6 +546,20 @@ fetch('data/board.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(b=>
     tr.append(role,name,tel); tb.append(tr);
   });
   if(b.email){const n=document.getElementById('board-note'); n.innerHTML=''; n.append('לפנייה לוועד: '); const a=document.createElement('a'); a.href='mailto:'+b.email; a.textContent=b.email; n.append(a);}
+}).catch(()=>{});
+</script>
+<script>
+// השיעורים הקבועים: data/shiurim.json (יומיים + לפי יום). עריכת הקובץ מעדכנת את הדף.
+fetch('data/shiurim.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(d=>{
+  if(!d) return;
+  const grid=document.getElementById('shiurim-grid'); grid.innerHTML='';
+  const el=(tag,cls,txt)=>{const e=document.createElement(tag); if(cls) e.className=cls; if(txt!=null) e.textContent=txt; return e;};
+  const item=(it)=>{const li=el('div','sh-item'); const t=el('div','t',it.title); if(it.tag){const tg=el('span','tag',it.tag); t.append(tg);} li.append(t);
+    li.append(el('div','when',it.when||'')); const meta=[it.who,it.place,it.days].filter(Boolean).join(' · ');
+    const m=el('div','m',meta); if(it.link){m.append(' · '); const a=el('a',null,'קישור'); a.href=it.link; a.target='_blank'; a.rel='noopener'; m.append(a);} li.append(m); return li;};
+  if(Array.isArray(d.daily)&&d.daily.length){const c=el('div','card sh-day'); c.append(el('h3',null,'כל יום')); d.daily.forEach(it=>c.append(item(it))); grid.append(c);}
+  (d.weekly||[]).forEach(day=>{const c=el('div','card sh-day'); const h=el('h3',null,'יום '+day.day); if(day.day==='שבת') h.textContent='שבת'; if(day.label) h.append(el('span','small',day.label)); c.append(h); (day.items||[]).forEach(it=>c.append(item(it))); grid.append(c);});
+  const u=document.getElementById('shiurim-updated'); u.textContent=[d.note, d.updated?('עודכן: '+d.updated):''].filter(Boolean).join(' · ');
 }).catch(()=>{});
 </script>
 </body>

@@ -30,3 +30,6 @@
 
 ## הוועד
 `data/board.json`: תפקיד, שם, טלפון (בפורמט 05X-XXX-XXXX). עיפרון → שינוי → Commit. הדף מציג מהקובץ עם קישורי חיוג.
+
+## שיעורים קבועים
+`data/shiurim.json`: `daily` (כל יום) ו-`weekly` (לפי יום, עם `items`). שדות: title, when, who, place, ואופציונלי tag, link, days. עריכה → Commit.
