@@ -99,6 +99,13 @@ nav a.nav-hi:hover{background:#e9dbb6}
 .sh-item .t{font-weight:700}
 .sh-item .m{font-size:14px;color:var(--muted)}
 .sh-item .when{font-weight:700;color:#6b5620;font-size:14px}
+.quote{margin:18px 0;padding:14px 18px;border-inline-start:3px solid var(--sand);background:rgba(255,255,255,.06);border-radius:8px;font-size:17px;line-height:1.55}
+.quote footer{margin-top:8px;font-size:14px;color:#c8d3e3}
+.gallery{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:18px}
+.gallery figure{margin:0}
+.gallery img{width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:12px;display:block;box-shadow:var(--shadow)}
+.gallery figcaption{font-size:13px;color:var(--muted);margin-top:6px}
+@media (max-width:900px){.gallery{grid-template-columns:repeat(2,1fr)}}
 section{padding:72px 0}
 section.alt{background:var(--paper);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 .lead{font-size:19px;max-width:66ch}
@@ -422,8 +429,9 @@ footer a{color:var(--navy)}
         <span class="eyebrow">קמפיין השיפוץ</span>
         <h2>מחדשים את הלב של באר שבע</h2>
         <p>החצר הפנימית של בית הכנסת כבר לא עונה על צרכי הציבור הרחב שפוקד את המקום. התוכנית: מתחם רב-תכליתי מקורה ונעים לתפילה, ללימוד ולאירועי קהילה, שירותים חדשים, הצללה ונגישות.</p>
-        <p>"זה הזמן לרומם את בית ה'. כל אחד מאיתנו יכול להיות שותף, על פי יכולתו ונדיבות ליבו."</p>
+        <blockquote class="quote">"זה הזמן לרומם את בית ה'. כל אחד מאיתנו יכול להיות שותף, על פי יכולתו ונדיבות ליבו, להפוך את החזון למציאות."<footer>הרב אהרן דרשביץ, רב קהילת הכיפה</footer></blockquote>
         <p class="small" style="color:#c8d3e3">התרומה מוכרת לצרכי מס לפי סעיף 46. לקבלה: <a style="color:#fff" href="mailto:belshalem@gmail.com">belshalem@gmail.com</a></p>
+        <a class="btn btn-ghost" href="docs/brochure-renovation.pdf" target="_blank" rel="noopener">חוברת הקמפיין המלאה (PDF)</a>
       </div>
       <div class="ways">
         <h3 style="color:#fff;font-size:20px">דרכי תרומה</h3>
@@ -434,6 +442,12 @@ footer a{color:var(--navy)}
           <li style="grid-template-columns:1fr"><span><strong>צ'ק</strong><br>לפקודת "בית הכנסת העל עדתי"</span></li>
         </ul>
       </div>
+    </div>
+    <div class="gallery">
+      <figure><img src="images/campaign/exterior.jpg" alt="חזית בית הכנסת הכיפה" loading="lazy"><figcaption>בית הכנסת היום</figcaption></figure>
+      <figure><img src="images/campaign/courtyard.jpg" alt="הדמיה: החצר המחודשת" loading="lazy"><figcaption>הדמיה: החצר הפנימית המחודשת</figcaption></figure>
+      <figure><img src="images/campaign/hall-a.jpg" alt="הדמיה: מתחם תפילה ולימוד, הצעה א" loading="lazy"><figcaption>הדמיה: מתחם תפילה, לימוד ואירועים, הצעה א'</figcaption></figure>
+      <figure><img src="images/campaign/hall-b.jpg" alt="הדמיה: מתחם תפילה ולימוד, הצעה ב" loading="lazy"><figcaption>הדמיה: מתחם תפילה, לימוד ואירועים, הצעה ב'</figcaption></figure>
     </div>
   </div>
 </section>
