@@ -87,6 +87,10 @@ def parse(text):
 
 
 def main():
+    try:
+        sys.stdout.reconfigure(encoding="utf-8")
+    except Exception:
+        pass
     pdf = newest_pdf()
     if not pdf:
         print("no PDF in weekly/"); return 0

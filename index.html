@@ -69,6 +69,17 @@ nav a:hover{background:var(--sand-2)}
 .event .when{font-weight:700;color:#6b5620}
 .event p{margin:6px 0 0}
 @media (max-width:600px){.event{grid-template-columns:1fr}.event img{width:100%;max-width:260px;margin:0 auto}}
+.yearly{margin-top:26px;background:var(--paper);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow)}
+.yearly summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:18px 22px;font-weight:700;color:var(--navy);font-size:18px}
+.yearly summary::-webkit-details-marker{display:none}
+.yearly summary::after{content:"+";font-size:24px;line-height:1;color:var(--sand)}
+.yearly[open] summary::after{content:"−"}
+.yearly-body{padding:0 22px 20px}
+.yr td,.yr th{padding:8px 10px;font-size:15px}
+.yr tr.now td{background:var(--sand-2);font-weight:700}
+.yr .tag{margin-inline-start:6px}
+.yr .sub{display:block;font-size:12.5px;color:var(--muted);font-weight:400}
+@media (max-width:600px){.yearly summary{font-size:16px;flex-direction:column;align-items:flex-start;gap:4px}.yr td,.yr th{padding:7px 6px;font-size:14px}}
 section{padding:72px 0}
 section.alt{background:var(--paper);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 .lead{font-size:19px;max-width:66ch}
@@ -254,6 +265,17 @@ footer a{color:var(--navy)}
         <div class="note">הדף השבועי נערך על פי הנחיות הרב אהרן רבנשטיין זצ"ל. עדכונים: <a href="mailto:hakipa.zmanim@gmail.com">hakipa.zmanim@gmail.com</a></div>
       </div>
     </div>
+
+    <details class="yearly" id="yearly" hidden>
+      <summary><span>לוח הדלקת נרות וצאת השבת לשנת <span id="yr-year"></span></span><span class="small muted">כל השבתות והחגים · לחיצה לפתיחה</span></summary>
+      <div class="yearly-body">
+        <table class="yr" id="yr-table">
+          <thead><tr><th>פרשה / חג</th><th>תאריך</th><th>הדלקת נרות</th><th>צאת השבת</th></tr></thead>
+          <tbody></tbody>
+        </table>
+        <div class="note">השורה המודגשת היא השבת הקרובה. <a id="yr-pdf" href="yearly/latest.pdf" target="_blank" rel="noopener">הלוח המלא (PDF)</a></div>
+      </div>
+    </details>
   </div>
 </section>
 
@@ -478,6 +500,31 @@ fetch('data/events.json',{cache:'no-store'}).then(r=>r.ok?r.json():[]).then(list
     card.append(body); wrap.append(card);
   });
   document.getElementById('events').hidden=false;
+}).catch(()=>{});
+</script>
+<script>
+// הלוח השנתי: data/yearly.json (מתעדכן פעם בשנה מה-PDF ב-yearly/).
+fetch('data/yearly.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(y=>{
+  if(!y||!Array.isArray(y.rows)||!y.rows.length) return;
+  document.getElementById('yr-year').textContent=y.year||'';
+  const tb=document.querySelector('#yr-table tbody'); tb.innerHTML='';
+  const cur=(document.getElementById('sh-parasha').textContent||'').replace(/^פרשת\s+/,'').trim();
+  const norm=t=>t.replace(/[\s\-·'"]/g,'');
+  let marked=false;
+  y.rows.forEach(r=>{
+    const tr=document.createElement('tr');
+    const title=document.createElement('td'); title.textContent=r.title||'';
+    if(r.note){const t=document.createElement('span'); t.className='tag'; t.textContent=r.note; title.append(t);}
+    const date=document.createElement('td'); date.textContent=r.hdate||'';
+    if(r.weekday&&r.weekday!=='שבת'){const sub=document.createElement('span'); sub.className='sub'; sub.textContent='יום '+r.weekday; date.append(sub);}
+    const c=document.createElement('td'); c.className='time'; c.textContent=(r.candles_note?r.candles_note+' ':'')+(r.candles||'');
+    const h=document.createElement('td'); h.className='time'; h.textContent=r.havdala||'';
+    tr.append(title,date,c,h);
+    if(!marked&&cur&&norm(r.title||'').startsWith(norm(cur.split(/[\s\-]/)[0]))){tr.classList.add('now'); marked=true;}
+    tb.append(tr);
+  });
+  const d=document.getElementById('yearly'); d.hidden=false;
+  const now=tb.querySelector('tr.now'); if(now){d.addEventListener('toggle',()=>{if(d.open) now.scrollIntoView({block:'center',behavior:'smooth'});},{once:true});}
 }).catch(()=>{});
 </script>
 </body>

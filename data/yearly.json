@@ -1,0 +1,548 @@
+{
+ "year": "תשפ\"ז",
+ "rows": [
+  {
+   "n": 1,
+   "candles": "18:31",
+   "havdala": "",
+   "note": "",
+   "title": "ראש השנה",
+   "weekday": "שבת",
+   "hdate": "א תשרי"
+  },
+  {
+   "n": 2,
+   "candles": "19:31",
+   "havdala": "19:30",
+   "note": "",
+   "candles_note": "לא לפני",
+   "title": "ב' דראש השנה",
+   "weekday": "ראשון",
+   "hdate": "ב תשרי"
+  },
+  {
+   "n": 3,
+   "candles": "18:21",
+   "havdala": "19:22",
+   "note": "",
+   "title": "האזינו · שבת שובה",
+   "weekday": "שבת",
+   "hdate": "ח תשרי"
+  },
+  {
+   "n": 4,
+   "candles": "18:18",
+   "havdala": "19:15",
+   "note": "",
+   "title": "יום כיפור",
+   "weekday": "שני",
+   "hdate": "י תשרי"
+  },
+  {
+   "n": 5,
+   "candles": "18:12",
+   "havdala": "19:13",
+   "note": "",
+   "title": "סוכות",
+   "weekday": "שבת",
+   "hdate": "טו תשרי"
+  },
+  {
+   "n": 6,
+   "candles": "18:04",
+   "havdala": "19:05",
+   "note": "",
+   "title": "שמיני עצרת",
+   "weekday": "שבת",
+   "hdate": "כב תשרי"
+  },
+  {
+   "n": 7,
+   "candles": "17:55",
+   "havdala": "18:56",
+   "note": "",
+   "title": "בראשית",
+   "weekday": "שבת",
+   "hdate": "כט תשרי"
+  },
+  {
+   "n": 8,
+   "candles": "17:46",
+   "havdala": "18:47",
+   "note": "",
+   "title": "נח",
+   "weekday": "שבת",
+   "hdate": "ו חשון"
+  },
+  {
+   "n": 9,
+   "candles": "17:39",
+   "havdala": "18:40",
+   "note": "",
+   "title": "לך · לך",
+   "weekday": "שבת",
+   "hdate": "יג חשון"
+  },
+  {
+   "n": 10,
+   "candles": "16:32",
+   "havdala": "17:33",
+   "note": "שעון חורף",
+   "title": "וירא",
+   "weekday": "שבת",
+   "hdate": "כ חשון"
+  },
+  {
+   "n": 11,
+   "candles": "16:26",
+   "havdala": "17:27",
+   "note": "",
+   "title": "חיי · שרה",
+   "weekday": "שבת",
+   "hdate": "כז חשון"
+  },
+  {
+   "n": 12,
+   "candles": "16:21",
+   "havdala": "17:22",
+   "note": "",
+   "title": "תולדות",
+   "weekday": "שבת",
+   "hdate": "ד כסלו"
+  },
+  {
+   "n": 13,
+   "candles": "16:17",
+   "havdala": "17:19",
+   "note": "",
+   "title": "ויצא",
+   "weekday": "שבת",
+   "hdate": "יא כסלו"
+  },
+  {
+   "n": 14,
+   "candles": "16:15",
+   "havdala": "17:17",
+   "note": "",
+   "title": "וישלח",
+   "weekday": "שבת",
+   "hdate": "יח כסלו"
+  },
+  {
+   "n": 15,
+   "candles": "16:15",
+   "havdala": "17:17",
+   "note": "",
+   "title": "וישב · א' דחנוכה",
+   "weekday": "שבת",
+   "hdate": "כה כסלו"
+  },
+  {
+   "n": 16,
+   "candles": "16:16",
+   "havdala": "17:18",
+   "note": "",
+   "title": "מקץ · ח' דחנוכה",
+   "weekday": "שבת",
+   "hdate": "ב טבת"
+  },
+  {
+   "n": 17,
+   "candles": "16:18",
+   "havdala": "17:20",
+   "note": "",
+   "title": "ויגש",
+   "weekday": "שבת",
+   "hdate": "ט טבת"
+  },
+  {
+   "n": 18,
+   "candles": "16:21",
+   "havdala": "17:24",
+   "note": "",
+   "title": "ויחי",
+   "weekday": "שבת",
+   "hdate": "טז טבת"
+  },
+  {
+   "n": 19,
+   "candles": "16:25",
+   "havdala": "17:28",
+   "note": "",
+   "title": "שמות",
+   "weekday": "שבת",
+   "hdate": "כג טבת"
+  },
+  {
+   "n": 20,
+   "candles": "16:31",
+   "havdala": "17:34",
+   "note": "",
+   "title": "וארא",
+   "weekday": "שבת",
+   "hdate": "א שבט"
+  },
+  {
+   "n": 21,
+   "candles": "16:38",
+   "havdala": "17:41",
+   "note": "",
+   "title": "בא",
+   "weekday": "שבת",
+   "hdate": "ח שבט"
+  },
+  {
+   "n": 22,
+   "candles": "16:44",
+   "havdala": "17:47",
+   "note": "",
+   "title": "בשלח",
+   "weekday": "שבת",
+   "hdate": "טו שבט"
+  },
+  {
+   "n": 23,
+   "candles": "16:50",
+   "havdala": "17:53",
+   "note": "",
+   "title": "יתרו",
+   "weekday": "שבת",
+   "hdate": "כב שבט"
+  },
+  {
+   "n": 24,
+   "candles": "16:56",
+   "havdala": "17:59",
+   "note": "",
+   "title": "משפטים",
+   "weekday": "שבת",
+   "hdate": "כט שבט"
+  },
+  {
+   "n": 25,
+   "candles": "17:02",
+   "havdala": "18:05",
+   "note": "",
+   "title": "תרומה",
+   "weekday": "שבת",
+   "hdate": "ו אדר א"
+  },
+  {
+   "n": 26,
+   "candles": "17:08",
+   "havdala": "18:11",
+   "note": "",
+   "title": "תצוה",
+   "weekday": "שבת",
+   "hdate": "יג אדר א"
+  },
+  {
+   "n": 27,
+   "candles": "17:13",
+   "havdala": "18:16",
+   "note": "",
+   "title": "כי · תשא",
+   "weekday": "שבת",
+   "hdate": "כ אדר א"
+  },
+  {
+   "n": 28,
+   "candles": "17:18",
+   "havdala": "18:21",
+   "note": "",
+   "title": "ויקהל · שבת שקלים",
+   "weekday": "שבת",
+   "hdate": "כז אדר א"
+  },
+  {
+   "n": 29,
+   "candles": "17:23",
+   "havdala": "18:26",
+   "note": "",
+   "title": "פקודי",
+   "weekday": "שבת",
+   "hdate": "ד אדר ב"
+  },
+  {
+   "n": 30,
+   "candles": "17:28",
+   "havdala": "18:31",
+   "note": "",
+   "title": "ויקרא · שבת זכור",
+   "weekday": "שבת",
+   "hdate": "יא אדר ב"
+  },
+  {
+   "n": 31,
+   "candles": "18:33",
+   "havdala": "19:35",
+   "note": "שעון קיץ",
+   "title": "צו · שבת פרה",
+   "weekday": "שבת",
+   "hdate": "יח אדר ב"
+  },
+  {
+   "n": 32,
+   "candles": "18:37",
+   "havdala": "19:39",
+   "note": "",
+   "title": "שמיני · שבת החודש",
+   "weekday": "שבת",
+   "hdate": "כה אדר ב"
+  },
+  {
+   "n": 33,
+   "candles": "18:42",
+   "havdala": "19:45",
+   "note": "",
+   "title": "תזריע",
+   "weekday": "שבת",
+   "hdate": "ג ניסן"
+  },
+  {
+   "n": 34,
+   "candles": "18:46",
+   "havdala": "19:49",
+   "note": "",
+   "title": "מצורע · שבת הגדול",
+   "weekday": "שבת",
+   "hdate": "י ניסן"
+  },
+  {
+   "n": 35,
+   "candles": "18:49",
+   "havdala": "19:52",
+   "note": "",
+   "title": "פסח",
+   "weekday": "חמישי",
+   "hdate": "טו ניסן"
+  },
+  {
+   "n": 36,
+   "candles": "18:51",
+   "havdala": "19:54",
+   "note": "",
+   "title": "שבת חוה\"מ פסח",
+   "weekday": "שבת",
+   "hdate": "יז ניסן"
+  },
+  {
+   "n": 37,
+   "candles": "18:54",
+   "havdala": "19:57",
+   "note": "",
+   "title": "שביעי של פסח",
+   "weekday": "רביעי",
+   "hdate": "כא ניסן"
+  },
+  {
+   "n": 38,
+   "candles": "18:56",
+   "havdala": "19:58",
+   "note": "",
+   "title": "אחרי מות",
+   "weekday": "שבת",
+   "hdate": "כד ניסן"
+  },
+  {
+   "n": 39,
+   "candles": "19:00",
+   "havdala": "20:03",
+   "note": "",
+   "title": "קדושים",
+   "weekday": "שבת",
+   "hdate": "א אייר"
+  },
+  {
+   "n": 40,
+   "candles": "19:05",
+   "havdala": "20:08",
+   "note": "",
+   "title": "אמור",
+   "weekday": "שבת",
+   "hdate": "ח אייר"
+  },
+  {
+   "n": 41,
+   "candles": "19:09",
+   "havdala": "20:12",
+   "note": "",
+   "title": "בהר",
+   "weekday": "שבת",
+   "hdate": "טו אייר"
+  },
+  {
+   "n": 42,
+   "candles": "19:14",
+   "havdala": "20:17",
+   "note": "",
+   "title": "בחוקותי",
+   "weekday": "שבת",
+   "hdate": "כב אייר"
+  },
+  {
+   "n": 43,
+   "candles": "19:18",
+   "havdala": "20:21",
+   "note": "",
+   "title": "במדבר",
+   "weekday": "שבת",
+   "hdate": "כט אייר"
+  },
+  {
+   "n": 44,
+   "candles": "19:21",
+   "havdala": "",
+   "note": "",
+   "title": "שבועות",
+   "weekday": "שישי",
+   "hdate": "ו סיון"
+  },
+  {
+   "n": 45,
+   "candles": "19:22",
+   "havdala": "20:24",
+   "note": "",
+   "title": "נשא · איסרו חג",
+   "weekday": "שבת",
+   "hdate": "ז סיון"
+  },
+  {
+   "n": 46,
+   "candles": "19:24",
+   "havdala": "20:26",
+   "note": "",
+   "title": "בהעלותך",
+   "weekday": "שבת",
+   "hdate": "יד סיון"
+  },
+  {
+   "n": 47,
+   "candles": "19:26",
+   "havdala": "20:28",
+   "note": "",
+   "title": "שלח · לך",
+   "weekday": "שבת",
+   "hdate": "כא סיון"
+  },
+  {
+   "n": 48,
+   "candles": "19:26",
+   "havdala": "20:28",
+   "note": "",
+   "title": "קרח",
+   "weekday": "שבת",
+   "hdate": "כח סיון"
+  },
+  {
+   "n": 49,
+   "candles": "19:25",
+   "havdala": "20:27",
+   "note": "",
+   "title": "חוקת",
+   "weekday": "שבת",
+   "hdate": "ה תמוז"
+  },
+  {
+   "n": 50,
+   "candles": "19:23",
+   "havdala": "20:25",
+   "note": "",
+   "title": "בלק",
+   "weekday": "שבת",
+   "hdate": "יב תמוז"
+  },
+  {
+   "n": 51,
+   "candles": "19:19",
+   "havdala": "20:21",
+   "note": "",
+   "title": "פינחס",
+   "weekday": "שבת",
+   "hdate": "יט תמוז"
+  },
+  {
+   "n": 52,
+   "candles": "19:15",
+   "havdala": "20:17",
+   "note": "",
+   "title": "מטות · מסעי",
+   "weekday": "שבת",
+   "hdate": "כו תמוז"
+  },
+  {
+   "n": 53,
+   "candles": "19:11",
+   "havdala": "20:12",
+   "note": "",
+   "title": "דברים · שבת חזון",
+   "weekday": "שבת",
+   "hdate": "ד אב"
+  },
+  {
+   "n": 54,
+   "candles": "19:04",
+   "havdala": "20:05",
+   "note": "",
+   "title": "ואתחנן · שבת נחמו",
+   "weekday": "שבת",
+   "hdate": "יא אב"
+  },
+  {
+   "n": 55,
+   "candles": "18:57",
+   "havdala": "19:57",
+   "note": "",
+   "title": "עקב",
+   "weekday": "שבת",
+   "hdate": "יח אב"
+  },
+  {
+   "n": 56,
+   "candles": "18:48",
+   "havdala": "19:49",
+   "note": "",
+   "title": "ראה",
+   "weekday": "שבת",
+   "hdate": "כה אב"
+  },
+  {
+   "n": 57,
+   "candles": "18:41",
+   "havdala": "19:42",
+   "note": "",
+   "title": "שופטים",
+   "weekday": "שבת",
+   "hdate": "ב אלול"
+  },
+  {
+   "n": 58,
+   "candles": "18:32",
+   "havdala": "19:33",
+   "note": "",
+   "title": "כי · תצא",
+   "weekday": "שבת",
+   "hdate": "ט אלול"
+  },
+  {
+   "n": 59,
+   "candles": "18:23",
+   "havdala": "19:23",
+   "note": "",
+   "title": "כי · תבוא",
+   "weekday": "שבת",
+   "hdate": "טז אלול"
+  },
+  {
+   "n": 60,
+   "candles": "18:14",
+   "havdala": "19:14",
+   "note": "",
+   "title": "ניצבים · וילך",
+   "weekday": "שבת",
+   "hdate": "כג אלול"
+  }
+ ],
+ "unparsed": [],
+ "source_pdf": "candle-lighting-5787.pdf"
+}
