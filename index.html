@@ -1,0 +1,435 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>בית הכנסת הכיפה, באר שבע</title>
+<meta name="description" content="בית הכנסת העל-עדתי 'הכיפה' בבאר שבע: זמני תפילה, שיעורים, תלמוד תורה, ילדים ונוער, הקהילה ודרכי תרומה.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&family=Frank+Ruhl+Libre:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#faf8f3; --paper:#ffffff; --ink:#1d2430; --muted:#5d6675; --line:#e6e1d6;
+  --navy:#1e3a5f; --navy-2:#2b5283; --sand:#c9a86a; --sand-2:#f1e7cf; --teal:#2f7f7a;
+  --shadow:0 1px 2px rgba(20,30,50,.06),0 8px 24px rgba(20,30,50,.06);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Heebo,system-ui,Arial,sans-serif;font-size:17px;line-height:1.6}
+h1,h2,h3{font-family:"Frank Ruhl Libre",Heebo,serif;line-height:1.15;margin:0 0 .4em}
+h2{font-size:clamp(26px,3.4vw,36px);color:var(--navy)}
+h3{font-size:22px;color:var(--navy)}
+p{margin:0 0 1em}
+a{color:var(--navy-2)}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+.eyebrow{display:inline-block;font-size:13px;letter-spacing:.06em;color:var(--teal);font-weight:700;margin-bottom:8px}
+.muted{color:var(--muted)}
+.small{font-size:14px}
+
+/* header */
+header{position:sticky;top:0;z-index:20;background:rgba(250,248,243,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:66px;gap:16px}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--navy);font-weight:700}
+.brand .dome{width:38px;height:38px;border-radius:50% 50% 6px 6px;background:linear-gradient(180deg,var(--navy),var(--navy-2));position:relative}
+.brand .dome:after{content:"";position:absolute;inset:auto 7px 7px 7px;height:9px;background:var(--sand);border-radius:2px}
+.brand small{display:block;font-weight:400;font-size:12px;color:var(--muted)}
+nav ul{display:flex;gap:4px;list-style:none;margin:0;padding:0;flex-wrap:wrap}
+nav a{display:block;padding:8px 12px;border-radius:8px;text-decoration:none;color:var(--ink);font-weight:500;font-size:15px}
+nav a:hover{background:var(--sand-2)}
+.menu-btn{display:none;background:none;border:1px solid var(--line);border-radius:8px;padding:8px 10px;font:inherit}
+
+/* hero */
+.hero{position:relative;min-height:560px;display:grid;align-items:end;color:#fff;overflow:hidden}
+.hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 35%}
+.hero:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,32,52,.25) 0%,rgba(20,32,52,.55) 40%,rgba(20,32,52,.94) 100%)}
+.hero .wrap{position:relative;padding-bottom:56px;padding-top:120px}
+.hero h1{font-size:clamp(34px,6vw,64px);color:#fff;max-width:14ch;text-shadow:0 2px 20px rgba(0,0,0,.35)}
+.hero p{font-size:clamp(17px,2vw,21px);max-width:52ch;color:#e9eef5}
+.cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px}
+.btn{display:inline-block;padding:12px 22px;border-radius:10px;font-weight:700;text-decoration:none;border:2px solid transparent}
+.btn-primary{background:var(--sand);color:#1d2430}
+.btn-ghost{border-color:rgba(255,255,255,.7);color:#fff}
+.btn:hover{filter:brightness(1.05)}
+
+/* this week strip */
+.week{margin-top:-44px;position:relative;z-index:2}
+.week .card{display:grid;grid-template-columns:1.1fr 1fr 1fr;gap:0;border-radius:16px;overflow:hidden;box-shadow:var(--shadow);background:var(--paper)}
+.week .cell{padding:22px 24px;border-inline-start:1px solid var(--line)}
+.week .cell:first-child{border:0;background:var(--navy);color:#fff}
+.week .cell:first-child .eyebrow{color:var(--sand)}
+.big{font-size:40px;font-weight:900;line-height:1;font-family:Heebo}
+.week dl{display:grid;grid-template-columns:auto auto;gap:4px 14px;margin:0}
+.week dt{color:var(--muted)}
+.week dd{margin:0;font-weight:700;text-align:left;font-variant-numeric:tabular-nums}
+
+section{padding:72px 0}
+section.alt{background:var(--paper);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.lead{font-size:19px;max-width:66ch}
+.grid{display:grid;gap:22px}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:24px;box-shadow:var(--shadow)}
+.card h3{margin-bottom:10px}
+
+table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+th,td{padding:10px 12px;text-align:right;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:700;color:var(--navy);background:var(--sand-2)}
+tr:last-child td{border-bottom:0}
+.time{font-weight:700;white-space:nowrap}
+.tag{display:inline-block;font-size:12px;padding:2px 8px;border-radius:999px;background:var(--sand-2);color:#6b5620;font-weight:700;margin-inline-start:6px}
+.note{font-size:14px;color:var(--muted);margin-top:10px}
+
+.list{list-style:none;padding:0;margin:0}
+.list li{display:grid;grid-template-columns:72px 1fr;gap:12px;padding:10px 0;border-bottom:1px dashed var(--line)}
+.list li:last-child{border:0}
+
+.campaign{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-2) 60%,#3b6a9c 100%);color:#fff;border-radius:24px;padding:48px;display:grid;grid-template-columns:1.2fr 1fr;gap:40px;align-items:center}
+.campaign h2{color:#fff}
+.campaign .eyebrow{color:var(--sand)}
+.campaign .ways{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:16px;padding:22px}
+.campaign .ways li{padding:8px 0;border-bottom:1px solid rgba(255,255,255,.14)}
+.campaign .ways li:last-child{border:0}
+.campaign strong{color:var(--sand)}
+
+footer{padding:40px 0 60px;color:var(--muted);font-size:14px;border-top:1px solid var(--line)}
+footer .cols{display:grid;grid-template-columns:2fr 1fr 1fr;gap:28px}
+footer a{color:var(--navy)}
+
+@media (max-width:900px){
+  .g3,.g2{grid-template-columns:1fr}
+  .week .card{grid-template-columns:1fr}
+  .week .cell{border-inline-start:0;border-top:1px solid var(--line)}
+  .campaign{grid-template-columns:1fr;padding:30px}
+  footer .cols{grid-template-columns:1fr}
+  nav ul{display:none;position:absolute;inset-inline:0;top:66px;background:var(--bg);flex-direction:column;padding:10px 16px 16px;border-bottom:1px solid var(--line)}
+  nav ul.open{display:flex}
+  .menu-btn{display:inline-block}
+  .hero{min-height:520px}
+  section{padding:52px 0}
+  html,body{overflow-x:hidden}
+  table{display:block;overflow-x:auto;max-width:100%}
+  .time{white-space:normal}
+  .campaign .ways li,.list li{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="#top">
+      <span class="dome" aria-hidden="true"></span>
+      <span>בית הכנסת הכיפה<small>העל-עדתי, שכונה ה', באר שבע</small></span>
+    </a>
+    <nav aria-label="ראשי">
+      <button class="menu-btn" aria-expanded="false" onclick="var u=this.nextElementSibling;u.classList.toggle('open');this.setAttribute('aria-expanded',u.classList.contains('open'))">תפריט</button>
+      <ul>
+        <li><a href="#tefila">זמני תפילה</a></li>
+        <li><a href="#shiurim">שיעורים</a></li>
+        <li><a href="#kids">ילדים ונוער</a></li>
+        <li><a href="#kehila">הקהילה</a></li>
+        <li><a href="#truma">תרומה</a></li>
+        <li><a href="#contact">יצירת קשר</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+<div class="hero">
+  <img src="images/hero-interior.jpg" alt="היכל בית הכנסת הכיפה בשעת תפילה">
+  <div class="wrap">
+    <span class="eyebrow" style="color:var(--sand)">ב"ה · שכונה ה', באר שבע</span>
+    <h1>בית הכנסת העל-עדתי "הכיפה"</h1>
+    <p>חמישים שנה של תפילה, תורה וחסד בלב באר שבע. מאות מתפללים מדי יום, שבעה מנייני שחרית, ושיעורים לכל גיל.</p>
+    <div class="cta">
+      <a class="btn btn-primary" href="#tefila">זמני תפילה</a>
+      <a class="btn btn-ghost" href="#truma">מחדשים את הלב של באר שבע</a>
+    </div>
+  </div>
+</div>
+
+<div class="wrap week" id="week">
+  <div class="card">
+    <div class="cell">
+      <span class="eyebrow">שבת הקרובה</span>
+      <div id="sh-parasha" style="font-size:26px;font-weight:700;font-family:'Frank Ruhl Libre',serif">פרשת נח</div>
+      <div class="muted small" style="color:#c8d3e3"><span id="sh-date">ו' מרחשוון תשפ"ז</span> · הפטרה: <span id="sh-haftara">רני עקרה</span></div>
+      <div style="display:flex;gap:28px;margin-top:14px">
+        <div><div class="small" style="color:#c8d3e3">הדלקת נרות</div><div class="big" id="sh-candles">17:46</div></div>
+        <div><div class="small" style="color:#c8d3e3">צאת השבת</div><div class="big" id="sh-havdala">18:47</div></div>
+      </div>
+      <div class="small" style="color:#c8d3e3;margin-top:8px">ר"ת <span id="sh-rt">19:19</span> · <span id="sh-note">במוצאי שבת מתחילים לבקש "ותן טל ומטר לברכה"</span></div>
+    </div>
+    <div class="cell">
+      <span class="eyebrow">ליל שבת ובוקר</span>
+      <dl id="sh-friday">
+        <dt>מנחה גדולה (שישי)</dt><dd>13:30</dd>
+        <dt>מנחה וקב"ש בהיכל</dt><dd>17:51</dd>
+        <dt>מנחה וקב"ש בביהמ"ד</dt><dd>17:56</dd>
+        <dt>שחרית א' בביהמ"ד</dt><dd>7:00</dd>
+        <dt>שחרית ב' (הודו) בהיכל</dt><dd>8:00</dd>
+      </dl>
+    </div>
+    <div class="cell">
+      <span class="eyebrow">אחר הצהריים ומוצ"ש</span>
+      <dl id="sh-shabbat">
+        <dt>מנחה א'</dt><dd>13:30</dd>
+        <dt>מנחה ב'</dt><dd>16:10</dd>
+        <dt>מנחה ג'</dt><dd>17:30</dd>
+        <dt>ערבית א'</dt><dd>18:47</dd>
+        <dt>ערבית ב'</dt><dd>19:07</dd>
+      </dl>
+      <div class="note" id="sh-footnote">דבר תורה: הרב אבישי גרוסר · קידוש לבנה במוצאי שבת</div>
+    </div>
+  </div>
+</div>
+
+<section id="tefila">
+  <div class="wrap">
+    <span class="eyebrow">זמני תפילה</span>
+    <h2>ימי חול</h2>
+    <p class="lead">שבעה מנייני שחרית, מנחה אחת וחמישה מנייני ערבית, כל יום. בימים שני וחמישי המניינים הראשונים מקדימים.</p>
+    <div class="grid g3">
+      <div class="card">
+        <h3>שחרית</h3>
+        <table>
+          <tr><td>מניין א'</td><td class="time">5:35</td><td class="muted small">ב', ה': 5:30</td></tr>
+          <tr><td>מניין ב'</td><td class="time">6:00</td><td class="muted small">ב', ה': 5:40</td></tr>
+          <tr><td>מניין ג'</td><td class="time">6:30</td><td></td></tr>
+          <tr><td>מניין ד'</td><td class="time">7:00</td><td></td></tr>
+          <tr><td>מניין ה'</td><td class="time">7:30</td><td></td></tr>
+          <tr><td>מניין ו'</td><td class="time">8:00</td><td></td></tr>
+          <tr><td>מניין ז'</td><td class="time">8:30</td><td></td></tr>
+        </table>
+      </div>
+      <div class="card">
+        <h3>מנחה</h3>
+        <table>
+          <tr><td>מניין יחיד</td><td class="time">17:50</td></tr>
+        </table>
+        <div class="note">השעה מתעדכנת לפי השקיעה. הזמן המדויק בדף השבועי.</div>
+        <h3 style="margin-top:22px">זמני היום</h3>
+        <table class="small">
+          <tr><td>עלות השחר</td><td class="time">5:31</td></tr>
+          <tr><td>הנץ החמה</td><td class="time">6:43</td></tr>
+          <tr><td>סוף זמן ק"ש (גר"א)</td><td class="time">9:35</td></tr>
+          <tr><td>חצות היום</td><td class="time">12:26</td></tr>
+          <tr><td>שקיעת החמה</td><td class="time">18:08</td></tr>
+        </table>
+      </div>
+      <div class="card">
+        <h3>ערבית</h3>
+        <table>
+          <tr><td>מניין א'</td><td class="time">18:30</td></tr>
+          <tr><td>מניין ב'</td><td class="time">19:45</td></tr>
+          <tr><td>מניין ג'</td><td class="time">20:45</td></tr>
+          <tr><td>מניין ד'</td><td class="time">21:45</td></tr>
+          <tr><td>מניין ה'</td><td class="time">23:00</td></tr>
+        </table>
+        <div class="note">הדף השבועי נערך על פי הנחיות הרב אהרן רבנשטיין זצ"ל. עדכונים: <a href="mailto:hakipa.zmanim@gmail.com">hakipa.zmanim@gmail.com</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="shiurim" class="alt">
+  <div class="wrap">
+    <span class="eyebrow">תורה</span>
+    <h2>שיעורים</h2>
+    <div class="grid g3">
+      <div class="card">
+        <h3>כל יום</h3>
+        <ul class="list">
+          <li><span class="time">בוקר</span><span>דף יומי א', לאחר מניין ב' של שחרית</span></li>
+          <li><span class="time">22:00</span><span>דף יומי ב', במקלט</span></li>
+          <li><span class="time">ערב</span><span>שיעור בין מנחה לערבית</span></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>שבת</h3>
+        <ul class="list">
+          <li><span class="time">7:15</span><span>פרשת השבוע על פי ליקוטי שיחות · ישראל גולדשטיין</span></li>
+          <li><span class="time">אחרי שחרית ב'</span><span>שיעור הלכה · הרב אייל בן-דוד</span></li>
+          <li><span class="time">13:50</span><span>שיעור הלכה בהיכל · הרב שמואל דביר</span></li>
+          <li><span class="time">15:45</span><span>שיעור נשים בבית המדרש · הרב רפאל וסרטייל</span></li>
+          <li><span class="time">16:30</span><span>גמרא, מסכת כתובות, בהיכל · ר' אביגדור שפירא</span></li>
+          <li><span class="time">17:00</span><span>שינון תהילים בבית המדרש</span></li>
+        </ul>
+      </div>
+      <div class="card" style="background:var(--sand-2);border-color:#e4d4ab">
+        <span class="eyebrow">לגילאי 20-35</span>
+        <h3>אורייתא · באר של תורה</h3>
+        <p>ערבי לימוד לצעירים בפורמט מחודש: שיעור כפול, כיבוד עשיר, ישיבה בהפרדה.</p>
+        <p class="small"><strong>האחרון:</strong> הרב יהושע פיינה, "תפילה לעני כי יעטוף", פתיחת סדרת שיעורי תנ"ך ומדרש על חוני המעגל.</p>
+        <p class="small muted">המועד הבא יפורסם כאן ובקבוצת העדכונים.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="kids">
+  <div class="wrap">
+    <span class="eyebrow">ילדים ונוער</span>
+    <h2>הדור הבא לומד כאן</h2>
+    <p class="lead">תפילת ילדים בשבת, תלמוד תורה לבנים ולבנות מגן חובה עד ח', וחבורת נוער שבועית.</p>
+    <div class="grid g3" style="margin-bottom:22px">
+      <div class="card">
+        <h3>תפילת ילדים <span class="tag">שבת</span></h3>
+        <p>מזה שנים רבות, בכל שבת בבוקר בבית המדרש, בשעה 10:15. עם הפתעות לילדים.</p>
+        <p class="small muted">בירורים ורישום: אצל מיכאל דביר, 050-3800127.</p>
+      </div>
+      <div class="card">
+        <h3>תורה נוער <span class="tag">ז'-ח' בנים</span></h3>
+        <p>חבורה שבועית, כל יום שני בשעה 18:00 בבית הכנסת. מוביל: אריאל.</p>
+      </div>
+      <div class="card">
+        <h3>עוד בשבת</h3>
+        <ul class="list">
+          <li><span class="time">13:50</span><span>תנ"ך בעל פה לילדים</span></li>
+          <li><span class="time">16:15</span><span>לימוד הורים וילדים בבית המדרש</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <span class="eyebrow">ושננתם לבניך ודברת בם</span>
+      <h3>תלמוד תורה "אהבת תורה" · מערכת שעות</h3>
+      <p class="small muted">כל שיעור 35 דקות. חדש השנה: קבוצה לילדי גן חובה.</p>
+      <div class="grid g2">
+        <div>
+          <h3 style="font-size:18px">בנים</h3>
+          <table>
+            <tr><th>כיתות</th><th>ימים</th><th>שעה</th><th>מקום</th><th>מלמד</th></tr>
+            <tr><td>א'-ב'</td><td>א', ב', ה'</td><td class="time">17:00-17:35</td><td>מקלט</td><td>הרב יחזקאל אהרוני</td></tr>
+            <tr><td>ג'-ד'</td><td>א', ב', ד'</td><td class="time">17:40-18:15</td><td>מקלט</td><td>הרב נהוראי גל</td></tr>
+            <tr><td>ה'-ו'</td><td>א', ד' / ב'</td><td class="time">17:35-18:10 / 18:15-18:40</td><td>ספרייה</td><td>הרב ברוך גלמן</td></tr>
+          </table>
+        </div>
+        <div>
+          <h3 style="font-size:18px">בנות</h3>
+          <table>
+            <tr><th>כיתות</th><th>ימים</th><th>שעה</th><th>מקום</th><th>מלמדת</th></tr>
+            <tr><td>א'-ב'</td><td>ב', ג', ה'</td><td class="time">16:30-17:05</td><td>בית המדרש</td><td>רננה וסרטייל</td></tr>
+            <tr><td>ג'-ד'</td><td>ב', ג', ה'</td><td class="time">17:00-17:35</td><td>ספרייה</td><td>הודיה נוטמן</td></tr>
+            <tr><td>ה'-ו'</td><td>א', ג', ד'</td><td class="time">18:15-18:50</td><td>ספרייה</td><td>אריה אהרוני</td></tr>
+            <tr><td>ז'-ח'</td><td>ד'</td><td class="time">19:30-20:05</td><td>ספרייה / ביהמ"ד</td><td>רעיה גולדשטיין</td></tr>
+          </table>
+        </div>
+      </div>
+      <table style="margin-top:14px">
+        <tr><th>גן חובה (בנים ובנות)</th><td>ב', ג'</td><td class="time">17:30-18:05</td><td>בית המדרש</td><td>אליענה מאיר</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="kehila" class="alt">
+  <div class="wrap">
+    <span class="eyebrow">הקהילה</span>
+    <h2>בית של כל העדות</h2>
+    <div class="grid g2">
+      <div>
+        <p class="lead">בלב באר שבע, בירת הנגב, ניצב כחמישים שנה בית הכנסת העל-עדתי "הכיפה", אחד מסמליה הרוחניים והקהילתיים של העיר.</p>
+        <p>מאות מתפללים פוקדים אותו מדי יום: תפילות, שיעורי תורה ואירועים קהילתיים. הכיפה אינו רק מקום תפילה. הוא בית של חסד ושל ערבות הדדית: גמ"ח, עזרה למשפחות, ומקום שבו מתפללים מכל העדות עומדים יחד, "כל ישראל ערבים זה בזה".</p>
+        <p><strong>רב הקהילה:</strong> הרב אהרן דרשביץ.</p>
+      </div>
+      <div class="grid" style="gap:16px">
+        <div class="card">
+          <h3>ועד בית הכנסת</h3>
+          <table class="small">
+            <tr><td>יו"ר</td><td>עמיטל בראלי</td></tr>
+            <tr><td>גזבר, אחזקה ושוטף</td><td>בצלאל אלשלם</td></tr>
+            <tr><td>מועדים ואחראי גבאים</td><td>הרב אמנון דינר</td></tr>
+            <tr><td>אירועים</td><td>יהושע אלפרון</td></tr>
+            <tr><td>שיעורי תורה ותרבות</td><td>משה אוחיון, עמיטל בראלי</td></tr>
+          </table>
+        </div>
+        <div class="card">
+          <h3>חברות בקהילה</h3>
+          <p class="small">דמי חבר תשפ"ז: 1,300 ש"ח לבית אב. תשלום בצ'ק לפקודת "בית הכנסת העל עדתי", במזומן לגזבר, בהעברה בנקאית או בקישור התשלום. חברים שזקוקים להנחה פונים ליו"ר הוועד.</p>
+          <p class="small muted">מקומות ישיבה קבועים: לפי סדר ההצטרפות לקהילה. פנייה לאחראי המקומות דרך הוועד.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="truma">
+  <div class="wrap">
+    <div class="campaign">
+      <div>
+        <span class="eyebrow">קמפיין השיפוץ</span>
+        <h2>מחדשים את הלב של באר שבע</h2>
+        <p>החצר הפנימית של בית הכנסת כבר לא עונה על צרכי הציבור הרחב שפוקד את המקום. התוכנית: מתחם רב-תכליתי מקורה ונעים לתפילה, ללימוד ולאירועי קהילה, שירותים חדשים, הצללה ונגישות.</p>
+        <p>"זה הזמן לרומם את בית ה'. כל אחד מאיתנו יכול להיות שותף, על פי יכולתו ונדיבות ליבו."</p>
+        <p class="small" style="color:#c8d3e3">התרומה מוכרת לצרכי מס לפי סעיף 46. לקבלה: <a style="color:#fff" href="mailto:belshalem@gmail.com">belshalem@gmail.com</a></p>
+      </div>
+      <div class="ways">
+        <h3 style="color:#fff;font-size:20px">דרכי תרומה</h3>
+        <ul class="list" style="font-size:16px">
+          <li style="grid-template-columns:1fr"><span><strong>ביט / פייבוקס</strong><br>052-9245947</span></li>
+          <li style="grid-template-columns:1fr"><span><strong>העברה בנקאית</strong><br>בנק הפועלים, סניף 668, חשבון 428051</span></li>
+          <li style="grid-template-columns:1fr"><span><strong>צ'ק</strong><br>לפקודת "בית הכנסת העל עדתי"</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="alt">
+  <div class="wrap">
+    <span class="eyebrow">יצירת קשר</span>
+    <h2>בואו להתפלל איתנו</h2>
+    <div class="grid g3">
+      <div class="card">
+        <h3>כתובת</h3>
+        <p>רחוב הצבי 22, שכונה ה', באר שבע.</p>
+        <p class="small muted">בית הכנסת העל-עדתי, באר שבע (ע"ר) · עמותה 58-002982-5</p>
+      </div>
+      <div class="card">
+        <h3>הוועד</h3>
+        <p><a href="mailto:vaad@hakipabs.org">vaad@hakipabs.org</a></p>
+        <p class="small muted">זמנים ודף שבועי: <a href="mailto:hakipa.zmanim@gmail.com">hakipa.zmanim@gmail.com</a></p>
+      </div>
+      <div class="card">
+        <h3>עדכונים</h3>
+        <p class="small">קבוצת וואטסאפ שקטה להודעות הוועד בלבד, וקבוצת מייל לעדכונים קהילתיים. הצטרפות דרך הוועד.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap cols">
+    <div>
+      <strong style="color:var(--navy)">בית הכנסת העל-עדתי "הכיפה", באר שבע</strong><br>
+      חמישים שנה של תפילה, תורה וחסד בלב שכונה ה'.
+    </div>
+    <div>
+      <a href="#tefila">זמני תפילה</a><br><a href="#shiurim">שיעורים</a><br><a href="#kids">ילדים ונוער</a>
+    </div>
+    <div>
+      <a href="#kehila">הקהילה</a><br><a href="#truma">תרומה</a><br><a href="#contact">יצירת קשר</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// זמני השבת נטענים מ-data/shabbat.json; אם הטעינה נכשלת נשארים הערכים שבדף.
+fetch('data/shabbat.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(d=>{
+  if(!d) return;
+  const set=(id,v)=>{const el=document.getElementById(id); if(el&&v!=null) el.textContent=v;};
+  set('sh-parasha',d.parasha); set('sh-date',d.hebrew_date); set('sh-haftara',d.haftara);
+  set('sh-candles',d.candles); set('sh-havdala',d.havdala); set('sh-rt',d.rabbeinu_tam);
+  set('sh-note',d.note); set('sh-footnote',d.footnote);
+  const fill=(id,rows)=>{const dl=document.getElementById(id); if(!dl||!Array.isArray(rows)) return; dl.innerHTML='';
+    rows.forEach(([k,v])=>{const dt=document.createElement('dt');dt.textContent=k;const dd=document.createElement('dd');dd.textContent=v;dl.append(dt,dd);});};
+  fill('sh-friday',d.friday); fill('sh-shabbat',d.shabbat);
+}).catch(()=>{});
+</script>
+</body>
+</html>
