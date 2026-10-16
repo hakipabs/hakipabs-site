@@ -169,6 +169,7 @@ footer a{color:var(--navy)}
         <div><div class="small" style="color:#c8d3e3">צאת השבת</div><div class="big" id="sh-havdala">18:47</div></div>
       </div>
       <div class="small" style="color:#c8d3e3;margin-top:8px">ר"ת <span id="sh-rt">19:19</span> · <span id="sh-note">במוצאי שבת מתחילים לבקש "ותן טל ומטר לברכה"</span></div>
+      <a class="btn btn-ghost small" style="margin-top:14px;padding:8px 14px" href="weekly/latest.pdf" target="_blank" rel="noopener">הדף השבועי המלא (PDF)</a>
     </div>
     <div class="cell">
       <span class="eyebrow">ליל שבת ובוקר</span>
@@ -215,16 +216,16 @@ footer a{color:var(--navy)}
       <div class="card">
         <h3>מנחה</h3>
         <table>
-          <tr><td>מניין יחיד</td><td class="time">17:50</td></tr>
+          <tr><td>מניין יחיד</td><td class="time" id="wd-mincha">17:50</td></tr>
         </table>
         <div class="note">השעה מתעדכנת לפי השקיעה. הזמן המדויק בדף השבועי.</div>
         <h3 style="margin-top:22px">זמני היום</h3>
         <table class="small">
-          <tr><td>עלות השחר</td><td class="time">5:31</td></tr>
-          <tr><td>הנץ החמה</td><td class="time">6:43</td></tr>
-          <tr><td>סוף זמן ק"ש (גר"א)</td><td class="time">9:35</td></tr>
-          <tr><td>חצות היום</td><td class="time">12:26</td></tr>
-          <tr><td>שקיעת החמה</td><td class="time">18:08</td></tr>
+          <tr><td>עלות השחר</td><td class="time" data-zman="עלות השחר">5:31</td></tr>
+          <tr><td>הנץ החמה</td><td class="time" data-zman="הנץ החמה">6:43</td></tr>
+          <tr><td>סוף זמן ק"ש (גר"א)</td><td class="time" data-zman="סוף זמן ק"ש גר"א">9:35</td></tr>
+          <tr><td>חצות היום</td><td class="time" data-zman="חצות היום">12:26</td></tr>
+          <tr><td>שקיעת החמה</td><td class="time" data-zman="שקיעת החמה">18:08</td></tr>
         </table>
       </div>
       <div class="card">
@@ -257,7 +258,7 @@ footer a{color:var(--navy)}
       </div>
       <div class="card">
         <h3>שבת</h3>
-        <ul class="list">
+        <ul class="list" id="sh-shiurim">
           <li><span class="time">7:15</span><span>פרשת השבוע על פי ליקוטי שיחות · ישראל גולדשטיין</span></li>
           <li><span class="time">אחרי שחרית ב'</span><span>שיעור הלכה · הרב אייל בן-דוד</span></li>
           <li><span class="time">13:50</span><span>שיעור הלכה בהיכל · הרב שמואל דביר</span></li>
@@ -355,13 +356,8 @@ footer a{color:var(--navy)}
       <div class="grid" style="gap:16px">
         <div class="card">
           <h3>ועד בית הכנסת</h3>
-          <table class="small">
-            <tr><td>יו"ר</td><td>עמיטל בראלי</td></tr>
-            <tr><td>גזבר, אחזקה ושוטף</td><td>בצלאל אלשלם</td></tr>
-            <tr><td>מועדים ואחראי גבאים</td><td>הרב אמנון דינר</td></tr>
-            <tr><td>אירועים</td><td>יהושע אלפרון</td></tr>
-            <tr><td>שיעורי תורה ותרבות</td><td>משה אוחיון, עמיטל בראלי</td></tr>
-          </table>
+          <p class="small">הוועד נבחר מקרב המתפללים ואחראי על התפילות, השיעורים, האירועים, האחזקה והכספים. לפנייה לוועד: <a href="mailto:vaad@hakipabs.org">vaad@hakipabs.org</a>.</p>
+          <p class="small muted" id="board-note">רשימת חברי הוועד הנוכחי תפורסם כאן.</p>
         </div>
         <div class="card">
           <h3>חברות בקהילה</h3>
@@ -446,6 +442,8 @@ fetch('data/shabbat.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(d
   const fill=(id,rows)=>{const dl=document.getElementById(id); if(!dl||!Array.isArray(rows)) return; dl.innerHTML='';
     rows.forEach(([k,v])=>{const dt=document.createElement('dt');dt.textContent=k;const dd=document.createElement('dd');dd.textContent=v;dl.append(dt,dd);});};
   fill('sh-friday',d.friday); fill('sh-shabbat',d.shabbat);
+  set('wd-mincha',d.weekday_mincha);
+  if(d.zmanim) document.querySelectorAll('[data-zman]').forEach(td=>{const v=d.zmanim[td.dataset.zman]; if(v) td.textContent=v;});
 }).catch(()=>{});
 </script>
 </body>
