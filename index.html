@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>בית הכנסת הכיפה, באר שבע</title>
 <meta name="description" content="בית הכנסת העל-עדתי 'הכיפה' בבאר שבע: זמני תפילה, שיעורים, תלמוד תורה, ילדים ונוער, הקהילה ודרכי תרומה.">
+<link rel="icon" type="image/png" href="images/favicon.png">
+<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+<meta property="og:title" content="בית הכנסת הכיפה, באר שבע">
+<meta property="og:image" content="https://www.hakipabs.org/images/hero-interior.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&family=Frank+Ruhl+Libre:wght@500;700&display=swap" rel="stylesheet">
 <style>
@@ -30,8 +34,8 @@ a{color:var(--navy-2)}
 header{position:sticky;top:0;z-index:20;background:rgba(250,248,243,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
 .nav{display:flex;align-items:center;justify-content:space-between;height:66px;gap:16px}
 .brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--navy);font-weight:700}
-.brand .dome{width:38px;height:38px;border-radius:50% 50% 6px 6px;background:linear-gradient(180deg,var(--navy),var(--navy-2));position:relative}
-.brand .dome:after{content:"";position:absolute;inset:auto 7px 7px 7px;height:9px;background:var(--sand);border-radius:2px}
+.brand .mark{display:block;flex:none}
+@media (max-width:600px){.brand .mark{width:40px;height:30px}}
 .brand small{display:block;font-weight:400;font-size:12px;color:var(--muted)}
 nav ul{display:flex;gap:4px;list-style:none;margin:0;padding:0;flex-wrap:wrap}
 nav a{display:block;padding:8px 12px;border-radius:8px;text-decoration:none;color:var(--ink);font-weight:500;font-size:15px}
@@ -147,7 +151,13 @@ footer a{color:var(--navy)}
 <header>
   <div class="wrap nav">
     <a class="brand" href="#top">
-      <span class="dome" aria-hidden="true"></span>
+      <svg class="mark" viewBox="0 0 64 48" width="52" height="39" aria-hidden="true" focusable="false">
+        <path d="M6 36 C6 18 18 8 32 8 C46 8 58 18 58 36 Z" fill="var(--navy)"/>
+        <rect x="22" y="22" width="20" height="14" rx="2" fill="var(--sand)"/>
+        <path d="M22 27 H42 M22 32 H42 M27 22 V36 M32 22 V36 M37 22 V36" stroke="var(--navy)" stroke-width="1.4" opacity=".55"/>
+        <rect x="2" y="36" width="60" height="5" rx="1.5" fill="var(--navy-2)"/>
+        <rect x="8" y="41" width="48" height="2.5" rx="1" fill="var(--sand)"/>
+      </svg>
       <span>בית הכנסת הכיפה<small>העל-עדתי, שכונה ה', באר שבע</small></span>
     </a>
     <nav aria-label="ראשי">
@@ -459,7 +469,7 @@ footer a{color:var(--navy)}
 <footer>
   <div class="wrap cols">
     <div>
-      <strong style="color:var(--navy)">בית הכנסת העל-עדתי "הכיפה", באר שבע</strong><br>
+      <img src="images/logo-full.png" alt="בית הכנסת העל-עדתי, שכונה ה' לדוגמא, באר שבע (ע"ר), עמותה 58-002982-5, הצבי 22" style="max-width:220px;width:100%;height:auto;display:block;margin-bottom:10px;opacity:.85">
       חמישים שנה של תפילה, תורה וחסד בלב שכונה ה'.
     </div>
     <div>
