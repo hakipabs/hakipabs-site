@@ -36,3 +36,6 @@
 
 ## מזל טוב / כוס תנחומים
 נקראים אוטומטית מהדף השבועי (הפריטים שמתחילים ב-* אחרי הכותרת) ומוצגים כפס מתחת לזמני השבת. כשאין פריטים הפס לא מופיע. תיקון ידני: `data/shabbat.json`, שדות `mazal_tov` ו-`nichumim`.
+
+## אוטומציה מלאה: מהמייל לאתר (Apps Script)
+`tools/gmail-to-github.gs` רץ בתוך Gmail של הוועד פעם בשעה: מייל חדש מ-hakipa.zmanim@gmail.com עם PDF → הקובץ נדחף ל-`weekly/` → ה-Action מעדכן את האתר. הוראות ההתקנה בראש הקובץ. דורש טוקן גיטהאב מצומצם לריפו הזה (Contents: Read and write) ב-Script Properties בשם `GITHUB_TOKEN`.

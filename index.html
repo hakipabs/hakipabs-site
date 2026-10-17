@@ -561,8 +561,8 @@ fetch('data/shabbat.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(d
   const greet=(id,data)=>{const box=document.getElementById(id); if(!box) return false; const items=(data&&Array.isArray(data.items))?data.items.filter(Boolean):[]; if(!items.length){box.hidden=true; return false;}
     const text=items.join('   ·   ')+(data.closing?('   ·   '+data.closing):'');
     box.querySelectorAll('.copy').forEach(c=>c.textContent=text);
-    box.querySelector('.track').style.setProperty('--dur', Math.max(24, Math.round(text.length*0.28))+'s');
-    box.hidden=false; return true;};
+    box.hidden=false; const w=box.querySelector('.copy').getBoundingClientRect().width||text.length*8;
+    box.querySelector('.track').style.setProperty('--dur', Math.max(8, Math.round(w/75))+'s'); return true;};
   const anyGreet=greet('gr-mazal',d.mazal_tov)|greet('gr-nichum',d.nichumim); const gw=document.getElementById('greetings'); if(gw) gw.hidden=!anyGreet;
 
   if(d.zmanim) document.querySelectorAll('[data-zman]').forEach(td=>{const v=d.zmanim[td.dataset.zman]; if(v) td.textContent=v;});
