@@ -135,6 +135,9 @@ nav a.nav-hi:hover{background:#e9dbb6}
 .gallery img{width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:12px;display:block;box-shadow:var(--shadow)}
 .gallery figcaption{font-size:13px;color:var(--muted);margin-top:6px}
 @media (max-width:900px){.gallery{grid-template-columns:repeat(2,1fr)}}
+.map{display:block;position:relative;margin:12px 0 8px;border-radius:12px;overflow:hidden;border:1px solid var(--line);aspect-ratio:1/1;max-width:260px;box-shadow:var(--shadow)}
+.map iframe{width:100%;height:100%;border:0;display:block;pointer-events:none}
+.map:hover{filter:brightness(1.03)}
 section{padding:72px 0}
 section.alt{background:var(--paper);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 .lead{font-size:19px;max-width:66ch}
@@ -491,6 +494,10 @@ footer a{color:var(--navy)}
         <p>רחוב הצבי 22, שכונה ה', באר שבע.</p>
         <p class="small" dir="ltr" style="text-align:right">HaKipa Synagogue · HaTsvi St 22, Be'er Sheva 8473349, Israel</p>
         <p class="small muted">בית הכנסת העל-עדתי, שכונה ה' לדוגמא, באר שבע (ע"ר) · עמותה 58-002982-5</p>
+        <a class="map" href="https://www.google.com/maps/search/?api=1&query=%D7%94%D7%A6%D7%91%D7%99+22+%D7%91%D7%90%D7%A8+%D7%A9%D7%91%D7%A2" target="_blank" rel="noopener" aria-label="פתיחת המיקום בגוגל מפות">
+          <iframe title="מפה: הצבי 22, באר שבע" src="https://www.google.com/maps?q=%D7%94%D7%A6%D7%91%D7%99+22+%D7%91%D7%90%D7%A8+%D7%A9%D7%91%D7%A2&z=16&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+        </a>
+        <p class="small"><a href="https://www.google.com/maps/search/?api=1&query=%D7%94%D7%A6%D7%91%D7%99+22+%D7%91%D7%90%D7%A8+%D7%A9%D7%91%D7%A2" target="_blank" rel="noopener">פתיחה בגוגל מפות</a> · <a href="https://waze.com/ul?q=%D7%94%D7%A6%D7%91%D7%99%2022%20%D7%91%D7%90%D7%A8%20%D7%A9%D7%91%D7%A2&navigate=yes" target="_blank" rel="noopener">ניווט ב-Waze</a></p>
       </div>
       <div class="card">
         <h3>הוועד</h3>
