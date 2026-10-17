@@ -1,0 +1,30 @@
+name: Holiday schedule sheets to the site
+
+on:
+  push:
+    paths:
+      - "holidays/*.pdf"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pymupdf
+      - run: python scripts/update_holidays.py
+      - name: Commit the rendered sheets and the list
+        run: |
+          git config user.name "shabbat-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A data/holidays.json holidays/
+          git diff --cached --quiet || git commit -m "Holiday sheets: render and list [skip ci]"
+          git push

@@ -2,8 +2,8 @@
  * הדף השבועי: ממייל הוועד ישירות לאתר.
  *
  * רץ בתוך Google Apps Script של תיבת vaad@hakipabs.org, פעם בשעה.
- * מחפש מיילים חדשים מהשולח של הדף השבועי שהנושא שלהם מתחיל ב"זמני השבוע" ויש בהם PDF, מעלה את ה-PDF
- * לתיקייה weekly/ בריפו hakipabs/hakipabs-site, ומסמן את המייל בתווית.
+ * מחפש מיילים חדשים מהשולח של הדף השבועי עם PDF. נושא שמתחיל ב"זמני השבוע" -> weekly/ (הדף השבועי);
+ * כל PDF אחר (לוח חג, פורים, יום העצמאות) -> holidays/ (מוצג באתר כתמונה). המייל מסומן בתווית.
  * משם ה-Action הקיים בגיטהאב קורא את ה-PDF ומעדכן את האתר.
  *
  * התקנה (פעם אחת, מתוך חשבון הוועד):
@@ -16,10 +16,11 @@
 
 const CONFIG = {
   sender: 'hakipa.zmanim@gmail.com',
-  subjectPrefix: 'זמני השבוע',        // רק מיילים שהנושא שלהם מתחיל כך (לא לוחות חגים, לא הודעות אחרות)
+  subjectPrefix: 'זמני השבוע',        // נושא שמתחיל כך = הדף השבועי -> weekly/ ; כל PDF אחר -> holidays/
   repo: 'hakipabs/hakipabs-site',
   branch: 'main',
   folder: 'weekly',
+  holidayFolder: 'holidays',           // כל PDF אחר מאותו שולח (לוח חג, פורים, יום העצמאות)
   label: 'hakipa-site-uploaded',
   lookbackDays: 10,
   notifyOnError: 'vaad@hakipabs.org',  // '' כדי לכבות
@@ -36,7 +37,7 @@ function run() {
   const token = PropertiesService.getScriptProperties().getProperty('GITHUB_TOKEN');
   if (!token) throw new Error('GITHUB_TOKEN is missing in Script Properties');
   const label = GmailApp.getUserLabelByName(CONFIG.label) || GmailApp.createLabel(CONFIG.label);
-  const query = `from:${CONFIG.sender} subject:"${CONFIG.subjectPrefix}" has:attachment filename:pdf newer_than:${CONFIG.lookbackDays}d -label:${CONFIG.label}`;
+  const query = `from:${CONFIG.sender} has:attachment filename:pdf newer_than:${CONFIG.lookbackDays}d -label:${CONFIG.label}`;
   const threads = GmailApp.search(query, 0, 10);
   Logger.log('query: %s -> %s thread(s)', query, threads.length);
 
@@ -45,11 +46,12 @@ function run() {
       const msgs = thread.getMessages();
       const msg = msgs[msgs.length - 1];
       const subj = (msg.getSubject() || '').replace(/^(re|fwd?|fw)\s*:\s*/i, '').trim();
-      if (!subj.startsWith(CONFIG.subjectPrefix)) { Logger.log('skipped (not a weekly sheet): "%s"', subj); thread.addLabel(label); return; }
+      const isWeekly = subj.startsWith(CONFIG.subjectPrefix);
+      const folder = isWeekly ? CONFIG.folder : CONFIG.holidayFolder;   // לוחות חגים ושאר דפי זמנים -> holidays/
       const pdf = msg.getAttachments().find(a => /\.pdf$/i.test(a.getName()) || a.getContentType() === 'application/pdf');
       if (!pdf) { Logger.log('no PDF in "%s"', msg.getSubject()); return; }
       const name = fileNameFor_(msg.getSubject(), msg.getDate());
-      const path = `${CONFIG.folder}/${name}`;
+      const path = `${folder}/${name}`;
       uploadToGitHub_(token, path, pdf.getBytes(), `Weekly sheet from email: ${msg.getSubject()}`);
       thread.addLabel(label);
       Logger.log('uploaded %s (%s KB)', path, Math.round(pdf.getSize() / 1024));

@@ -149,6 +149,13 @@ nav a.nav-hi:hover{background:#e9dbb6}
 .ticker:hover .track{animation-play-state:paused}
 @keyframes tick{from{transform:translateX(0)}to{transform:translateX(50%)}}
 @media (prefers-reduced-motion:reduce){.ticker .track{animation:none}.ticker .viewport{white-space:normal;mask-image:none;-webkit-mask-image:none}.ticker .copy:last-child{display:none}}
+.holidays{padding:40px 0 0}
+.hol-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:22px}
+.hol{display:block;background:var(--paper);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--shadow);text-decoration:none;color:inherit}
+.hol img{display:block;width:100%;height:auto;border-bottom:1px solid var(--line)}
+.hol .cap{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 16px}
+.hol .cap strong{color:var(--navy);font-size:17px}
+.hol .cap span{font-size:13px;color:var(--muted);white-space:nowrap}
 section{padding:72px 0}
 section.alt{background:var(--paper);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 .lead{font-size:19px;max-width:66ch}
@@ -293,6 +300,13 @@ footer a{color:var(--navy)}
   <div class="ticker" id="gr-mazal" hidden><strong>מזל טוב!</strong><div class="viewport"><div class="track"><span class="copy"></span><span class="copy"></span></div></div></div>
   <div class="ticker nichum" id="gr-nichum" hidden><strong>כוס תנחומים</strong><div class="viewport"><div class="track"><span class="copy"></span><span class="copy"></span></div></div></div>
 </div>
+
+<section id="holidays" class="holidays" hidden>
+  <div class="wrap">
+    <span class="eyebrow">לוחות זמנים לחגים</span>
+    <div id="holidays-list" class="hol-grid"></div>
+  </div>
+</section>
 
 <section id="events" class="events" hidden>
   <div class="wrap">
@@ -650,6 +664,22 @@ fetch('data/shiurim.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(d
   window.addEventListener('load',function(){ goHash(); setTimeout(goHash,500); setTimeout(goHash,1500); setTimeout(goHash,3000); });
   window.addEventListener('hashchange',function(){ setTimeout(goHash,50); });
 })();
+</script>
+<script>
+// לוחות חגים: holidays/*.pdf -> תמונה + קישור ל-PDF, מתוך data/holidays.json. מוצג show_days ימים מההעלאה, או עד "until".
+fetch('data/holidays.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(h=>{
+  if(!h||!Array.isArray(h.items)) return;
+  const today=new Date(); today.setHours(0,0,0,0); const days=h.show_days||45;
+  const live=h.items.filter(e=>{const a=new Date(e.added+'T00:00:00'); if(isNaN(a)) return false;
+    if(e.until){const u=new Date(e.until+'T00:00:00'); return !isNaN(u)&&u>=today;}
+    return (today-a)/864e5<=days;});
+  if(!live.length) return;
+  const wrap=document.getElementById('holidays-list');
+  live.forEach(e=>{const a=document.createElement('a'); a.className='hol'; a.href=e.pdf; a.target='_blank'; a.rel='noopener';
+    const img=document.createElement('img'); img.src=e.image; img.alt=e.title||''; img.loading='lazy'; a.append(img);
+    const cap=document.createElement('div'); cap.className='cap'; const t=document.createElement('strong'); t.textContent=e.title||'לוח זמנים'; const sp=document.createElement('span'); sp.textContent='פתיחה כ-PDF'; cap.append(t,sp); a.append(cap); wrap.append(a);});
+  document.getElementById('holidays').hidden=false;
+}).catch(()=>{});
 </script>
 </body>
 </html>
