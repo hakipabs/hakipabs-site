@@ -2,7 +2,7 @@
  * הדף השבועי: ממייל הוועד ישירות לאתר.
  *
  * רץ בתוך Google Apps Script של תיבת vaad@hakipabs.org, פעם בשעה.
- * מחפש מיילים חדשים מהשולח של הדף השבועי עם PDF מצורף, מעלה את ה-PDF
+ * מחפש מיילים חדשים מהשולח של הדף השבועי שהנושא שלהם מתחיל ב"זמני השבוע" ויש בהם PDF, מעלה את ה-PDF
  * לתיקייה weekly/ בריפו hakipabs/hakipabs-site, ומסמן את המייל בתווית.
  * משם ה-Action הקיים בגיטהאב קורא את ה-PDF ומעדכן את האתר.
  *
@@ -16,7 +16,7 @@
 
 const CONFIG = {
   sender: 'hakipa.zmanim@gmail.com',
-  subjectHint: 'זמני השבוע',          // לא חובה; משמש רק לשם הקובץ
+  subjectPrefix: 'זמני השבוע',        // רק מיילים שהנושא שלהם מתחיל כך (לא לוחות חגים, לא הודעות אחרות)
   repo: 'hakipabs/hakipabs-site',
   branch: 'main',
   folder: 'weekly',
@@ -36,7 +36,7 @@ function run() {
   const token = PropertiesService.getScriptProperties().getProperty('GITHUB_TOKEN');
   if (!token) throw new Error('GITHUB_TOKEN is missing in Script Properties');
   const label = GmailApp.getUserLabelByName(CONFIG.label) || GmailApp.createLabel(CONFIG.label);
-  const query = `from:${CONFIG.sender} has:attachment filename:pdf newer_than:${CONFIG.lookbackDays}d -label:${CONFIG.label}`;
+  const query = `from:${CONFIG.sender} subject:"${CONFIG.subjectPrefix}" has:attachment filename:pdf newer_than:${CONFIG.lookbackDays}d -label:${CONFIG.label}`;
   const threads = GmailApp.search(query, 0, 10);
   Logger.log('query: %s -> %s thread(s)', query, threads.length);
 
@@ -44,6 +44,8 @@ function run() {
     try {
       const msgs = thread.getMessages();
       const msg = msgs[msgs.length - 1];
+      const subj = (msg.getSubject() || '').replace(/^(re|fwd?|fw)\s*:\s*/i, '').trim();
+      if (!subj.startsWith(CONFIG.subjectPrefix)) { Logger.log('skipped (not a weekly sheet): "%s"', subj); thread.addLabel(label); return; }
       const pdf = msg.getAttachments().find(a => /\.pdf$/i.test(a.getName()) || a.getContentType() === 'application/pdf');
       if (!pdf) { Logger.log('no PDF in "%s"', msg.getSubject()); return; }
       const name = fileNameFor_(msg.getSubject(), msg.getDate());
@@ -66,7 +68,7 @@ function fileNameFor_(subject, date) {
   let s = (subject || '').replace(/^(re|fwd?|fw)\s*:\s*/i, '').trim();
   const idx = s.indexOf('-');
   if (idx >= 0) s = s.slice(idx + 1);
-  s = s.replace(CONFIG.subjectHint, '').replace(/[\\\/:*?"<>|#%]/g, '').replace(/\s+/g, '-').replace(/^-+|-+$/g, '');
+  s = s.replace(CONFIG.subjectPrefix, '').replace(/[\\\/:*?"<>|#%]/g, '').replace(/\s+/g, '-').replace(/^-+|-+$/g, '');
   const stamp = Utilities.formatDate(date, 'Asia/Jerusalem', 'yyyy-MM-dd');
   return (s ? `${s}-${stamp}` : stamp) + '.pdf';
 }
