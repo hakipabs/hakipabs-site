@@ -49,6 +49,7 @@
   --shadow:0 1px 2px rgba(20,30,50,.06),0 8px 24px rgba(20,30,50,.06);
 }
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 html{scroll-behavior:smooth;scroll-padding-top:84px}
 section,.week,.events,#talmud-torah{scroll-margin-top:84px}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:Heebo,system-ui,Arial,sans-serif;font-size:17px;line-height:1.6}
@@ -138,6 +139,16 @@ nav a.nav-hi:hover{background:#e9dbb6}
 .map{display:block;position:relative;margin:12px 0 8px;border-radius:12px;overflow:hidden;border:1px solid var(--line);aspect-ratio:1/1;max-width:260px;box-shadow:var(--shadow)}
 .map iframe{width:100%;height:100%;border:0;display:block;pointer-events:none}
 .map:hover{filter:brightness(1.03)}
+.greetings{margin-top:22px}
+.ticker{display:flex;align-items:center;gap:14px;margin:0 0 10px;padding:10px 16px;background:var(--paper);border:1px solid var(--line);border-inline-start:4px solid var(--sand);border-radius:12px;line-height:1.5}
+.ticker.nichum{border-inline-start-color:var(--navy-2)}
+.ticker strong{color:var(--navy);white-space:nowrap;flex:none}
+.ticker .viewport{flex:1;min-width:0;overflow:hidden;white-space:nowrap;mask-image:linear-gradient(to left,transparent 0,#000 24px,#000 calc(100% - 24px),transparent 100%);-webkit-mask-image:linear-gradient(to left,transparent 0,#000 24px,#000 calc(100% - 24px),transparent 100%)}
+.ticker .track{display:inline-flex;will-change:transform;animation:tick var(--dur,40s) linear infinite}
+.ticker .copy{display:inline-block;padding-inline-end:4em}
+.ticker:hover .track{animation-play-state:paused}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(50%)}}
+@media (prefers-reduced-motion:reduce){.ticker .track{animation:none}.ticker .viewport{white-space:normal;mask-image:none;-webkit-mask-image:none}.ticker .copy:last-child{display:none}}
 section{padding:72px 0}
 section.alt{background:var(--paper);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 .lead{font-size:19px;max-width:66ch}
@@ -276,6 +287,11 @@ footer a{color:var(--navy)}
       <div class="note" id="sh-footnote">דבר תורה: הרב אבישי גרוסר · קידוש לבנה במוצאי שבת</div>
     </div>
   </div>
+</div>
+
+<div class="wrap greetings" id="greetings" hidden>
+  <div class="ticker" id="gr-mazal" hidden><strong>מזל טוב!</strong><div class="viewport"><div class="track"><span class="copy"></span><span class="copy"></span></div></div></div>
+  <div class="ticker nichum" id="gr-nichum" hidden><strong>כוס תנחומים</strong><div class="viewport"><div class="track"><span class="copy"></span><span class="copy"></span></div></div></div>
 </div>
 
 <section id="events" class="events" hidden>
@@ -542,6 +558,13 @@ fetch('data/shabbat.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(d
     rows.forEach(([k,v])=>{const dt=document.createElement('dt');dt.textContent=k;const dd=document.createElement('dd');dd.textContent=v;dl.append(dt,dd);});};
   fill('sh-friday',d.friday); fill('sh-shabbat',d.shabbat);
   set('wd-mincha',d.weekday_mincha); set('kids-time',d.kids_tefila);
+  const greet=(id,data)=>{const box=document.getElementById(id); if(!box) return false; const items=(data&&Array.isArray(data.items))?data.items.filter(Boolean):[]; if(!items.length){box.hidden=true; return false;}
+    const text=items.join('   ·   ')+(data.closing?('   ·   '+data.closing):'');
+    box.querySelectorAll('.copy').forEach(c=>c.textContent=text);
+    box.querySelector('.track').style.setProperty('--dur', Math.max(24, Math.round(text.length*0.28))+'s');
+    box.hidden=false; return true;};
+  const anyGreet=greet('gr-mazal',d.mazal_tov)|greet('gr-nichum',d.nichumim); const gw=document.getElementById('greetings'); if(gw) gw.hidden=!anyGreet;
+
   if(d.zmanim) document.querySelectorAll('[data-zman]').forEach(td=>{const v=d.zmanim[td.dataset.zman]; if(v) td.textContent=v;});
 }).catch(()=>{});
 </script>

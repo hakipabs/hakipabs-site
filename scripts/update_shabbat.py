@@ -22,6 +22,37 @@ ZMANIM = ["עלות השחר", "טלית ותפילין", "הנץ החמה", "ס
           "סוף זמן ק\"ש גר\"א", "סוף זמן תפילה", "חצות היום", "מנחה גדולה", "שקיעת החמה"]
 
 
+STOP_HEADERS = ("קידוש לבנה", "זמני השבוע", "מניין ב", "במוצא", "שחרית מנין", "שיעורים יומיים", "זמני תפילות")
+CLOSERS = ("יהי רצון", "המקום ינחם", "תנצב\"ה", "ה' יאריך", "שלא תדעו")
+
+
+def block_after(norm, header_re):
+    """Collect '*' items (and a closing blessing) after a header line such as 'מזל טוב' or 'כוס תנחומים'."""
+    m = re.search(header_re, norm)
+    if not m:
+        return None
+    items, closing, blanks = [], "", 0
+    for line in norm[m.end():].splitlines()[1:]:
+        t = line.strip()
+        if not t or t == "*":
+            blanks += 1
+            if items and blanks >= 2:
+                break
+            continue
+        blanks = 0
+        if any(t.startswith(h) for h in STOP_HEADERS):
+            break
+        if t.startswith("*"):
+            items.append(re.sub(r"\s+", " ", t.lstrip("* ").strip(" .")).replace(" ב ת ", " בת ") + ".")
+        elif any(t.startswith(c) for c in CLOSERS):
+            closing = re.sub(r"\s+", " ", t).strip()
+        elif items:
+            items[-1] = (items[-1].rstrip(".") + " " + t.strip(" .")).strip() + "."
+        else:
+            break
+    return {"items": items, "closing": closing} if items else None
+
+
 def newest_pdf():
     pdfs = [p for p in WEEKLY.glob("*.pdf") if p.name != "latest.pdf"]
     if not pdfs:
@@ -85,6 +116,11 @@ def parse(text):
 
     m = re.search(r"תפילת ילדים[^\n]*?" + TIME, norm)
     if m: out["kids_tefila"] = m.group(1)
+
+    mt = block_after(norm, r"מזל\s*טוב")
+    out["mazal_tov"] = mt or {"items": [], "closing": ""}
+    nc = block_after(norm, r"(כוס\s*תנחומים|ניחומים|תנחומים)")
+    out["nichumim"] = nc or {"items": [], "closing": ""}
 
     return out
 
