@@ -5,11 +5,23 @@
    "title": "אורייתא",
    "date": "2026-10-18",
    "cover": "gallery/אורייתא/thumb/20261018-1014-01.jpg",
-   "count": 1,
+   "count": 4,
    "photos": [
     {
      "web": "gallery/אורייתא/web/20261018-1014-01.jpg",
      "thumb": "gallery/אורייתא/thumb/20261018-1014-01.jpg"
+    },
+    {
+     "web": "gallery/אורייתא/web/20261018-1014-02.jpg",
+     "thumb": "gallery/אורייתא/thumb/20261018-1014-02.jpg"
+    },
+    {
+     "web": "gallery/אורייתא/web/20261018-1014-03.jpg",
+     "thumb": "gallery/אורייתא/thumb/20261018-1014-03.jpg"
+    },
+    {
+     "web": "gallery/אורייתא/web/20261018-1014-04.jpg",
+     "thumb": "gallery/אורייתא/thumb/20261018-1014-04.jpg"
     }
    ]
   }
