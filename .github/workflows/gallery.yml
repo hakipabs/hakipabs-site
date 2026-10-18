@@ -1,4 +1,4 @@
-name: Photo gallery: resize and list
+name: "Photo gallery - resize and list"
 
 on:
   push:
