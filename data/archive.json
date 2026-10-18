@@ -1,0 +1,40 @@
+{
+ "collections": [
+  {
+   "slug": "hakama",
+   "title": "ההקמה",
+   "period": "תשכ\"ז, 1967",
+   "year_sort": 1967,
+   "description": "בניית בית הכנסת העל-עדתי בשכונה ה', שנחנך בשנת תשכ\"ז (1967): יציקת קליפת הבטון של הכיפה, החזית עם סורג המשושים, והרחבה הראשונה.",
+   "contributor": "",
+   "cover": "archive/hakama/thumb/01-yetzika.jpg",
+   "count": 3,
+   "items": [
+    {
+     "web": "archive/hakama/web/01-yetzika.jpg",
+     "thumb": "archive/hakama/thumb/01-yetzika.jpg",
+     "file": "",
+     "caption": "יציקת קליפת הבטון של הכיפה. ברקע שיכוני שכונה ה'.",
+     "year": "",
+     "kind": "photo"
+    },
+    {
+     "web": "archive/hakama/web/02-kipa.jpg",
+     "thumb": "archive/hakama/thumb/02-kipa.jpg",
+     "file": "",
+     "caption": "הכיפה עם סיום הבנייה: החזית עם סורג המשושים, הדקלים והרחבה המרוצפת.",
+     "year": "",
+     "kind": "photo"
+    },
+    {
+     "web": "archive/hakama/web/03-rachava.jpg",
+     "thumb": "archive/hakama/thumb/03-rachava.jpg",
+     "file": "",
+     "caption": "הרחבה והגינה בחזית בית הכנסת, זמן קצר אחרי הפתיחה.",
+     "year": "",
+     "kind": "photo"
+    }
+   ]
+  }
+ ]
+}

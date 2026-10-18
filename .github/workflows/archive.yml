@@ -1,0 +1,43 @@
+name: "Community archive - render and list"
+
+on:
+  push:
+    paths:
+      - "archive/**"
+      - "!archive/**/web/**"
+      - "!archive/**/thumb/**"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: archive
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pillow pymupdf
+      - name: Build on the latest main and push (retry if main moved meanwhile)
+        run: |
+          git config user.name "shabbat-bot"
+          git config user.email "actions@users.noreply.github.com"
+          for attempt in 1 2 3 4; do
+            git fetch origin main
+            git reset --hard origin/main
+            python scripts/build_archive.py
+            git add -A data/archive.json archive/
+            if git diff --cached --quiet; then echo "nothing to commit"; exit 0; fi
+            git commit -m "Archive: rendered items and list [skip ci]"
+            if git push origin HEAD:main; then exit 0; fi
+            echo "push rejected (main moved), retrying ($attempt)"; sleep 5
+          done
+          exit 1

@@ -64,3 +64,9 @@
 
 ## מדידת תנועה
 Cloudflare Web Analytics (בלי עוגיות). קטע הקוד בתחתית `index.html` ו-`gallery.html`. הדשבורד: dash.cloudflare.com → Web Analytics.
+
+## ארכיון הקהילה (ההיסטוריה שלנו)
+`archive.html` מציג ציר זמן של אוספים מתוך `archive/<אוסף>/`. בכל תיקייה: תמונות/PDF ו-`album.json`:
+`title`, `period` (טקסט חופשי, למשל "שנות ה-60"), `year_sort` (מספר למיון), `description`, `contributor`, `approved` (true/false),
+ו-`items` עם כיתוב ושנה לכל קובץ. **אוסף מתפרסם רק כש-`approved` הוא true.**
+מייל ל-vaad@ עם נושא `ארכיון: <שם האוסף>` ותמונות/סריקות מצורפות יוצר את התיקייה כטיוטה (approved: false); חבר ועד מאשר, מוסיף כיתובים ותקופה, ו-Commit.

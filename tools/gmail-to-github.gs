@@ -26,6 +26,8 @@
 const CONFIG = {
   senders: ['hakipa.zmanim@gmail.com', 'shmueltaub@gmail.com', 'reinerav@gmail.com'],   // מי רשאי לשלוח לאתר (זמנים, הוועד, אורייתא)
   subjectPrefix: 'זמני השבוע',        // הדף השבועי -> weekly/
+  archivePrefix: 'ארכיון',            // ארכיון: <שם האוסף> + תמונות/PDF -> archive/<שם>/ (נכנס כלא-מאושר עד אישור הוועד)
+  archiveFolder: 'archive',
   albumPrefix: 'אלבום',               // אלבום: <שם> + תמונות -> gallery/<שם>/ (דף הגלריה)
   galleryFolder: 'gallery',
   eventPrefix: 'אירוע',               // אירוע -> images/events/ + data/events.json
@@ -70,18 +72,22 @@ function run() {
       const pdf = atts.find(a => /\.pdf$/i.test(a.getName()) || a.getContentType() === 'application/pdf');
       const img = atts.find(a => /^image\/(jpeg|png|webp)$/i.test(a.getContentType()));
 
-      if (subj.startsWith(CONFIG.albumPrefix)) {
-        const imgs = atts.filter(a => /^image\/(jpeg|png|webp)$/i.test(a.getContentType()));
+      const isArchive = subj.startsWith(CONFIG.archivePrefix);
+      if (subj.startsWith(CONFIG.albumPrefix) || isArchive) {
+        const prefix = isArchive ? CONFIG.archivePrefix : CONFIG.albumPrefix;
+        const baseFolder = isArchive ? CONFIG.archiveFolder : CONFIG.galleryFolder;
+        const imgs = atts.filter(a => /^image\/(jpeg|png|webp)$/i.test(a.getContentType()) || a.getContentType() === 'application/pdf');
         if (!imgs.length) { Logger.log('album mail without images: "%s"', subj); thread.addLabel(label); return; }
-        const albumTitle = subj.slice(CONFIG.albumPrefix.length).replace(/^[\s:\-]+/, '').trim() || 'אלבום';
+        const albumTitle = subj.slice(prefix.length).replace(/^[\s:\-]+/, '').trim() || 'אלבום';
         const albumSlug = slug_(albumTitle) || 'album';
         const stamp = Utilities.formatDate(msg.getDate(), 'Asia/Jerusalem', 'yyyyMMdd-HHmm');
         imgs.forEach((a, i) => {
-          const ext = a.getContentType().includes('png') ? 'png' : a.getContentType().includes('webp') ? 'webp' : 'jpg';
-          uploadToGitHub_(token, `${CONFIG.galleryFolder}/${albumSlug}/${stamp}-${String(i + 1).padStart(2, '0')}.${ext}`, a.getBytes(), `Album photos from email: ${subj}`);
+          const ext = a.getContentType() === 'application/pdf' ? 'pdf' : a.getContentType().includes('png') ? 'png' : a.getContentType().includes('webp') ? 'webp' : 'jpg';
+          uploadToGitHub_(token, `${baseFolder}/${albumSlug}/${stamp}-${String(i + 1).padStart(2, '0')}.${ext}`, a.getBytes(), `Album photos from email: ${subj}`);
         });
         thread.addLabel(label);
-        uploads.push({ kind: 'album', subject: subj, path: `${CONFIG.galleryFolder}/${albumSlug}`, album: albumSlug, albumTitle, count: imgs.length, kb: Math.round(imgs.reduce((s, a) => s + a.getSize(), 0) / 1024) });
+        if (isArchive) { const meta = { title: albumTitle, period: '', year_sort: 9999, description: cleanBody_(msg.getPlainBody()).slice(0, 3).join(' '), contributor: msg.getFrom().replace(/<.*>/, '').trim(), approved: false, items: {} }; const mf = getFile_(token, `${baseFolder}/${albumSlug}/album.json`); if (!mf.sha) putFile_(token, `${baseFolder}/${albumSlug}/album.json`, JSON.stringify(meta, null, 2) + '\n', `Archive collection from email: ${subj}`, null); }
+        uploads.push({ kind: isArchive ? 'archive' : 'album', subject: subj, path: `${baseFolder}/${albumSlug}`, album: albumSlug, albumTitle, count: imgs.length, kb: Math.round(imgs.reduce((s, a) => s + a.getSize(), 0) / 1024) });
         Logger.log('album "%s": %s photo(s) uploaded', albumTitle, imgs.length);
         return;
       }
@@ -224,7 +230,10 @@ function buildReport_(token, u) {
   const lines = [`המייל: ${u.subject}`, `הקובץ שהועלה: ${u.path} (${u.kb} KB)`, ''];
   let ok = true;
 
-  if (u.kind === 'album') {
+  if (u.kind === 'archive') {
+    lines.push(`האוסף נשמר ב-${u.path} עם ${u.count} פריטים, כטיוטה. הוא יופיע באתר אחרי שחבר ועד יאשר: לפתוח את ${u.path}/album.json, לשנות "approved": false ל-true, להוסיף כיתובים ותקופה, ו-Commit.`);
+    lines.push(`https://github.com/${CONFIG.repo}/edit/${CONFIG.branch}/${u.path}/album.json`);
+  } else if (u.kind === 'album') {
     const gal = fetchJson_(`${CONFIG.siteUrl}/data/gallery.json`);
     const al = gal && (gal.albums || []).find(a => a.slug === u.album);
     if (!al) { ok = false; lines.push('⚠️ האלבום עדיין לא מופיע בגלריה. ייתכן שהאוטומציה (הקטנת תמונות) עוד רצה; לבדוק שוב בעוד כמה דקות.'); }

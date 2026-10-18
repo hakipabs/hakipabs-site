@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ההיסטוריה שלנו · בית הכנסת הכיפה</title>
+<meta name="description" content="ארכיון בית הכנסת העל-עדתי הכיפה בבאר שבע: תמונות ומסמכים מדור המייסדים ועד היום.">
+<link rel="canonical" href="https://hakipabs.org/archive.html">
+<link rel="icon" type="image/png" href="images/favicon.png">
+<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700&family=Frank+Ruhl+Libre:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#faf8f3;--paper:#fff;--ink:#1d2430;--muted:#5d6675;--line:#e6e1d6;--navy:#1e3a5f;--navy-2:#2b5283;--sand:#c9a86a;--sand-2:#f1e7cf;--shadow:0 1px 2px rgba(20,30,50,.06),0 8px 24px rgba(20,30,50,.06)}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Heebo,system-ui,Arial,sans-serif;font-size:17px;line-height:1.65}
+.skip{position:absolute;top:-100px;right:16px;background:var(--navy);color:#fff;padding:10px 16px;border-radius:0 0 10px 10px;z-index:100;text-decoration:none}
+.skip:focus{top:0}
+a{color:var(--navy-2)} a:focus-visible,button:focus-visible{outline:3px solid var(--sand);outline-offset:2px}
+header{position:sticky;top:0;z-index:20;background:rgba(250,248,243,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+.nav{display:flex;align-items:center;justify-content:space-between;height:66px;gap:16px}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--navy);font-weight:700}
+.brand small{display:block;font-weight:400;font-size:12px;color:var(--muted)}
+.brand svg{flex:none}
+.back{text-decoration:none;font-weight:500;padding:8px 12px;border-radius:8px}
+.back:hover{background:var(--sand-2)}
+.hero{background:var(--navy);color:#fff;padding:56px 0 48px}
+.hero h1{font-family:"Frank Ruhl Libre",serif;font-size:clamp(30px,5vw,48px);margin:0 0 10px;line-height:1.15}
+.hero p{max-width:60ch;color:#dbe3ee;font-size:18px;margin:0}
+.eyebrow{display:inline-block;font-size:13px;letter-spacing:.06em;color:var(--sand);font-weight:700;margin-bottom:10px}
+main{padding:0 0 80px}
+h2,h3{font-family:"Frank Ruhl Libre",serif;color:var(--navy);line-height:1.2}
+.muted{color:var(--muted)}
+.player{position:relative;aspect-ratio:16/9;border-radius:16px;overflow:hidden;box-shadow:var(--shadow);background:#000}
+.player iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+/* timeline */
+.timeline{position:relative;margin-top:40px;padding-inline-start:28px}
+.timeline:before{content:"";position:absolute;inset-inline-start:7px;top:8px;bottom:8px;width:2px;background:var(--line)}
+.coll{position:relative;margin-bottom:56px}
+.coll:before{content:"";position:absolute;inset-inline-start:-27px;top:10px;width:16px;height:16px;border-radius:50%;background:var(--sand);border:3px solid var(--bg);box-shadow:0 0 0 2px var(--sand)}
+.coll .period{font-size:14px;font-weight:700;color:#6b5620;letter-spacing:.04em}
+.coll h2{font-size:clamp(24px,3vw,32px);margin:2px 0 8px}
+.coll .desc{max-width:70ch;margin:0 0 6px}
+.coll .by{font-size:14px;color:var(--muted);margin:0 0 18px}
+.items{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
+.item{background:var(--paper);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:var(--shadow);padding:0;text-align:right;cursor:pointer;font:inherit;color:inherit}
+.item img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;filter:saturate(.96)}
+.item figcaption{padding:10px 14px 12px;font-size:14px;line-height:1.5}
+.item .yr{display:block;font-size:12px;color:var(--muted);margin-top:4px}
+.item .doc{display:inline-block;font-size:11px;background:var(--sand-2);color:#6b5620;border-radius:999px;padding:1px 8px;margin-inline-start:6px;vertical-align:middle}
+.call{margin-top:60px;background:var(--sand-2);border:1px solid #e4d4ab;border-radius:18px;padding:28px 30px;display:grid;grid-template-columns:1.4fr 1fr;gap:26px;align-items:center}
+.call h2{margin:0 0 8px;font-size:26px}
+.call p{margin:0 0 8px}
+.btn{display:inline-block;padding:12px 22px;border-radius:10px;font-weight:700;text-decoration:none;background:var(--navy);color:#fff}
+.empty{background:var(--paper);border:1px dashed var(--line);border-radius:16px;padding:40px;text-align:center;color:var(--muted);margin-top:30px}
+/* lightbox */
+.lb{position:fixed;inset:0;background:rgba(10,16,28,.95);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:50;padding:16px}
+.lb img{max-width:96vw;max-height:76vh;border-radius:8px;box-shadow:0 10px 40px rgba(0,0,0,.5)}
+.lb .cap{color:#e9eef5;max-width:70ch;text-align:center;margin-top:14px;font-size:16px;line-height:1.5}
+.lb .cap a{color:var(--sand)}
+.lb button{position:absolute;background:rgba(255,255,255,.12);color:#fff;border:0;width:48px;height:48px;border-radius:50%;font-size:26px;cursor:pointer}
+.lb button:hover{background:rgba(255,255,255,.25)}
+.lb .close{top:16px;left:16px}
+.lb .prev{right:14px;top:50%;transform:translateY(-50%)}
+.lb .next{left:14px;top:50%;transform:translateY(-50%)}
+.lb .count{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);color:#c8d3e3;font-size:14px}
+footer{border-top:1px solid var(--line);padding:26px 0 44px;color:var(--muted);font-size:14px}
+@media (max-width:700px){.call{grid-template-columns:1fr;padding:22px}.timeline{padding-inline-start:22px}.coll:before{inset-inline-start:-21px}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">דילוג לתוכן הראשי</a>
+<header><div class="wrap nav">
+  <a class="brand" href="./">
+    <svg viewBox="0 0 64 48" width="44" height="33" aria-hidden="true"><path d="M6 36 C6 18 18 8 32 8 C46 8 58 18 58 36 Z" fill="#1e3a5f"/><rect x="22" y="22" width="20" height="14" rx="2" fill="#c9a86a"/><rect x="2" y="36" width="60" height="5" rx="1.5" fill="#2b5283"/><rect x="8" y="41" width="48" height="2.5" rx="1" fill="#c9a86a"/></svg>
+    <span>בית הכנסת הכיפה<small>העל-עדתי, שכונה ה', באר שבע</small></span>
+  </a>
+  <a class="back" href="./">לדף הבית</a>
+</div></header>
+
+<main id="main">
+  <section class="hero"><div class="wrap">
+    <span class="eyebrow">ארכיון הקהילה</span>
+    <h1>ההיסטוריה שלנו</h1>
+    <p id="hero-text">מאז תשכ"ז (1967) ועד היום: תמונות, מסמכים וסיפורים של בית הכנסת העל-עדתי "הכיפה" בשכונה ה'. הארכיון נבנה מהחומרים שהקהילה שולחת, ומתעדכן כל הזמן.</p>
+  </div></section>
+
+  <div class="wrap">
+    <section class="video" aria-labelledby="video-h">
+      <h2 id="video-h" style="margin:36px 0 10px;font-size:26px">סרט היובל: 50 שנה לכיפה (תשע"ז)</h2>
+      <div class="player"><iframe src="https://www.youtube-nocookie.com/embed/ZF5LByNR640" title="יובל 50 לבית הכנסת העל עדתי הכיפה באר שבע" loading="lazy" allow="accelerometer; encrypted-media; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+      <p class="muted" style="font-size:14px;margin-top:8px">הסרט הופק לקראת חגיגות היובל. באדיבות ניר C-M (יוטיוב).</p>
+    </section>
+    <div id="timeline" class="timeline"></div>
+    <div id="empty" class="empty" hidden>הארכיון עוד מתמלא. שלחו לנו חומרים.</div>
+
+    <div class="call">
+      <div>
+        <h2>יש לכם תמונה או מסמך מהימים ההם?</h2>
+        <p>צילום בטלפון של התמונה המקורית מספיק (באור יום, ישר מלמעלה). הוסיפו מה שאתם יודעים: מתי בערך, מי בתמונה, ומי מוסר.</p>
+        <p class="muted" style="font-size:14px">כל חומר נשמר ומוחזר. דבר לא מתפרסם בלי בדיקה של הוועד.</p>
+      </div>
+      <div><a class="btn" href="mailto:vaad@hakipabs.org?subject=%D7%90%D7%A8%D7%9B%D7%99%D7%95%D7%9F%3A%20">שליחה לארכיון במייל</a></div>
+    </div>
+  </div>
+</main>
+
+<div id="lb" class="lb" hidden role="dialog" aria-modal="true" aria-label="תצוגת פריט">
+  <button class="close" aria-label="סגירה">×</button>
+  <button class="prev" aria-label="הפריט הקודם">›</button>
+  <img id="lb-img" alt="">
+  <div class="cap" id="lb-cap"></div>
+  <button class="next" aria-label="הפריט הבא">‹</button>
+  <div class="count" id="lb-count"></div>
+</div>
+
+<footer><div class="wrap">בית הכנסת העל-עדתי "הכיפה", באר שבע · <a href="./">לדף הבית</a> · <a href="gallery.html">גלריה</a> · <a href="mailto:vaad@hakipabs.org?subject=%D7%90%D7%A8%D7%9B%D7%99%D7%95%D7%9F">תיקון או הסרה של פריט</a></div></footer>
+
+<script>
+(async function(){
+  const el=id=>document.getElementById(id);
+  let data=null;
+  try{ const r=await fetch('data/archive.json',{cache:'no-store'}); data=r.ok?await r.json():null; }catch(e){}
+  const cols=(data&&data.collections)||[];
+  if(!cols.length){ el('empty').hidden=false; return; }
+  const all=[]; // flat list for the lightbox
+  cols.forEach(c=>{
+    const sec=document.createElement('section'); sec.className='coll'; sec.id=c.slug;
+    const per=document.createElement('div'); per.className='period'; per.textContent=c.period||''; sec.append(per);
+    const h=document.createElement('h2'); h.textContent=c.title; sec.append(h);
+    if(c.description){const d=document.createElement('p'); d.className='desc'; d.textContent=c.description; sec.append(d);}
+    const by=document.createElement('p'); by.className='by'; by.textContent=[c.count+' פריטים', c.contributor?('באדיבות '+c.contributor):''].filter(Boolean).join(' · '); sec.append(by);
+    const grid=document.createElement('div'); grid.className='items';
+    (c.items||[]).forEach(it=>{
+      const idx=all.length; all.push(it);
+      const b=document.createElement('button'); b.className='item'; b.type='button';
+      const fig=document.createElement('figure'); fig.style.margin='0';
+      const img=document.createElement('img'); img.src=it.thumb; img.alt=it.caption||c.title; img.loading='lazy'; fig.append(img);
+      const fc=document.createElement('figcaption'); fc.textContent=it.caption||''; if(it.kind==='document'){const s=document.createElement('span'); s.className='doc'; s.textContent='מסמך'; fc.append(s);} if(it.year){const y=document.createElement('span'); y.className='yr'; y.textContent=it.year; fc.append(y);} fig.append(fc);
+      b.append(fig); b.addEventListener('click',()=>open(idx)); grid.append(b);
+    });
+    sec.append(grid); el('timeline').append(sec);
+  });
+  const lb=el('lb'), lbImg=el('lb-img'), lbCap=el('lb-cap'); let idx=0;
+  function show(i){ idx=(i+all.length)%all.length; const it=all[idx]; lbImg.src=it.web; lbImg.alt=it.caption||''; lbCap.innerHTML=''; lbCap.append(it.caption||''); if(it.year){lbCap.append(' ('+it.year+')');} if(it.file){const a=document.createElement('a'); a.href=it.file; a.target='_blank'; a.rel='noopener'; a.textContent=' · פתיחת המסמך המלא'; lbCap.append(a);} el('lb-count').textContent=(idx+1)+' / '+all.length; }
+  function open(i){ show(i); lb.hidden=false; document.body.style.overflow='hidden'; lb.querySelector('.close').focus(); }
+  function close(){ lb.hidden=true; document.body.style.overflow=''; }
+  lb.querySelector('.close').addEventListener('click',close);
+  lb.querySelector('.prev').addEventListener('click',()=>show(idx-1));
+  lb.querySelector('.next').addEventListener('click',()=>show(idx+1));
+  lb.addEventListener('click',e=>{ if(e.target===lb) close(); });
+  document.addEventListener('keydown',e=>{ if(lb.hidden) return; if(e.key==='Escape') close(); if(e.key==='ArrowRight') show(idx-1); if(e.key==='ArrowLeft') show(idx+1); });
+  let sx=null; lb.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;},{passive:true}); lb.addEventListener('touchend',e=>{ if(sx===null) return; const dx=e.changedTouches[0].clientX-sx; if(Math.abs(dx)>50) show(dx>0?idx-1:idx+1); sx=null; });
+  if(location.hash){ const t=document.querySelector(location.hash); if(t) t.scrollIntoView(); }
+})();
+</script>
+<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "07d95a4b7bbb4b21aa67c3de7fd0d09a"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>
