@@ -106,7 +106,7 @@ footer{border-top:1px solid var(--line);padding:26px 0 44px;color:var(--muted);f
   try{ const r=await fetch('data/gallery.json',{cache:'no-store'}); data=r.ok?await r.json():null; }catch(e){}
   const albums=(data&&data.albums)||[];
   const slug=new URLSearchParams(location.search).get('album');
-  const fmt=d=>{const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(d||''); return m?`${+m[3]}.${+m[2]}.${m[1]}`:''};
+  const fmt=d=>{const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(d||''); return m?`${+m[3]}.${+m[2]}.${m[1]}`:(/^\d{4}$/.test(d||'')?d:'')};
   if(!albums.length){ el('empty').hidden=false; return; }
   const album=slug&&albums.find(a=>a.slug===slug);
   if(!album){

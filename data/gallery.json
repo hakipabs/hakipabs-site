@@ -24,6 +24,31 @@
      "thumb": "gallery/אורייתא/thumb/20261018-1014-04.jpg"
     }
    ]
+  },
+  {
+   "slug": "tiyul-bikat-hayarden-2013",
+   "title": "טיול הקהילה לבקעת הירדן",
+   "date": "2013",
+   "cover": "gallery/tiyul-bikat-hayarden-2013/thumb/01-hadracha.jpg",
+   "count": 4,
+   "photos": [
+    {
+     "web": "gallery/tiyul-bikat-hayarden-2013/web/01-hadracha.jpg",
+     "thumb": "gallery/tiyul-bikat-hayarden-2013/thumb/01-hadracha.jpg"
+    },
+    {
+     "web": "gallery/tiyul-bikat-hayarden-2013/web/02-chava.jpg",
+     "thumb": "gallery/tiyul-bikat-hayarden-2013/thumb/02-chava.jpg"
+    },
+    {
+     "web": "gallery/tiyul-bikat-hayarden-2013/web/03-izim.jpg",
+     "thumb": "gallery/tiyul-bikat-hayarden-2013/thumb/03-izim.jpg"
+    },
+    {
+     "web": "gallery/tiyul-bikat-hayarden-2013/web/04-laila.jpg",
+     "thumb": "gallery/tiyul-bikat-hayarden-2013/thumb/04-laila.jpg"
+    }
+   ]
   }
  ]
 }
