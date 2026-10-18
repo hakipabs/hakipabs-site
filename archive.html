@@ -139,7 +139,7 @@ footer{border-top:1px solid var(--line);padding:26px 0 44px;color:var(--muted);f
   <button class="txtbtn" id="lb-txtbtn" type="button" hidden>הטקסט המלא</button>
   <div class="txt" id="lb-text" hidden></div>
   <button class="next" aria-label="הפריט הבא">‹</button>
-  <div class="count" id="lb-count"></div>
+  <div class="count" id="lb-count" dir="ltr"></div>
 </div>
 
 <footer><div class="wrap">בית הכנסת העל-עדתי "הכיפה", באר שבע · <a href="./">לדף הבית</a> · <a href="gallery.html">גלריה</a> · <a href="mailto:vaad@hakipabs.org?subject=%D7%90%D7%A8%D7%9B%D7%99%D7%95%D7%9F">תיקון או הסרה של פריט</a></div></footer>
@@ -172,7 +172,7 @@ footer{border-top:1px solid var(--line);padding:26px 0 44px;color:var(--muted);f
   const lb=el('lb'), lbImg=el('lb-img'), lbCap=el('lb-cap'); let idx=0;
   const txtBtn=el('lb-txtbtn'), txtBox=el('lb-text');
   txtBtn.addEventListener('click',()=>{ txtBox.hidden=!txtBox.hidden; txtBtn.textContent=txtBox.hidden?'הטקסט המלא':'הסתרת הטקסט'; });
-  function show(i){ idx=(i+all.length)%all.length; const it=all[idx]; lbImg.src=it.web; lbImg.alt=it.caption||''; lbCap.innerHTML=''; lbCap.append(it.caption||''); if(it.year){lbCap.append(' ('+it.year+')');} if(it.file){const a=document.createElement('a'); a.href=it.file; a.target='_blank'; a.rel='noopener'; a.textContent=' · פתיחת המסמך המלא (PDF)'; lbCap.append(a);} txtBox.hidden=true; txtBtn.textContent='הטקסט המלא'; if(it.text){ txtBox.textContent=it.text; txtBtn.hidden=false; } else { txtBtn.hidden=true; txtBox.textContent=''; } el('lb-count').textContent=(idx+1)+' / '+all.length; }
+  function show(i){ idx=(i+all.length)%all.length; const it=all[idx]; lbImg.src=it.web; lbImg.alt=it.caption||''; lbCap.innerHTML=''; lbCap.append(it.caption||''); if(it.year){lbCap.append(' · '+it.year);} if(it.file){const a=document.createElement('a'); a.href=it.file; a.target='_blank'; a.rel='noopener'; a.textContent=' · פתיחת המסמך המלא (PDF)'; lbCap.append(a);} txtBox.hidden=true; txtBtn.textContent='הטקסט המלא'; if(it.text){ txtBox.textContent=it.text; txtBtn.hidden=false; } else { txtBtn.hidden=true; txtBox.textContent=''; } el('lb-count').textContent=(idx+1)+' / '+all.length; }
   function open(i){ show(i); lb.hidden=false; document.body.style.overflow='hidden'; lb.querySelector('.close').focus(); }
   function close(){ lb.hidden=true; document.body.style.overflow=''; }
   lb.querySelector('.close').addEventListener('click',close);
