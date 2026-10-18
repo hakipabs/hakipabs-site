@@ -122,5 +122,6 @@ footer{border-top:1px solid var(--line);padding:26px 0 44px;color:var(--muted);f
   let sx=null; lb.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;},{passive:true}); lb.addEventListener('touchend',e=>{ if(sx===null) return; const dx=e.changedTouches[0].clientX-sx; if(Math.abs(dx)>50) show(dx>0?idx-1:idx+1); sx=null; });
 })();
 </script>
+<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "07d95a4b7bbb4b21aa67c3de7fd0d09a"}'></script><!-- End Cloudflare Web Analytics -->
 </body>
 </html>
