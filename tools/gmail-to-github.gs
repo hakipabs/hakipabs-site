@@ -5,6 +5,7 @@
  *   נושא שמתחיל ב"זמני השבוע" + PDF  -> weekly/        (זמני שבת, מנחה, זמני היום, מזל טוב מתעדכנים באתר)
  *   נושא שמתחיל ב"אירוע" + תמונה     -> images/events/ (כרטיס בבלוק "אירועים קרובים": פוסטר, כותרת, תאריך, טקסט)
  *   נושא שמכיל "אורייתא" + תמונה      -> אירוע של אותו יום (הפוסטר השבועי שמגיע מהקבוצה)
+ *   נושא שמתחיל ב"אלבום" + תמונות    -> gallery/<שם האלבום>/ (דף הגלריה; כמה מיילים עם אותו נושא = אותו אלבום)
  *   כל PDF אחר                        -> holidays/      (לוח חג: מוצג באתר כתמונה, 45 יום)
  * אחרי ההעלאה ממתין כ-3 דקות לאוטומציה של גיטהאב, בודק מה האתר מציג, ושולח דוח לוועד.
  *
@@ -25,6 +26,8 @@
 const CONFIG = {
   senders: ['hakipa.zmanim@gmail.com', 'shmueltaub@gmail.com', 'reinerav@gmail.com'],   // מי רשאי לשלוח לאתר (זמנים, הוועד, אורייתא)
   subjectPrefix: 'זמני השבוע',        // הדף השבועי -> weekly/
+  albumPrefix: 'אלבום',               // אלבום: <שם> + תמונות -> gallery/<שם>/ (דף הגלריה)
+  galleryFolder: 'gallery',
   eventPrefix: 'אירוע',               // אירוע -> images/events/ + data/events.json
   eventKeywords: ['אורייתא'],         // נושא שמכיל מילה כזו = אירוע של אותו יום, גם בלי 'אירוע' בנושא (הפוסטר השבועי של אורייתא)
   repo: 'hakipabs/hakipabs-site',
@@ -66,6 +69,22 @@ function run() {
       const atts = msg.getAttachments();
       const pdf = atts.find(a => /\.pdf$/i.test(a.getName()) || a.getContentType() === 'application/pdf');
       const img = atts.find(a => /^image\/(jpeg|png|webp)$/i.test(a.getContentType()));
+
+      if (subj.startsWith(CONFIG.albumPrefix)) {
+        const imgs = atts.filter(a => /^image\/(jpeg|png|webp)$/i.test(a.getContentType()));
+        if (!imgs.length) { Logger.log('album mail without images: "%s"', subj); thread.addLabel(label); return; }
+        const albumTitle = subj.slice(CONFIG.albumPrefix.length).replace(/^[\s:\-]+/, '').trim() || 'אלבום';
+        const albumSlug = slug_(albumTitle) || 'album';
+        const stamp = Utilities.formatDate(msg.getDate(), 'Asia/Jerusalem', 'yyyyMMdd-HHmm');
+        imgs.forEach((a, i) => {
+          const ext = a.getContentType().includes('png') ? 'png' : a.getContentType().includes('webp') ? 'webp' : 'jpg';
+          uploadToGitHub_(token, `${CONFIG.galleryFolder}/${albumSlug}/${stamp}-${String(i + 1).padStart(2, '0')}.${ext}`, a.getBytes(), `Album photos from email: ${subj}`);
+        });
+        thread.addLabel(label);
+        uploads.push({ kind: 'album', subject: subj, path: `${CONFIG.galleryFolder}/${albumSlug}`, album: albumSlug, albumTitle, count: imgs.length, kb: Math.round(imgs.reduce((s, a) => s + a.getSize(), 0) / 1024) });
+        Logger.log('album "%s": %s photo(s) uploaded', albumTitle, imgs.length);
+        return;
+      }
 
       const isEvent = subj.startsWith(CONFIG.eventPrefix) || CONFIG.eventKeywords.some(k => subj.includes(k));
       if (isEvent) {
@@ -205,7 +224,12 @@ function buildReport_(token, u) {
   const lines = [`המייל: ${u.subject}`, `הקובץ שהועלה: ${u.path} (${u.kb} KB)`, ''];
   let ok = true;
 
-  if (u.kind === 'event') {
+  if (u.kind === 'album') {
+    const gal = fetchJson_(`${CONFIG.siteUrl}/data/gallery.json`);
+    const al = gal && (gal.albums || []).find(a => a.slug === u.album);
+    if (!al) { ok = false; lines.push('⚠️ האלבום עדיין לא מופיע בגלריה. ייתכן שהאוטומציה (הקטנת תמונות) עוד רצה; לבדוק שוב בעוד כמה דקות.'); }
+    else lines.push(`האלבום "${al.title}" מופיע בגלריה עם ${al.count} תמונות: ${CONFIG.siteUrl}/gallery.html?album=${encodeURIComponent(al.slug)}`);
+  } else if (u.kind === 'event') {
     const list = fetchJson_(`${CONFIG.siteUrl}/${CONFIG.eventsJson}`);
     const item = Array.isArray(list) && list.find(e => e.poster === u.path);
     if (!item) { ok = false; lines.push('⚠️ האירוע עדיין לא מופיע באתר. ייתכן שהאתר עוד נבנה; לבדוק שוב בעוד כמה דקות.'); }

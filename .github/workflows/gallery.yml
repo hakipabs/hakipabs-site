@@ -1,0 +1,32 @@
+name: Photo gallery: resize and list
+
+on:
+  push:
+    paths:
+      - "gallery/**"
+      - "!gallery/**/web/**"
+      - "!gallery/**/thumb/**"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pillow
+      - run: python scripts/build_gallery.py
+      - name: Commit the resized photos and the list
+        run: |
+          git config user.name "shabbat-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A data/gallery.json gallery/
+          git diff --cached --quiet || git commit -m "Gallery: resized photos and list [skip ci]"
+          git push
