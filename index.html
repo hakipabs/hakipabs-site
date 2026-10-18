@@ -160,12 +160,15 @@ nav a.nav-hi:hover{background:#e9dbb6}
 .hol .cap{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 16px}
 .hol .cap strong{color:var(--navy);font-size:17px}
 .hol .cap span{font-size:13px;color:var(--muted);white-space:nowrap}
+.tt a.wa{display:block;font-size:12.5px;font-weight:600;color:#1f7a4d;text-decoration:none;margin-top:2px;white-space:nowrap}
+.tt a.wa:hover{text-decoration:underline}
+.tt a.wa::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:#25d366;margin-inline-end:5px;vertical-align:middle}
 section{padding:72px 0}
 section.alt{background:var(--paper);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 .lead{font-size:19px;max-width:66ch}
 .grid{display:grid;gap:22px}
-.g2{grid-template-columns:repeat(2,1fr)}
-.g3{grid-template-columns:repeat(3,1fr)}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
 .card{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:24px;box-shadow:var(--shadow)}
 .card h3{margin-bottom:10px}
 
@@ -174,6 +177,8 @@ th,td{padding:10px 12px;text-align:right;border-bottom:1px solid var(--line);ver
 th{font-weight:700;color:var(--navy);background:var(--sand-2)}
 tr:last-child td{border-bottom:0}
 .time{font-weight:700;white-space:nowrap}
+.tt td.time,.tt th{white-space:normal}
+.tt{width:100%;table-layout:auto;word-break:keep-all}
 .tag{display:inline-block;font-size:12px;padding:2px 8px;border-radius:999px;background:var(--sand-2);color:#6b5620;font-weight:700;margin-inline-start:6px}
 .note{font-size:14px;color:var(--muted);margin-top:10px}
 
@@ -215,7 +220,7 @@ footer a{color:var(--navy)}
   .tt td::before{content:attr(data-label);color:var(--muted);font-size:13px}
   .tt td:first-child{display:block;font-weight:700;color:var(--navy);font-size:17px;border-bottom:1px dashed var(--line);margin-bottom:6px;padding-bottom:6px}
   .tt td:first-child::before{content:none}
-  .tt td.time{white-space:nowrap}
+  .tt td.time{white-space:normal}
 }
 </style>
 </head>
@@ -408,7 +413,7 @@ footer a{color:var(--navy)}
       <div class="card">
         <h3>תפילת ילדים <span class="tag">שבת</span></h3>
         <p>מזה שנים רבות, בכל שבת בבוקר בבית המדרש, בשעה <strong id="kids-time">10:15</strong>. עם הפתעות לילדים.</p>
-        <p class="small muted">בירורים ורישום: אצל מיכאל דביר, 050-3800127.</p>
+        <p class="small muted">בירורים ורישום: אצל גבי היין.</p>
       </div>
       <div class="card">
         <h3>תורה נוער <span class="tag">ז'-ח' בנים</span></h3>
@@ -426,17 +431,18 @@ footer a{color:var(--navy)}
     <div class="card" id="talmud-torah">
       <span class="eyebrow">ושננתם לבניך ודברת בם</span>
       <h3>תלמוד תורה "אהבת תורה" · מערכת שעות</h3>
-      <p class="small muted">כל שיעור 35 דקות. חדש השנה: קבוצה לילדי גן חובה.</p>
+      <p>ילדי באר שבע מוזמנים להצטרף: אצלנו לומדים בשמחה, בכיף ובאהבת תורה. <strong>חדש: קבוצה לילדי גן חובה.</strong> להרשמה לוחצים על "הרשמה בוואטסאפ" ליד הכיתה.</p>
+      <p class="small muted">כל שיעור 35 דקות. המסגרת מופעלת על ידי ת"ת הכיפה בשיתוף בית מוריה.</p>
       <div class="grid g2">
         <div>
           <h3 style="font-size:18px">בנים</h3>
           <table class="tt">
 <thead><tr><th>כיתות</th><th>ימים</th><th>שעה</th><th>מקום</th><th>מלמד</th></tr></thead>
 <tbody>
-<tr><td data-label="כיתות">א'-ב'</td><td data-label="ימים">א', ב', ה'</td><td data-label="שעה" class="time">17:00-17:35</td><td data-label="מקום">מקלט</td><td data-label="מלמד">הרב יחזקאל אהרוני</td></tr>
-<tr><td data-label="כיתות">ג'-ד'</td><td data-label="ימים">א', ב', ד'</td><td data-label="שעה" class="time">17:40-18:15</td><td data-label="מקום">מקלט</td><td data-label="מלמד">הרב נהוראי גל</td></tr>
-<tr><td data-label="כיתות">ה'-ו'</td><td data-label="ימים">א', ד'</td><td data-label="שעה" class="time">17:35-18:10</td><td data-label="מקום">ספרייה</td><td data-label="מלמד">הרב ברוך גלמן</td></tr>
-<tr><td data-label="כיתות">ה'-ו'</td><td data-label="ימים">ב'</td><td data-label="שעה" class="time">18:15-18:40</td><td data-label="מקום">ספרייה</td><td data-label="מלמד">הרב ברוך גלמן</td></tr>
+<tr><td data-label="כיתות">א'-ב'<a class="wa" href="https://chat.whatsapp.com/CE1UWOsIx9tHPqEK6roKhv" target="_blank" rel="noopener">הרשמה בוואטסאפ</a></td><td data-label="ימים">א', ב', ד'</td><td data-label="שעה" class="time">א', ד': 17:00-17:35 · ב': 17:35-18:10</td><td data-label="מקום">מקלט</td><td data-label="מלמד">הרב יחזקאל אהרוני</td></tr>
+<tr><td data-label="כיתות">ג'-ד'<a class="wa" href="https://chat.whatsapp.com/Cwxfg1nVBqYFuvcqINYKAo" target="_blank" rel="noopener">הרשמה בוואטסאפ</a></td><td data-label="ימים">א', ב', ד'</td><td data-label="שעה" class="time">א', ד': 17:35-18:10 · ב': 17:00-17:35</td><td data-label="מקום">מקלט</td><td data-label="מלמד">הרב נהוראי גול</td></tr>
+<tr><td data-label="כיתות">ה'-ו'<a class="wa" href="https://chat.whatsapp.com/Be24W250fcC4q8bNYC1qxR" target="_blank" rel="noopener">הרשמה בוואטסאפ</a></td><td data-label="ימים">א', ב', ד'</td><td data-label="שעה" class="time">א', ד': 17:00-17:35 · ב': 17:40-18:15</td><td data-label="מקום">ספרייה</td><td data-label="מלמד">הרב יהודה רוזנברג</td></tr>
+<tr><td data-label="כיתות">ז'-ט'</td><td data-label="ימים">ג'</td><td data-label="שעה" class="time">19:00-19:35</td><td data-label="מקום">ספרייה</td><td data-label="מלמד">הרב יעקב מוסאי</td></tr>
 </tbody>
 </table>
         </div>
@@ -445,10 +451,10 @@ footer a{color:var(--navy)}
           <table class="tt">
 <thead><tr><th>כיתות</th><th>ימים</th><th>שעה</th><th>מקום</th><th>מלמדת</th></tr></thead>
 <tbody>
-<tr><td data-label="כיתות">א'-ב'</td><td data-label="ימים">ב', ג', ה'</td><td data-label="שעה" class="time">16:30-17:05</td><td data-label="מקום">בית המדרש</td><td data-label="מלמדת">רננה וסרטייל</td></tr>
-<tr><td data-label="כיתות">ג'-ד'</td><td data-label="ימים">ב', ג', ה'</td><td data-label="שעה" class="time">17:00-17:35</td><td data-label="מקום">ספרייה</td><td data-label="מלמדת">הודיה נוטמן</td></tr>
-<tr><td data-label="כיתות">ה'-ו'</td><td data-label="ימים">א', ג', ד'</td><td data-label="שעה" class="time">18:15-18:50</td><td data-label="מקום">ספרייה</td><td data-label="מלמדת">אריה אהרוני</td></tr>
-<tr><td data-label="כיתות">ז'-ח'</td><td data-label="ימים">ד'</td><td data-label="שעה" class="time">19:30-20:05</td><td data-label="מקום">ספרייה / ביהמ"ד</td><td data-label="מלמדת">רעיה גולדשטיין</td></tr>
+<tr><td data-label="כיתות">א'-ב'<a class="wa" href="https://chat.whatsapp.com/GL57BjD63C3LK2FwxFYNAY" target="_blank" rel="noopener">הרשמה בוואטסאפ</a></td><td data-label="ימים">ב', ג', ה'</td><td data-label="שעה" class="time">17:00-17:35</td><td data-label="מקום">בית המדרש</td><td data-label="מלמדת">רננה וסרטייל</td></tr>
+<tr><td data-label="כיתות">ג'-ד'<a class="wa" href="https://chat.whatsapp.com/HC7UtzUo3vD4H1lfj10fzT" target="_blank" rel="noopener">הרשמה בוואטסאפ</a></td><td data-label="ימים">ב', ג', ה'</td><td data-label="שעה" class="time">17:00-17:35</td><td data-label="מקום">ספרייה</td><td data-label="מלמדת">הודיה נוטמן (ביום שני: אליענה מאיר)</td></tr>
+<tr><td data-label="כיתות">ה'-ו'<a class="wa" href="https://chat.whatsapp.com/LPkZTxwjoGsLZFjb0aF1ER" target="_blank" rel="noopener">הרשמה בוואטסאפ</a></td><td data-label="ימים">א', ג', ד'</td><td data-label="שעה" class="time">18:15-18:50</td><td data-label="מקום">ספרייה</td><td data-label="מלמדת">אורית אהרוני (ביום שלישי: אליענה מאיר)</td></tr>
+<tr><td data-label="כיתות">ז'-ח'</td><td data-label="ימים">ד'</td><td data-label="שעה" class="time">19:00-19:35</td><td data-label="מקום">ספרייה / בית המדרש</td><td data-label="מלמדת">רעיה גולדשטיין</td></tr>
 </tbody>
 </table>
         </div>
@@ -457,9 +463,10 @@ footer a{color:var(--navy)}
       <table class="tt">
 <thead><tr><th>כיתות</th><th>ימים</th><th>שעה</th><th>מקום</th><th>מלמדת</th></tr></thead>
 <tbody>
-<tr><td data-label="כיתות">גן חובה</td><td data-label="ימים">ב', ג'</td><td data-label="שעה" class="time">17:30-18:05</td><td data-label="מקום">בית המדרש</td><td data-label="מלמדת">אליענה מאיר</td></tr>
+<tr><td data-label="כיתות">גן חובה<a class="wa" href="https://chat.whatsapp.com/GC1obpqdzkACVYYLpaDEQa" target="_blank" rel="noopener">הרשמה בוואטסאפ</a></td><td data-label="ימים">ג', ה'</td><td data-label="שעה" class="time">17:35-18:10</td><td data-label="מקום">בית המדרש</td><td data-label="מלמדת">אליענה מאיר</td></tr>
 </tbody>
 </table>
+      <p class="note"><a href="images/talmud-torah-5787.jpg" target="_blank" rel="noopener">המערכת המלאה כתמונה</a></p>
     </div>
   </div>
 </section>
