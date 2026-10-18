@@ -8,7 +8,7 @@
    "description": "בניית בית הכנסת העל-עדתי בשכונה ה', שנחנך בשנת תשכ\"ז (1967): יציקת קליפת הבטון של הכיפה, החזית עם סורג המשושים, והרחבה הראשונה.",
    "contributor": "",
    "cover": "archive/hakama/thumb/01-yetzika.jpg",
-   "count": 3,
+   "count": 12,
    "items": [
     {
      "web": "archive/hakama/web/01-yetzika.jpg",
@@ -31,6 +31,78 @@
      "thumb": "archive/hakama/thumb/03-rachava.jpg",
      "file": "",
      "caption": "הרחבה והגינה בחזית בית הכנסת, זמן קצר אחרי הפתיחה.",
+     "year": "",
+     "kind": "photo"
+    },
+    {
+     "web": "archive/hakama/web/04-sheled.jpg",
+     "thumb": "archive/hakama/thumb/04-sheled.jpg",
+     "file": "",
+     "caption": "שלד הכיפה בבנייה: קליפת הבטון על הפיגומים, לפני בניית הקירות.",
+     "year": "",
+     "kind": "photo"
+    },
+    {
+     "web": "archive/hakama/web/05-chipushiyot.jpg",
+     "thumb": "archive/hakama/thumb/05-chipushiyot.jpg",
+     "file": "",
+     "caption": "חניה ליד אתר הבנייה. ברקע השיכונים הראשונים של שכונה ה'.",
+     "year": "",
+     "kind": "photo"
+    },
+    {
+     "web": "archive/hakama/web/06-tekes.jpg",
+     "thumb": "archive/hakama/thumb/06-tekes.jpg",
+     "file": "",
+     "caption": "טקס בחצר בית הכנסת, קהל ונואמים על במה. כנראה הנחת אבן הפינה או חנוכת הבית.",
+     "year": "",
+     "kind": "photo"
+    },
+    {
+     "web": "archive/hakama/web/07-yeladim.jpg",
+     "thumb": "archive/hakama/thumb/07-yeladim.jpg",
+     "file": "",
+     "caption": "ילדי השכונה מול הכיפה הגמורה, עם סורג המשושים ברקע.",
+     "year": "",
+     "kind": "photo"
+    },
+    {
+     "web": "archive/hakama/web/08-kipa-yeled.jpg",
+     "thumb": "archive/hakama/thumb/08-kipa-yeled.jpg",
+     "file": "",
+     "caption": "הכיפה אחרי הבנייה. ילד ברחבה שעוד לא רוצפה.",
+     "year": "",
+     "kind": "photo"
+    },
+    {
+     "web": "archive/hakama/web/09-shchuna.jpg",
+     "thumb": "archive/hakama/thumb/09-shchuna.jpg",
+     "file": "",
+     "caption": "שכונה ה' בבנייה: בתים חדשים ורחוב שעוד לא נסלל.",
+     "year": "",
+     "kind": "photo"
+    },
+    {
+     "web": "archive/hakama/web/10-shchuna-2.jpg",
+     "thumb": "archive/hakama/thumb/10-shchuna-2.jpg",
+     "file": "",
+     "caption": "הרחוב ליד בית הכנסת בימי ההקמה.",
+     "year": "",
+     "kind": "photo"
+    },
+    {
+     "web": "archive/hakama/web/11-gmalim.jpg",
+     "thumb": "archive/hakama/thumb/11-gmalim.jpg",
+     "file": "",
+     "caption": "גמלים בשולי השכונה. באר שבע של שנות השישים.",
+     "year": "",
+     "kind": "photo"
+    },
+    {
+     "web": "archive/hakama/web/12-yeled-gmalim.jpg",
+     "thumb": "archive/hakama/thumb/12-yeled-gmalim.jpg",
+     "file": "",
+     "caption": "ילד וגמלים ליד הבתים החדשים.",
      "year": "",
      "kind": "photo"
     }
