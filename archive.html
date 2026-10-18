@@ -66,7 +66,7 @@ h2,h3{font-family:"Frank Ruhl Libre",serif;color:var(--navy);line-height:1.2}
 .empty{background:var(--paper);border:1px dashed var(--line);border-radius:16px;padding:40px;text-align:center;color:var(--muted);margin-top:30px}
 /* lightbox */
 .lb{position:fixed;inset:0;background:rgba(10,16,28,.95);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:50;padding:16px}
-.lb img{max-width:96vw;max-height:76vh;border-radius:8px;box-shadow:0 10px 40px rgba(0,0,0,.5)}
+.lb img{max-width:96vw;max-height:62vh;border-radius:8px;box-shadow:0 10px 40px rgba(0,0,0,.5)}
 .lb .cap{color:#e9eef5;max-width:70ch;text-align:center;margin-top:14px;font-size:16px;line-height:1.5}
 .lb .cap a{color:var(--sand)}
 .lb button{position:absolute;background:rgba(255,255,255,.12);color:#fff;border:0;width:48px;height:48px;border-radius:50%;font-size:26px;cursor:pointer}
@@ -74,6 +74,8 @@ h2,h3{font-family:"Frank Ruhl Libre",serif;color:var(--navy);line-height:1.2}
 .lb .close{top:16px;left:16px}
 .lb .prev{right:14px;top:50%;transform:translateY(-50%)}
 .lb .next{left:14px;top:50%;transform:translateY(-50%)}
+.lb .txtbtn{position:static;width:auto;height:auto;border-radius:999px;padding:8px 18px;font:inherit;font-size:15px;margin-top:10px;background:var(--sand);color:#1d2430}
+.lb .txt{margin-top:12px;max-width:72ch;max-height:50vh;overflow:auto;background:#fff;color:var(--ink);border-radius:12px;padding:18px 22px;white-space:pre-wrap;line-height:1.7;font-size:16px;text-align:right}
 .lb .count{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);color:#c8d3e3;font-size:14px}
 footer{border-top:1px solid var(--line);padding:26px 0 44px;color:var(--muted);font-size:14px}
 @media (max-width:700px){.call{grid-template-columns:1fr;padding:22px}.timeline{padding-inline-start:22px}.coll:before{inset-inline-start:-21px}}
@@ -121,6 +123,8 @@ footer{border-top:1px solid var(--line);padding:26px 0 44px;color:var(--muted);f
   <button class="prev" aria-label="הפריט הקודם">›</button>
   <img id="lb-img" alt="">
   <div class="cap" id="lb-cap"></div>
+  <button class="txtbtn" id="lb-txtbtn" type="button" hidden>הטקסט המלא</button>
+  <div class="txt" id="lb-text" hidden></div>
   <button class="next" aria-label="הפריט הבא">‹</button>
   <div class="count" id="lb-count"></div>
 </div>
@@ -153,7 +157,9 @@ footer{border-top:1px solid var(--line);padding:26px 0 44px;color:var(--muted);f
     sec.append(grid); el('timeline').append(sec);
   });
   const lb=el('lb'), lbImg=el('lb-img'), lbCap=el('lb-cap'); let idx=0;
-  function show(i){ idx=(i+all.length)%all.length; const it=all[idx]; lbImg.src=it.web; lbImg.alt=it.caption||''; lbCap.innerHTML=''; lbCap.append(it.caption||''); if(it.year){lbCap.append(' ('+it.year+')');} if(it.file){const a=document.createElement('a'); a.href=it.file; a.target='_blank'; a.rel='noopener'; a.textContent=' · פתיחת המסמך המלא'; lbCap.append(a);} el('lb-count').textContent=(idx+1)+' / '+all.length; }
+  const txtBtn=el('lb-txtbtn'), txtBox=el('lb-text');
+  txtBtn.addEventListener('click',()=>{ txtBox.hidden=!txtBox.hidden; txtBtn.textContent=txtBox.hidden?'הטקסט המלא':'הסתרת הטקסט'; });
+  function show(i){ idx=(i+all.length)%all.length; const it=all[idx]; lbImg.src=it.web; lbImg.alt=it.caption||''; lbCap.innerHTML=''; lbCap.append(it.caption||''); if(it.year){lbCap.append(' ('+it.year+')');} if(it.file){const a=document.createElement('a'); a.href=it.file; a.target='_blank'; a.rel='noopener'; a.textContent=' · פתיחת המסמך המלא (PDF)'; lbCap.append(a);} txtBox.hidden=true; txtBtn.textContent='הטקסט המלא'; if(it.text){ txtBox.textContent=it.text; txtBtn.hidden=false; } else { txtBtn.hidden=true; txtBox.textContent=''; } el('lb-count').textContent=(idx+1)+' / '+all.length; }
   function open(i){ show(i); lb.hidden=false; document.body.style.overflow='hidden'; lb.querySelector('.close').focus(); }
   function close(){ lb.hidden=true; document.body.style.overflow=''; }
   lb.querySelector('.close').addEventListener('click',close);
