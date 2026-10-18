@@ -99,6 +99,19 @@ function run() {
   }
 }
 
+/** גוף המייל בלי כותרות של העברה (Forwarded message, From/Date/Subject/To, גם בעברית) ובלי ציטוטים. */
+function cleanBody_(body) {
+  const HEADER = /^(from|date|subject|to|cc|sent|מאת|תאריך|נושא|אל|עותק)\s*:/i;
+  return (body || '').split(/\r?\n/).map(l => l.trim()).filter(l => {
+    if (!l) return false;
+    if (/^>/.test(l) || /^-{2,}/.test(l) || /wrote:$/.test(l) || /כתב\/ה:$/.test(l)) return false;
+    if (/forwarded message|הודעה שהועברה|begin forwarded/i.test(l)) return false;
+    if (HEADER.test(l)) return false;
+    if (/(^|\s)(subject|to|cc|date|from)\s*:\s/i.test(l) && /@|\d{4}|<|>/.test(l)) return false;   // כותרות שהודבקו לשורה אחת
+    return true;
+  });
+}
+
 function cleanSubject_(subject) {
   return (subject || '').replace(/^(re|fwd?|fw)\s*:\s*/i, '').trim();
 }
@@ -134,7 +147,7 @@ function addEvent_(token, subj, body, mailDate, img) {
   }
   if (!date || isNaN(date)) { date = new Date(mailDate); if (!byKeyword) date.setDate(date.getDate() + CONFIG.eventDefaultDays); }   // אורייתא וכדומה: אותו יום
   const title = rest.replace(/[\s,\-:]+$/, '') || 'אירוע';
-  const lines = (body || '').split(/\r?\n/).map(l => l.trim()).filter(l => l && !/^(>|On .* wrote:|-{2,}|From:|Sent:|To:|Subject:|מאת:|נשלח:|אל:|נושא:)/.test(l));
+  const lines = cleanBody_(body);
   const start = (lines[0] && lines[0].replace(/\s+/g,' ') === title) ? 1 : 0;   // שורה ראשונה שחוזרת על הכותרת מדולגת
   const when = lines[start] || '';
   const text = lines.slice(start + 1, start + 6).join(' ').slice(0, 400);
