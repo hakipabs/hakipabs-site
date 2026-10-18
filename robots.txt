@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://hakipabs.org/sitemap.xml
