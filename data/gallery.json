@@ -5,6 +5,8 @@
    "title": "אורייתא",
    "date": "2026-10-18",
    "cover": "gallery/אורייתא/thumb/20261018-1014-01.jpg",
+   "description": "",
+   "when": "",
    "count": 4,
    "photos": [
     {
@@ -26,10 +28,93 @@
    ]
   },
   {
+   "slug": "shuk-arbaat-haminim",
+   "title": "שוק ארבעת המינים",
+   "date": "2026-09-23",
+   "cover": "gallery/shuk-arbaat-haminim/thumb/02.jpg",
+   "description": "שוק ארבעת המינים המסורתי בחצר הכיפה: אתרוגים, לולבים, הדסים וערבות, ובוחרים יחד, מבוגרים וילדים.",
+   "when": "ערב סוכות, לאורך השנים",
+   "count": 3,
+   "photos": [
+    {
+     "web": "gallery/shuk-arbaat-haminim/web/01.jpg",
+     "thumb": "gallery/shuk-arbaat-haminim/thumb/01.jpg"
+    },
+    {
+     "web": "gallery/shuk-arbaat-haminim/web/02.jpg",
+     "thumb": "gallery/shuk-arbaat-haminim/thumb/02.jpg"
+    },
+    {
+     "web": "gallery/shuk-arbaat-haminim/web/03.jpg",
+     "thumb": "gallery/shuk-arbaat-haminim/thumb/03.jpg"
+    }
+   ]
+  },
+  {
+   "slug": "tfilot-beet-milchama",
+   "title": "תפילות בעת מלחמה",
+   "date": "2024-06-01",
+   "cover": "gallery/tfilot-beet-milchama/thumb/02.jpg",
+   "description": "כשהאזעקות לא מאפשרות להתפלל בהיכל, המניין יורד למקלט: בין מדפי הספרים, בטלית ובתפילין, ממשיכים.",
+   "when": "בימי המלחמה, תשפ\"ד-תשפ\"ה (משוער)",
+   "count": 2,
+   "photos": [
+    {
+     "web": "gallery/tfilot-beet-milchama/web/01.jpg",
+     "thumb": "gallery/tfilot-beet-milchama/thumb/01.jpg"
+    },
+    {
+     "web": "gallery/tfilot-beet-milchama/web/02.jpg",
+     "thumb": "gallery/tfilot-beet-milchama/thumb/02.jpg"
+    }
+   ]
+  },
+  {
+   "slug": "mesibat-chatanim",
+   "title": "מסיבות חתנים",
+   "date": "2021-10-30",
+   "cover": "gallery/mesibat-chatanim/thumb/01.jpg",
+   "description": "מסורת הקהילה: במוצאי שבת פרשת נח, חתן תורה וחתן בראשית מזמינים את הקהל לסעודת מלווה מלכה חגיגית.",
+   "when": "מוצאי שבת פרשת נח, לאורך השנים",
+   "count": 7,
+   "photos": [
+    {
+     "web": "gallery/mesibat-chatanim/web/01.jpg",
+     "thumb": "gallery/mesibat-chatanim/thumb/01.jpg"
+    },
+    {
+     "web": "gallery/mesibat-chatanim/web/02.jpg",
+     "thumb": "gallery/mesibat-chatanim/thumb/02.jpg"
+    },
+    {
+     "web": "gallery/mesibat-chatanim/web/03.jpg",
+     "thumb": "gallery/mesibat-chatanim/thumb/03.jpg"
+    },
+    {
+     "web": "gallery/mesibat-chatanim/web/04.jpg",
+     "thumb": "gallery/mesibat-chatanim/thumb/04.jpg"
+    },
+    {
+     "web": "gallery/mesibat-chatanim/web/05.jpg",
+     "thumb": "gallery/mesibat-chatanim/thumb/05.jpg"
+    },
+    {
+     "web": "gallery/mesibat-chatanim/web/06.jpg",
+     "thumb": "gallery/mesibat-chatanim/thumb/06.jpg"
+    },
+    {
+     "web": "gallery/mesibat-chatanim/web/07.jpg",
+     "thumb": "gallery/mesibat-chatanim/thumb/07.jpg"
+    }
+   ]
+  },
+  {
    "slug": "tiyul-bikat-hayarden-2013",
    "title": "טיול הקהילה לבקעת הירדן",
    "date": "2013",
    "cover": "gallery/tiyul-bikat-hayarden-2013/thumb/01-hadracha.jpg",
+   "description": "",
+   "when": "",
    "count": 4,
    "photos": [
     {

@@ -5,7 +5,8 @@ Originals go in gallery/<album>/ (JPG/PNG/WebP/HEIC-converted). This script writ
 gallery/<album>/web/<name>.jpg (max 1600px, quality 82) and gallery/<album>/thumb/<name>.jpg
 (480px square-ish crop), and lists everything in data/gallery.json.
 Album title = folder name with dashes as spaces (a title already in gallery.json is kept).
-Album date = date the folder first appeared in git (or an "album.json" {"title","date","cover"} in the folder).
+Album date = date the folder first appeared in git (or an "album.json" {"title","date","cover","description","when"} in the folder;
+"when" is free text shown instead of the date, e.g. "מוצאי שבת פרשת נח, לאורך השנים").
 Delete a folder to remove an album.
 """
 import json, re, subprocess, sys
@@ -70,6 +71,8 @@ def main():
             "title": title,
             "date": meta.get("date") or prev.get("date") or first_commit_date(folder),
             "cover": meta.get("cover") or prev.get("cover") or (photos[0]["thumb"] if photos else ""),
+            "description": meta.get("description", prev.get("description", "")),
+            "when": meta.get("when", prev.get("when", "")),
             "count": len(photos),
             "photos": photos,
         })

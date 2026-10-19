@@ -50,6 +50,7 @@ h1{font-size:clamp(28px,4vw,40px);margin:0 0 6px}
 .photos button{padding:0;border:0;background:none;cursor:pointer;border-radius:10px;overflow:hidden;box-shadow:var(--shadow)}
 .photos img{display:block;width:100%;aspect-ratio:1;object-fit:cover}
 .toolbar{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin-top:6px}
+.toolbar .desc{margin:8px 0 0;max-width:70ch;color:var(--ink)}
 .empty{background:var(--paper);border:1px dashed var(--line);border-radius:16px;padding:40px;text-align:center;color:var(--muted);margin-top:26px}
 /* lightbox */
 .lb{position:fixed;inset:0;background:rgba(10,16,28,.94);display:flex;align-items:center;justify-content:center;z-index:50}
@@ -112,11 +113,11 @@ footer{border-top:1px solid var(--line);padding:26px 0 44px;color:var(--muted);f
   if(!album){
     albums.forEach(a=>{const link=document.createElement('a'); link.className='album'; link.href='gallery.html?album='+encodeURIComponent(a.slug);
       const img=document.createElement('img'); img.src=a.cover; img.alt=a.title; img.loading='lazy'; link.append(img);
-      const cap=document.createElement('div'); cap.className='cap'; const t=document.createElement('strong'); t.textContent=a.title; const s=document.createElement('span'); s.textContent=[fmt(a.date), a.count+' תמונות'].filter(Boolean).join(' · '); cap.append(t,s); link.append(cap); el('albums').append(link);});
+      const cap=document.createElement('div'); cap.className='cap'; const t=document.createElement('strong'); t.textContent=a.title; const s=document.createElement('span'); s.textContent=[a.when||fmt(a.date), a.count+' תמונות'].filter(Boolean).join(' · '); cap.append(t,s); link.append(cap); el('albums').append(link);});
     return;
   }
   el('albums').hidden=true; el('album').hidden=false; document.title=album.title+' · גלריה · בית הכנסת הכיפה';
-  el('album-title').textContent=album.title; el('album-meta').textContent=[fmt(album.date), album.count+' תמונות'].filter(Boolean).join(' · ');
+  el('album-title').textContent=album.title; el('album-meta').textContent=[album.when||fmt(album.date), album.count+' תמונות'].filter(Boolean).join(' · '); if(album.description){ const d=document.createElement('p'); d.className='desc'; d.textContent=album.description; el('album-title').parentNode.append(d); }
   const photos=album.photos||[]; let idx=0;
   photos.forEach((p,i)=>{const b=document.createElement('button'); b.setAttribute('aria-label','תמונה '+(i+1)); const img=document.createElement('img'); img.src=p.thumb; img.alt=''; img.loading='lazy'; b.append(img); b.addEventListener('click',()=>open(i)); el('photos').append(b);});
   const lb=el('lb'), lbImg=el('lb-img');
