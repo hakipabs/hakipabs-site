@@ -104,6 +104,12 @@ nav a.nav-hi:hover{background:#e9dbb6}
 .week dl{display:grid;grid-template-columns:auto auto;gap:4px 14px;margin:0}
 .week dt{color:var(--muted)}
 .week dd{margin:0;font-weight:700;text-align:left;font-variant-numeric:tabular-nums}
+.zbar{display:grid;grid-template-columns:repeat(9,1fr);background:var(--paper);border:1px solid var(--line);border-top:0;border-radius:0 0 16px 16px;box-shadow:var(--shadow);margin:0 10px;padding:6px 10px}
+.zbar div{padding:8px 6px;text-align:center}
+.zbar small{display:block;color:var(--muted);font-size:12.5px;line-height:1.3;min-height:2.6em}
+.zbar b{font-size:19px;font-variant-numeric:tabular-nums;color:var(--navy)}
+.zbar .src{grid-column:1/-1;text-align:left;font-size:12px;color:var(--muted);padding:0 6px 4px}
+@media (max-width:760px){.zbar{grid-template-columns:repeat(3,1fr);margin:0 4px}.zbar b{font-size:17px}}
 
 .events{padding:40px 0 0}
 .event{display:grid;grid-template-columns:140px 1fr;gap:22px;align-items:center;background:var(--sand-2);border:1px solid #e4d4ab;border-radius:16px;padding:20px;box-shadow:var(--shadow)}
@@ -314,6 +320,18 @@ footer a{color:var(--navy)}
       <div class="note" id="sh-footnote">דבר תורה: הרב אבישי גרוסר · קידוש לבנה במוצאי שבת</div>
     </div>
   </div>
+  <div class="zbar" id="zbar" aria-label="זמני היום">
+    <div><small>עלות השחר</small><b>5:31</b></div>
+    <div><small>טלית ותפילין</small><b>5:43</b></div>
+    <div><small>הנץ החמה</small><b>6:43</b></div>
+    <div><small>סוף זמן ק"ש מג"א</small><b>8:59</b></div>
+    <div><small>סוף זמן ק"ש גר"א</small><b>9:35</b></div>
+    <div><small>סוף זמן תפילה</small><b>10:32</b></div>
+    <div><small>חצות היום</small><b>12:26</b></div>
+    <div><small>מנחה גדולה</small><b>12:56</b></div>
+    <div><small>שקיעת החמה</small><b>18:08</b></div>
+    <span class="src">זמני היום לפי הדף השבועי</span>
+  </div>
 </div>
 
 <section id="dvar" class="dvar" hidden>
@@ -370,14 +388,6 @@ footer a{color:var(--navy)}
           <tr><td>מניין יחיד</td><td class="time" id="wd-mincha">17:50</td></tr>
         </table>
         <div class="note">השעה מתעדכנת לפי השקיעה. הזמן המדויק בדף השבועי.</div>
-        <h3 style="margin-top:22px">זמני היום</h3>
-        <table class="small">
-          <tr><td>עלות השחר</td><td class="time" data-zman="עלות השחר">5:31</td></tr>
-          <tr><td>הנץ החמה</td><td class="time" data-zman="הנץ החמה">6:43</td></tr>
-          <tr><td>סוף זמן ק"ש (גר"א)</td><td class="time" data-zman="סוף זמן ק"ש גר"א">9:35</td></tr>
-          <tr><td>חצות היום</td><td class="time" data-zman="חצות היום">12:26</td></tr>
-          <tr><td>שקיעת החמה</td><td class="time" data-zman="שקיעת החמה">18:08</td></tr>
-        </table>
       </div>
       <div class="card">
         <h3>ערבית</h3>
@@ -617,6 +627,8 @@ fetch('data/shabbat.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(d
   const anyGreet=greet('gr-mazal',d.mazal_tov)|greet('gr-nichum',d.nichumim); const gw=document.getElementById('greetings'); if(gw) gw.hidden=!anyGreet;
 
   if(d.zmanim) document.querySelectorAll('[data-zman]').forEach(td=>{const v=d.zmanim[td.dataset.zman]; if(v) td.textContent=v;});
+  const zb=document.getElementById('zbar'); const zk=d.zmanim?Object.keys(d.zmanim).filter(k=>d.zmanim[k]):[];
+  if(zb&&zk.length>=5){ const src=zb.querySelector('.src'); zb.innerHTML=''; zk.forEach(k=>{const c=document.createElement('div'); const l=document.createElement('small'); l.textContent=k; const b=document.createElement('b'); b.textContent=d.zmanim[k]; c.append(l,b); zb.append(c);}); if(src) zb.append(src); }
 }).catch(()=>{});
 </script>
 <script>
