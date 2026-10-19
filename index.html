@@ -104,7 +104,11 @@ nav a.nav-hi:hover{background:#e9dbb6}
 .week dl{display:grid;grid-template-columns:auto auto;gap:4px 14px;margin:0}
 .week dt{color:var(--muted)}
 .week dd{margin:0;font-weight:700;text-align:left;font-variant-numeric:tabular-nums}
-.zbar{display:grid;grid-template-columns:repeat(9,1fr);background:var(--paper);border:1px solid var(--line);border-top:0;border-radius:0 0 16px 16px;box-shadow:var(--shadow);margin:0 10px;padding:6px 10px}
+.zbar{display:grid;grid-template-columns:repeat(3,1fr);background:var(--paper);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);margin:16px 0 0;padding:6px 10px 4px}
+.zbar.open{grid-template-columns:repeat(9,1fr)}
+.zbar:not(.open) .xtra{display:none!important}
+.zbar .tg{grid-column:1/-1;background:none;border:0;border-top:1px solid var(--line);color:var(--navy-2);font:inherit;font-weight:700;font-size:15px;padding:10px 6px 8px;margin-top:4px;cursor:pointer;width:100%}
+.zbar .tg:hover{background:var(--sand-2)}
 .zbar div{padding:8px 6px;text-align:center}
 .zbar small{display:block;color:var(--muted);font-size:12.5px;line-height:1.3;min-height:2.6em}
 .zbar b{font-size:19px;font-variant-numeric:tabular-nums;color:var(--navy)}
@@ -116,7 +120,8 @@ nav a.nav-hi:hover{background:#e9dbb6}
 .zbar .hd .d2::before{content:'שמאל: ';color:var(--navy);font-weight:700}
 .zbar .src{grid-column:1/-1;text-align:left;font-size:12px;color:var(--muted);padding:0 6px 4px}
 @media (max-width:760px){
-  .zbar{display:block;margin:0 4px;padding:4px 10px 8px}
+  .zbar{display:block;margin:14px 0 0;padding:4px 10px 4px}
+  .zbar .tg{display:block}
   .zbar .hd,.zbar div:not(.hd){display:grid;grid-template-columns:1fr 72px 72px;align-items:center;padding:7px 4px;text-align:start}
   .zbar .hd{font-size:12.5px;padding:8px 4px 6px;border-bottom:1px solid var(--line)}
   .zbar .hd .hl{display:block;color:var(--navy);font-weight:700;font-size:13px}
@@ -341,14 +346,15 @@ footer a{color:var(--navy)}
   </div>
   <div class="zbar" id="zbar" aria-label="זמני היום">
     <div><small>עלות השחר</small><b>5:31</b></div>
-    <div><small>טלית ותפילין</small><b>5:43</b></div>
-    <div><small>הנץ החמה</small><b>6:43</b></div>
+    <div class="xtra"><small>טלית ותפילין</small><b>5:43</b></div>
+    <div class="xtra"><small>הנץ החמה</small><b>6:43</b></div>
     <div><small>סוף זמן ק"ש מג"א</small><b>8:59</b></div>
-    <div><small>סוף זמן ק"ש גר"א</small><b>9:35</b></div>
-    <div><small>סוף זמן תפילה</small><b>10:32</b></div>
-    <div><small>חצות היום</small><b>12:26</b></div>
-    <div><small>מנחה גדולה</small><b>12:56</b></div>
+    <div class="xtra"><small>סוף זמן ק"ש גר"א</small><b>9:35</b></div>
+    <div class="xtra"><small>סוף זמן תפילה</small><b>10:32</b></div>
+    <div class="xtra"><small>חצות היום</small><b>12:26</b></div>
+    <div class="xtra"><small>מנחה גדולה</small><b>12:56</b></div>
     <div><small>שקיעת החמה</small><b>18:08</b></div>
+    <button class="tg" type="button" aria-expanded="false" onclick="var z=this.parentNode;z.classList.toggle('open');var o=z.classList.contains('open');this.setAttribute('aria-expanded',o);this.textContent=o?'פחות זמנים ▴':'כל זמני השבוע ▾'">כל זמני השבוע ▾</button>
     <span class="src">זמני היום לפי הדף השבועי</span>
   </div>
 </div>
@@ -647,9 +653,11 @@ fetch('data/shabbat.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(d
 
   if(d.zmanim) document.querySelectorAll('[data-zman]').forEach(td=>{const v=d.zmanim[td.dataset.zman]; if(v) td.textContent=v;});
   const zb=document.getElementById('zbar'); const zk=d.zmanim?Object.keys(d.zmanim).filter(k=>d.zmanim[k]):[];
-  if(zb&&zk.length>=5){ const src=zb.querySelector('.src'); const z2=d.zmanim_next||null; const dts=Array.isArray(d.zmanim_dates)?d.zmanim_dates:[]; zb.innerHTML='';
+  if(zb&&zk.length>=5){ const src=zb.querySelector('.src'); const tg=zb.querySelector('.tg'); const z2=d.zmanim_next||null; const dts=Array.isArray(d.zmanim_dates)?d.zmanim_dates:[]; zb.innerHTML='';
     if(z2){ const hd=document.createElement('div'); hd.className='hd'; const hl=document.createElement('span'); hl.className='hl'; hl.textContent='זמני השבוע'; const a=document.createElement('span'); a.className='d1'; a.textContent='יום ו\' '+(dts[0]||'הקרוב'); const bb=document.createElement('span'); bb.className='d2'; bb.textContent='יום ו\' '+(dts[1]||'הבא'); hd.append(hl,a,bb); zb.append(hd); }
-    zk.forEach(k=>{const c=document.createElement('div'); const l=document.createElement('small'); l.textContent=k; c.append(l); if(z2&&z2[k]){ const t=document.createElement('span'); t.className='t'; const b=document.createElement('b'); b.textContent=d.zmanim[k]; const i=document.createElement('i'); i.textContent=z2[k]; t.append(b,i); c.append(t);} else { const b=document.createElement('b'); b.textContent=d.zmanim[k]; c.append(b);} zb.append(c);});
+    const KEEP=['עלות השחר','סוף זמן ק"ש מג"א','שקיעת החמה'].filter(k=>zk.includes(k)); const keep=KEEP.length===3?KEEP:zk.slice(0,3);
+    zk.forEach(k=>{const c=document.createElement('div'); if(!keep.includes(k)) c.className='xtra'; const l=document.createElement('small'); l.textContent=k; c.append(l); if(z2&&z2[k]){ const t=document.createElement('span'); t.className='t'; const b=document.createElement('b'); b.textContent=d.zmanim[k]; const i=document.createElement('i'); i.textContent=z2[k]; t.append(b,i); c.append(t);} else { const b=document.createElement('b'); b.textContent=d.zmanim[k]; c.append(b);} zb.append(c);});
+    if(tg) zb.append(tg);
     if(src){ src.textContent=z2?'זמני השבוע מהדף השבועי: הזמן הכהה ליום שישי הקרוב, הבהיר ליום שישי הבא':'זמני היום לפי הדף השבועי'; zb.append(src);} }
 }).catch(()=>{});
 </script>
