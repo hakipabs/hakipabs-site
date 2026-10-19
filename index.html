@@ -222,6 +222,12 @@ footer a{color:var(--navy)}
   .tt td:first-child::before{content:none}
   .tt td.time{white-space:normal}
 }
+.dvar{padding:28px 0 0}
+.dvar-card{background:var(--paper);border:1px solid var(--line);border-right:5px solid var(--sand);border-radius:16px;padding:22px 26px;box-shadow:var(--shadow)}
+.dvar-card h2{font-family:"Frank Ruhl Libre",serif;color:var(--navy);font-size:24px;margin:2px 0 4px;line-height:1.25}
+.dvar-card .by{margin:0 0 10px;color:var(--muted);font-size:15px}
+.dvar-card .txt{margin:0 0 14px;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.dvar-card .btn{background:var(--navy);color:#fff;padding:10px 18px}
 </style>
 </head>
 <body>
@@ -244,6 +250,7 @@ footer a{color:var(--navy)}
       <ul>
         <li><a href="#tefila">זמני תפילה</a></li>
         <li><a href="#shiurim">שיעורים</a></li>
+        <li><a href="divrei-torah.html">דברי תורה</a></li>
         <li><a href="#talmud-torah" class="nav-hi">תלמוד תורה</a></li>
         <li><a href="#kids">ילדים ונוער</a></li>
         <li><a href="#kehila">הקהילה</a></li>
@@ -308,6 +315,17 @@ footer a{color:var(--navy)}
     </div>
   </div>
 </div>
+
+<section id="dvar" class="dvar" hidden>
+  <div class="wrap"><div class="dvar-card">
+    <span class="eyebrow">דבר תורה לפרשת <span id="dv-parasha"></span></span>
+    <h2 id="dv-title"></h2>
+    <p class="by" id="dv-by"></p>
+    <p class="txt" id="dv-text"></p>
+    <a class="btn small" href="divrei-torah.html" id="dv-link">להמשך קריאה ולכל דברי התורה</a>
+    <span class="muted small" id="dv-more" style="margin-right:12px"></span>
+  </div></div>
+</section>
 
 <div class="wrap greetings" id="greetings" hidden aria-live="off">
   <div class="ticker" id="gr-mazal" hidden><strong>מזל טוב!</strong><div class="viewport"><div class="track"><span class="copy"></span><span class="copy"></span></div></div></div>
@@ -571,7 +589,7 @@ footer a{color:var(--navy)}
       <span dir="ltr" style="display:inline-block;margin-top:6px">HaKipa Synagogue (Beit HaKnesset HaAl-Adati) · HaTsvi St 22, Be'er Sheva 8473349, Israel · Reg. nonprofit 58-002982-5</span>
     </div>
     <div>
-      <a href="#tefila">זמני תפילה</a><br><a href="#shiurim">שיעורים</a><br><a href="#kids">ילדים ונוער</a><br><a href="#talmud-torah">תלמוד תורה</a>
+      <a href="#tefila">זמני תפילה</a><br><a href="#shiurim">שיעורים</a><br><a href="divrei-torah.html">דבר תורה לפרשה</a><br><a href="#kids">ילדים ונוער</a><br><a href="#talmud-torah">תלמוד תורה</a>
     </div>
     <div>
       <a href="#kehila">הקהילה</a><br><a href="minhagim.html">מנהגי בית הכנסת</a><br><a href="archive.html">ההיסטוריה שלנו</a><br><a href="gallery.html">גלריה</a><br><a href="#truma">תרומה</a><br><a href="#contact">יצירת קשר</a><br><a href="mailto:vaad@hakipabs.org?subject=%D7%94%D7%A2%D7%A8%D7%94%20%D7%A2%D7%9C%20%D7%94%D7%90%D7%AA%D7%A8">מצאתם טעות? כתבו לנו</a>
@@ -622,6 +640,22 @@ fetch('data/events.json',{cache:'no-store'}).then(r=>r.ok?r.json():[]).then(list
 }).catch(()=>{});
 </script>
 <script>
+// דבר תורה לפרשת השבוע: data/divrei-torah.json (נכנס מהמייל אחרי אישור חבר ועדה). מוצג רק כשיש אחד לפרשה הנוכחית.
+Promise.all([fetch('data/shabbat.json',{cache:'no-store'}).then(r=>r.ok?r.json():null),fetch('data/divrei-torah.json',{cache:'no-store'}).then(r=>r.ok?r.json():null)]).then(([sh,list])=>{
+  if(!sh||!Array.isArray(list)||!list.length) return;
+  const norm=t=>(t||'').replace(/^פרשת\s+/,'').replace(/[\u0591-\u05C7]/g,'').replace(/[\s\-–־'"״׳]/g,'');
+  const cur=norm(sh.parasha); if(!cur) return;
+  const mine=list.filter(e=>norm(e.parasha)===cur).sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+  if(!mine.length) return;
+  const e=mine[0], g=id=>document.getElementById(id);
+  g('dv-parasha').textContent=(sh.parasha||'').replace(/^פרשת\s+/,'');
+  g('dv-title').textContent=e.title||('דבר תורה לפרשת '+e.parasha);
+  g('dv-by').textContent=e.author||'';
+  g('dv-text').textContent=(e.paragraphs&&e.paragraphs[0])||'';
+  g('dv-link').href='divrei-torah.html#'+encodeURIComponent(e.id);
+  if(mine.length>1) g('dv-more').textContent='וגם: '+mine.slice(1).map(x=>x.author).join(', ');
+  g('dvar').hidden=false;
+}).catch(()=>{});
 // הלוח השנתי: data/yearly.json (מתעדכן פעם בשנה מה-PDF ב-yearly/).
 fetch('data/yearly.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(y=>{
   if(!y||!Array.isArray(y.rows)||!y.rows.length) return;

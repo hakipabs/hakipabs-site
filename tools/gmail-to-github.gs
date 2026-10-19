@@ -7,6 +7,7 @@
  *   נושא שמכיל "אורייתא" + תמונה      -> אירוע של אותו יום (הפוסטר השבועי שמגיע מהקבוצה)
  *   נושא שמתחיל ב"אלבום" + תמונות    -> gallery/<שם האלבום>/ (דף הגלריה; כמה מיילים עם אותו נושא = אותו אלבום)
  *   כל PDF אחר                        -> holidays/      (לוח חג: מוצג באתר כתמונה, 45 יום)
+ *   נושא שמתחיל ב"דבר תורה"          -> data/divrei-torah.json (מכל שולח; מתפרסם רק אחרי שחבר ועדה מעביר או עונה על המייל)
  * אחרי ההעלאה ממתין כ-3 דקות לאוטומציה של גיטהאב, בודק מה האתר מציג, ושולח דוח לוועד.
  *
  * מייל של אירוע, דוגמה:
@@ -39,6 +40,11 @@ const CONFIG = {
   eventsFolder: 'images/events',
   eventsJson: 'data/events.json',
   eventDefaultDays: 14,                // אירוע בלי תאריך בנושא מוצג כך וכך ימים
+  dvarPrefix: 'דבר תורה',             // דבר תורה: <פרשה> / <שם הכותב> -> data/divrei-torah.json (מתפרסם רק אחרי שחבר ועדה מעביר את המייל)
+  dvarReviewers: ['vaad@hakipabs.org', 'shmueltaub@gmail.com', 'hakipa.zmanim@gmail.com'],   // מי מאשר דברי תורה: הטקסט עולה רק כשהוא מגיע (או מועבר, או נענה) מכתובת ברשימה
+  dvarJson: 'data/divrei-torah.json',
+  dvarFiles: 'divrei-torah',          // קבצים שצורפו לדבר תורה (PDF/Word)
+  dvarPendingLabel: 'hakipa-dvar-torah-pending',
   label: 'hakipa-site-uploaded',
   lookbackDays: 10,
   reportTo: 'vaad@hakipabs.org',       // הדוח אחרי כל ריצה. אפשר כמה כתובות מופרדות בפסיק
@@ -61,6 +67,7 @@ function run() {
   const threads = GmailApp.search(query, 0, 10);
   Logger.log('query: %s -> %s thread(s)', query, threads.length);
   const uploads = [];
+  runDivreiTorah_(token, label, uploads);
 
   threads.forEach(thread => {
     const subject = thread.getFirstMessageSubject();
@@ -68,6 +75,7 @@ function run() {
       const msgs = thread.getMessages();
       const msg = msgs[msgs.length - 1];
       const subj = cleanSubject_(msg.getSubject());
+      if (subj.startsWith(CONFIG.dvarPrefix)) return;   // דברי תורה מטופלים ב-runDivreiTorah_
       const atts = msg.getAttachments();
       const pdf = atts.find(a => /\.pdf$/i.test(a.getName()) || a.getContentType() === 'application/pdf');
       const img = atts.find(a => /^image\/(jpeg|png|webp)$/i.test(a.getContentType()));
@@ -122,6 +130,98 @@ function run() {
     Utilities.sleep(CONFIG.waitForSiteMs);
     uploads.forEach(u => sendReport_(...buildReport_(token, u)));
   }
+}
+
+/** דברי תורה: כל אחד יכול לשלוח; מתפרסם רק אחרי שחבר ועדה (CONFIG.dvarReviewers) מעביר את המייל (Forward) או עונה עליו (Reply all). */
+function runDivreiTorah_(token, label, uploads) {
+  const pending = GmailApp.getUserLabelByName(CONFIG.dvarPendingLabel) || GmailApp.createLabel(CONFIG.dvarPendingLabel);
+  const query = `subject:"${CONFIG.dvarPrefix}" newer_than:${CONFIG.lookbackDays}d -label:${CONFIG.label}`;
+  const threads = GmailApp.search(query, 0, 20);
+  Logger.log('dvar query: %s -> %s thread(s)', query, threads.length);
+  const isDvar = m => cleanSubject_(m.getSubject()).startsWith(CONFIG.dvarPrefix);
+  const isReviewer = m => CONFIG.dvarReviewers.some(r => (m.getFrom() || '').toLowerCase().includes(r.toLowerCase()));
+  threads.forEach(thread => {
+    const subject = thread.getFirstMessageSubject();
+    try {
+      const msgs = thread.getMessages().filter(isDvar);
+      if (!msgs.length) { thread.addLabel(label); return; }                      // הדוחות של הסקריפט עצמו וכדומה
+      const approved = msgs.slice().reverse().find(isReviewer);
+      if (!approved) {
+        if (!thread.getLabels().some(l => l.getName() === CONFIG.dvarPendingLabel)) {
+          thread.addLabel(pending);
+          const from = msgs[0].getFrom();
+          sendReport_(`📝 דבר תורה ממתין לאישור: ${cleanSubject_(subject)}`, [
+            `התקבל דבר תורה מאת ${from}.`, `נושא: ${cleanSubject_(msgs[0].getSubject())}`, '',
+            'הוא יתפרסם באתר רק אחרי שחבר ועדה יאשר: לפתוח את המייל, לקרוא, ואז להעביר אותו (Forward) ל-vaad@hakipabs.org או להשיב עליו (Reply all) מתוך תיבת הוועד. הריצה הבאה (עד שעה) תפרסם.',
+            `כדאי לוודא לפני: שם הכותב בנושא (${CONFIG.dvarPrefix}: <פרשה> / <שם>), אורך סביר, בלי פרטים אישיים של אחרים.`, '',
+            `מי רשאי לאשר: ${CONFIG.dvarReviewers.join(', ')}`,
+          ].join('\n'));
+        }
+        return;
+      }
+      const entry = addDvar_(token, approved, msgs[0]);
+      thread.addLabel(label); thread.removeLabel(pending);
+      uploads.push({ kind: 'dvar', subject: cleanSubject_(approved.getSubject()), path: CONFIG.dvarJson, entry, kb: 0 });
+      Logger.log('dvar torah added: %s / %s', entry.parasha, entry.author);
+    } catch (e) {
+      Logger.log('ERROR on dvar "%s": %s', subject, e);
+      sendReport_(`❌ אתר הכיפה: דבר התורה "${subject}" לא עלה`, `המייל: ${subject}\nשגיאה: ${e}\n\n${howToFix_()}`);
+    }
+  });
+}
+
+/** מוסיף רשומה ל-data/divrei-torah.json מתוך המייל המאושר (הטקסט מגוף המייל, קבצים מצורפים נשמרים ומקושרים). מחזיר את הרשומה. */
+function addDvar_(token, msg, firstMsg) {
+  const subj = cleanSubject_(msg.getSubject());
+  const parts = subj.slice(CONFIG.dvarPrefix.length).replace(/^[\s:\-]+/, '').split(/\s*[\/|]\s*/).map(s => s.trim()).filter(Boolean);
+  const parasha = (parts[0] || '').replace(/^פרשת\s+/, '').replace(/[\s,]+$/, '') || 'השבוע';
+  let author = parts[1] || '';
+  const title = parts[2] || '';
+  const raw = msg.getPlainBody() || '';
+  if (!author) { const m = raw.match(/^\s*(?:מאת|כותב|כתב|כתבה)\s*:\s*(.+)$/m); if (m && !/@/.test(m[1])) author = m[1].trim(); }
+  if (!author) { const m = raw.match(/^\s*(?:From|מאת)\s*:\s*(.+?)\s*<[^>]+>/m); if (m) author = m[1].replace(/^["']|["']$/g, '').trim(); }
+  if (!author) author = firstMsg.getFrom().replace(/<.*>/, '').replace(/^["']|["']$/g, '').trim() || 'חבר קהילה';
+  const paragraphs = paragraphs_(raw);
+  if (!paragraphs.length) throw new Error('לא נמצא טקסט בגוף המייל (דבר התורה צריך להיות כתוב בגוף ההודעה)');
+  const dateStr = Utilities.formatDate(msg.getDate(), 'Asia/Jerusalem', 'yyyy-MM-dd');
+  const base = `${slug_(parasha) || 'parasha'}-${dateStr}-${slug_(author) || 'x'}`;
+  const files = [];
+  msg.getAttachments().forEach((a, i) => {
+    const ext = ((a.getName() || '').match(/\.(pdf|docx?)$/i) || [])[1];
+    if (!ext) return;
+    const path = `${CONFIG.dvarFiles}/${base}${i ? '-' + (i + 1) : ''}.${ext.toLowerCase()}`;
+    uploadToGitHub_(token, path, a.getBytes(), `Dvar Torah file from email: ${subj}`);
+    files.push(path);
+  });
+  const file = getFile_(token, CONFIG.dvarJson);
+  let list = [];
+  try { list = JSON.parse(file.text); } catch (e) { list = []; }
+  if (!Array.isArray(list)) list = [];
+  list = list.filter(e => e.id !== base);
+  const entry = { id: base, parasha, author, title, date: dateStr, paragraphs, files };
+  list.push(entry);
+  list.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+  putFile_(token, CONFIG.dvarJson, JSON.stringify(list, null, 2) + '\n', `Dvar Torah from email: ${subj}`, file.sha);
+  return entry;
+}
+
+/** גוף המייל כפסקאות: בלי כותרות העברה, ציטוטים וחתימות; שורות סמוכות מתחברות לפסקה, שורה ריקה מפרידה. */
+function paragraphs_(body) {
+  const HEADER = /^(from|date|subject|to|cc|sent|מאת|תאריך|נושא|אל|עותק|כותב|כתב|כתבה)\s*:/i;
+  const out = []; let cur = [];
+  const flush = () => { if (cur.length) out.push(cur.join(' ').replace(/\s{2,}/g, ' ')); cur = []; };
+  (body || '').split(/\r?\n/).forEach(line => {
+    const l = line.trim();
+    if (!l) { flush(); return; }
+    if (/^>/.test(l) || /^-{2,}/.test(l) || /wrote:$/.test(l) || /כתב\/ה:$/.test(l)) { flush(); return; }
+    if (/forwarded message|הודעה שהועברה|begin forwarded/i.test(l)) { flush(); return; }
+    if (/^(sent from my|נשלח מה-|נשלח מן ה)/i.test(l)) { flush(); return; }
+    if (HEADER.test(l)) { flush(); return; }
+    if (/(^|\s)(subject|to|cc|date|from)\s*:\s/i.test(l) && /@|\d{4}|<|>/.test(l)) { flush(); return; }
+    cur.push(l);
+  });
+  flush();
+  return out;
 }
 
 /** גוף המייל בלי כותרות של העברה (Forwarded message, From/Date/Subject/To, גם בעברית) ובלי ציטוטים. */
@@ -243,6 +343,14 @@ function buildReport_(token, u) {
     const item = Array.isArray(list) && list.find(e => e.poster === u.path);
     if (!item) { ok = false; lines.push('⚠️ האירוע עדיין לא מופיע באתר. ייתכן שהאתר עוד נבנה; לבדוק שוב בעוד כמה דקות.'); }
     else lines.push('מה האתר מציג:', `• ${item.title}`, `• מתי: ${item.when || '(לא צוין)'}`, `• טקסט: ${item.text || '(ללא)'}`, `• יוצג עד: ${item.date}`);
+  } else if (u.kind === 'dvar') {
+    const list = fetchJson_(`${CONFIG.siteUrl}/${CONFIG.dvarJson}`);
+    const item = Array.isArray(list) && list.find(e => e.id === u.entry.id);
+    if (!item) { ok = false; lines.push('⚠️ דבר התורה עדיין לא מופיע באתר. ייתכן שהאתר עוד נבנה; לבדוק שוב בעוד כמה דקות.'); }
+    else lines.push('מה האתר מציג:', `• פרשת ${item.parasha} · ${item.author}${item.title ? ' · ' + item.title : ''}`,
+      `• פסקת הפתיחה (מופיעה בדף הבית כשזו פרשת השבוע): ${(item.paragraphs[0] || '').slice(0, 220)}`,
+      `• ${item.paragraphs.length} פסקאות${item.files.length ? ', ' + item.files.length + ' קבצים מצורפים' : ''}`,
+      `• ${CONFIG.siteUrl}/divrei-torah.html#${encodeURIComponent(item.id)}`);
   } else {
     const runInfo = latestRun_(token, u.kind === 'weekly' ? 'weekly-sheet.yml' : 'holidays.yml');
     if (runInfo) lines.push(`האוטומציה בגיטהאב: ${runInfo.status}${runInfo.conclusion ? ' / ' + runInfo.conclusion : ''}  ${runInfo.url}`);
@@ -281,6 +389,8 @@ function howToFix_() {
     `   https://github.com/${CONFIG.repo}/edit/${CONFIG.branch}/data/shabbat.json`,
     '2. אירוע: לתקן כותרת/תאריך/טקסט או למחוק רשומה בקובץ data/events.json:',
     `   https://github.com/${CONFIG.repo}/edit/${CONFIG.branch}/${CONFIG.eventsJson}`,
+    '2ב. דבר תורה: לתקן שם/פרשה/טקסט או למחוק רשומה בקובץ data/divrei-torah.json:',
+    `   https://github.com/${CONFIG.repo}/edit/${CONFIG.branch}/${CONFIG.dvarJson}`,
     '3. הקובץ הלא נכון עלה: למחוק אותו בגיטהאב (פתיחת הקובץ -> ... -> Delete file) או להעלות מתוקן:',
     `   https://github.com/${CONFIG.repo}/upload/${CONFIG.branch}/${CONFIG.folder}   (דף שבועי)`,
     `   https://github.com/${CONFIG.repo}/upload/${CONFIG.branch}/${CONFIG.holidayFolder}   (לוח חג)`,
