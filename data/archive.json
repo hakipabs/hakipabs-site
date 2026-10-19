@@ -8,7 +8,7 @@
    "description": "אבן הפינה לבית הכנסת העל-עדתי בשכונה לדוגמא (שכונה ה') הונחה ביום ראשון, כ\"ה בשבט תשכ\"ז, 5 בפברואר 1967, \"השנה התשע-עשרה למדינת ישראל\". הבית נחנך כעבור כמעט ארבע שנים, ביום שלישי כ\"ד בכסלו תשל\"א, 22 בדצמבר 1970, במעמד ראש העיר אליהו נאוי ורב העיר. האוסף: מגילת אבן הפינה, הטקס, בניית קליפת הבטון של הכיפה, החזית עם סורג המשושים, מודעת חנוכת הבית, והשכונה בימיה הראשונים.",
    "contributor": "",
    "cover": "archive/hakama/thumb/02-kipa.jpg",
-   "count": 15,
+   "count": 18,
    "items": [
     {
      "web": "archive/hakama/web/00-megilat-even-hapina.jpg",
@@ -55,6 +55,36 @@
      "thumb": "archive/hakama/thumb/04-sheled.jpg",
      "file": "",
      "caption": "שלד הכיפה בבנייה: קליפת הבטון על הפיגומים, לפני בניית הקירות.",
+     "year": "תשכ\"ז-תש\"ל, 1967-1970 (משוער)",
+     "text": "",
+     "kind": "photo",
+     "group": ""
+    },
+    {
+     "web": "archive/hakama/web/04a-sheled-hakshatot.jpg",
+     "thumb": "archive/hakama/thumb/04a-sheled-hakshatot.jpg",
+     "file": "",
+     "caption": "שלד תבנית הכיפה: קשתות העץ והפלדה שעליהן תיוצק הקליפה, לפני היציקה. ברקע בתי השיכון של שכונה ה'.",
+     "year": "תשכ\"ז-תש\"ל, 1967-1970 (משוער)",
+     "text": "",
+     "kind": "photo",
+     "group": ""
+    },
+    {
+     "web": "archive/hakama/web/04b-reshet-habarzel.jpg",
+     "thumb": "archive/hakama/thumb/04b-reshet-habarzel.jpg",
+     "file": "",
+     "caption": "רשת הברזל של קליפת הבטון הדקה, פרושה על תבנית העץ, לפני היציקה.",
+     "year": "תשכ\"ז-תש\"ל, 1967-1970 (משוער)",
+     "text": "",
+     "kind": "photo",
+     "group": ""
+    },
+    {
+     "web": "archive/hakama/web/04c-hakipa-hayetzuka.jpg",
+     "thumb": "archive/hakama/thumb/04c-hakipa-hayetzuka.jpg",
+     "file": "",
+     "caption": "הכיפה היצוקה. התבניות יורדות, והצורה כבר שם.",
      "year": "תשכ\"ז-תש\"ל, 1967-1970 (משוער)",
      "text": "",
      "kind": "photo",
@@ -334,7 +364,7 @@
    "description": "כשהתפילות התפצלו למניינים של עשרה, לחצר ולקפסולות, החליט ועד בית הכנסת דווקא אז לחדש את ההיכל: תקרה חדשה, תאורה חדשה וכיפת אור במרכזה. האוסף מביא את מסמכי התקופה (ההנחיות, מכתבי הרב והוועד, נוסחי התפילה המקוצרים, מפות הקפסולות) ואת רצף תמונות העבודות, מהפיגום הראשון בטבת תשפ\"א ועד חנוכת הבית המחודש ביום העצמאות תשפ\"א. פרטי קשר פרטיים הוסרו מהעותקים המפורסמים.",
    "contributor": "",
    "cover": "archive/korona-5780-5781/thumb/28-teura-20210319-093307.jpg",
-   "count": 43,
+   "count": 53,
    "items": [
     {
      "web": "archive/korona-5780-5781/web/00-siyum-hashas-5780.jpg",
@@ -437,6 +467,56 @@
      "group": "07-nusach-yom-kippur-5781"
     },
     {
+     "web": "archive/korona-5780-5781/web/07a-hoshana-raba-1.jpg",
+     "thumb": "archive/korona-5780-5781/thumb/07a-hoshana-raba-1.jpg",
+     "file": "",
+     "caption": "הושענא רבה ברחבה: חיבוט ערבות בין הכיסאות, כל אחד במרחק, במסכה.",
+     "year": "תשרי תשפ\"א, אוקטובר 2020 (משוער)",
+     "text": "",
+     "kind": "photo",
+     "group": ""
+    },
+    {
+     "web": "archive/korona-5780-5781/web/07b-hoshana-raba-2.jpg",
+     "thumb": "archive/korona-5780-5781/thumb/07b-hoshana-raba-2.jpg",
+     "file": "",
+     "caption": "חיבוט ערבות בחצר, והמניין מתחת לגגון שבפתח.",
+     "year": "תשרי תשפ\"א, אוקטובר 2020 (משוער)",
+     "text": "",
+     "kind": "photo",
+     "group": ""
+    },
+    {
+     "web": "archive/korona-5780-5781/web/07c-kriat-hatora-barachava.jpg",
+     "thumb": "archive/korona-5780-5781/thumb/07c-kriat-hatora-barachava.jpg",
+     "file": "",
+     "caption": "קריאת התורה על שולחן ברחבה: מניין החצר של ימי הקורונה.",
+     "year": "סתיו תשפ\"א, 2020 (משוער)",
+     "text": "",
+     "kind": "photo",
+     "group": ""
+    },
+    {
+     "web": "archive/korona-5780-5781/web/07d-hagbaha-mul-hakipa.jpg",
+     "thumb": "archive/korona-5780-5781/thumb/07d-hagbaha-mul-hakipa.jpg",
+     "file": "",
+     "caption": "הגבהה מול הכיפה: שחרית ברחבה שלפני בית הכנסת.",
+     "year": "סתיו תשפ\"א, 2020 (משוער)",
+     "text": "",
+     "kind": "photo",
+     "group": ""
+    },
+    {
+     "web": "archive/korona-5780-5781/web/07e-minyan-harachava.jpg",
+     "thumb": "archive/korona-5780-5781/thumb/07e-minyan-harachava.jpg",
+     "file": "",
+     "caption": "מניין הרחבה: ספר התורה על השולחן, ולידו עמדת נטילת הידיים, דלי וכוס.",
+     "year": "סתיו תשפ\"א, 2020 (משוער)",
+     "text": "",
+     "kind": "photo",
+     "group": ""
+    },
+    {
      "web": "archive/korona-5780-5781/web/08-kapsulot-heichal-p1.jpg",
      "thumb": "archive/korona-5780-5781/thumb/08-kapsulot-heichal-p1.jpg",
      "file": "archive/korona-5780-5781/08-kapsulot-heichal.pdf",
@@ -495,6 +575,16 @@
      "text": "בס\"ד ז' בטבת התשפ\"א\nלהלן הנחיות רב בית הכנסת, הדיין, הרב דרשביץ.\n1. קיום מניין מצומצם בהיכל:\nלאור ההנחיות שלא להתכנס מעל 10 אנשים בחלל סגור על הגבאים להכריז בתחילת התפילה שמי שמאריך יתפלל לא בהיכל.\nשליח הציבור צריך להמתין עד שתשעה ממתפללי ההיכל יסיימו תפילת לחש לפני התחלת חזרת הש\"ץ. אם צריך בגלל שבכל זאת יש 1-2 המאריכים בתפילתם, להכניס 2 מהחצר למשך חזרת הש\"ץ. אין אפשרות לצרף לספירה אנשים שסיימו תפילתם בעזרת הנשים או בחצר.\n2. כהנים ולווים יצאו בשחרית ומוסף לנטילת ידיים בין תפילת לחש לחזרת הש\"ץ.\n3. מי שיודע שיצטרך לצאת תוך כדי מהלך התפילה עקב מצב רפואי, יכנס רק לעזרת הנשים או לחצר ולא להיכל. להיכל יכנס רק מי שיכול להישאר כל התפילה.\n4. עליה לתורה:\nאם הגבאי קורא אדם הנמצא בעזרת נשים לעלות לתורה, אין חשש ביציאה מעזרת הנשים תוך כדי קריאת התורה על מנת להיכנס להיכל. מנגד, עליו לצאת מההיכל מייד לאחר הברכה ללא המתנה ל\"מי שברך\".\n5. אדם שאומר קדיש ולא הספיק להיות מהעשרה הראשונים בהיכל:\nעליו להיכנס להיכל לאמירת הקדיש ואז יצא, אא\"כ יש 10 בעזרת נשים ואז יכול לומר שם. לגבי החצר, שיעמוד בפתח ההיכל למשך אמירת הקדיש ואז יחזור למקומו, אא\"כ יש 10 בחצר ואז אין צריך להיכנס.\n6. על אחראי הקורונה להימנע מלהעיר ואפילו ברמז באמצע ק\"ש או תפילת לחש.",
      "kind": "document",
      "group": "13-hanchayot-halacha-tevet-5781"
+    },
+    {
+     "web": "archive/korona-5780-5781/web/13a-shacharit-beit-midrash.jpg",
+     "thumb": "archive/korona-5780-5781/thumb/13a-shacharit-beit-midrash.jpg",
+     "file": "",
+     "caption": "שחרית בבית המדרש בימי הקורונה: מסכות, שולחן לכל מתפלל, ומרחק.",
+     "year": "תשפ\"א, 2020-2021 (משוער)",
+     "text": "",
+     "kind": "photo",
+     "group": ""
     },
     {
      "web": "archive/korona-5780-5781/web/14-teura-20210105-075247.jpg",
@@ -687,6 +777,26 @@
      "group": "31-likrat-purim-5781"
     },
     {
+     "web": "archive/korona-5780-5781/web/31a-purim-beit-midrash.jpg",
+     "thumb": "archive/korona-5780-5781/thumb/31a-purim-beit-midrash.jpg",
+     "file": "",
+     "caption": "פורים בבית המדרש: הילדים סביב השולחנות.",
+     "year": "פורים, תשפ\"א-תשפ\"ב (משוער)",
+     "text": "",
+     "kind": "photo",
+     "group": ""
+    },
+    {
+     "web": "archive/korona-5780-5781/web/31b-hagalat-kelim.jpg",
+     "thumb": "archive/korona-5780-5781/thumb/31b-hagalat-kelim.jpg",
+     "file": "",
+     "caption": "הגעלת כלים בחצר לקראת פסח: דוד רותח, מבערים ודליים.",
+     "year": "ערב פסח, תשפ\"א (משוער)",
+     "text": "",
+     "kind": "photo",
+     "group": ""
+    },
+    {
      "web": "archive/korona-5780-5781/web/32-chanukat-habait-moda.jpg",
      "thumb": "archive/korona-5780-5781/thumb/32-chanukat-habait-moda.jpg",
      "file": "",
@@ -702,6 +812,26 @@
      "file": "",
      "caption": "ערב חנוכת ההיכל המחודש: החזנים ליד הבימה, הציבור במסכות, ומעל כולם התאורה החדשה.",
      "year": "ב' באייר תשפ\"א, 14.4.2021",
+     "text": "",
+     "kind": "photo",
+     "group": ""
+    },
+    {
+     "web": "archive/korona-5780-5781/web/32-yom-haatzmaut-beit-midrash.jpg",
+     "thumb": "archive/korona-5780-5781/thumb/32-yom-haatzmaut-beit-midrash.jpg",
+     "file": "",
+     "caption": "בית המדרש מקושט בדגלונים ליום העצמאות, ודגל על ארון הקודש.",
+     "year": "יום העצמאות תשפ\"א, 2021 (משוער)",
+     "text": "",
+     "kind": "photo",
+     "group": ""
+    },
+    {
+     "web": "archive/korona-5780-5781/web/32-yom-haatzmaut-parochet.jpg",
+     "thumb": "archive/korona-5780-5781/thumb/32-yom-haatzmaut-parochet.jpg",
+     "file": "",
+     "caption": "פרוכת ייחודית ליום העצמאות: דגל ישראל על ארון הקודש.",
+     "year": "יום העצמאות תשפ\"א, 2021 (משוער)",
      "text": "",
      "kind": "photo",
      "group": ""
