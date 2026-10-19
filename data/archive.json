@@ -226,13 +226,13 @@
   },
   {
    "slug": "shabbatot-hazanut",
-   "title": "שבתות חזנות",
+   "title": "חזנות",
    "period": "תשע\"ב ואילך, 2012 עד היום",
    "year_sort": 2012,
-   "description": "מסורת של יותר מעשור: פעם או פעמיים בשנה הקהילה מארחת חזן ומקהלה לשבת שלמה, יחד עם קהילות המעיין ובית שמואל ובשיתוף המחלקה לתרבות יהודית של עיריית באר שבע. ההיכל מתמלא עד אפס מקום, ומי שמוביל את זה מאחורי הקלעים כל השנים הוא יהודה לורבר. כאן המודעות משבת לשבת, תמונות, ומכתב אחד שכדאי לקרוא עד הסוף. חסרות לנו מודעות ותמונות משבתות נוספות: שלחו ל-vaad@hakipabs.org.",
+   "description": "מסורת של יותר מעשור: פעם או פעמיים בשנה הקהילה מארחת חזן ומקהלה לשבת שלמה, יחד עם קהילות המעיין ובית שמואל ובשיתוף המחלקה לתרבות יהודית של עיריית באר שבע, ולעתים גם לתפילה חגיגית בחול, כמו תפילת יום העצמאות תשפ\"א עם חנוכת ההיכל המחודש. ההיכל מתמלא עד אפס מקום, ומי שמוביל את זה מאחורי הקלעים כל השנים הוא יהודה לורבר. כאן המודעות משבת לשבת, תמונות, ומכתב אחד שכדאי לקרוא עד הסוף. חסרות לנו מודעות ותמונות משבתות נוספות: שלחו ל-vaad@hakipabs.org.",
    "contributor": "יהודה לורבר",
    "cover": "archive/shabbatot-hazanut/thumb/09-hazanim-vehamakhela.jpg",
-   "count": 10,
+   "count": 13,
    "items": [
     {
      "web": "archive/shabbatot-hazanut/web/00-2012-03-03-grinwald.jpg",
@@ -295,6 +295,36 @@
      "group": ""
     },
     {
+     "web": "archive/shabbatot-hazanut/web/05a-2021-04-14-chanukat-moda.jpg",
+     "thumb": "archive/shabbatot-hazanut/thumb/05a-2021-04-14-chanukat-moda.jpg",
+     "file": "",
+     "caption": "המודעה לתפילת ערבית חגיגית של יום העצמאות עם חזנות, לרגל החזרה לבית הכנסת אחרי הקורונה וחנוכת ההיכל המשופץ: החזן צבי וייס (חזן בית הכנסת הגדול בירושלים) ולצדו החזן יקי לאער; ברכות: הרב יהודה דרעי, הרב אהרן דרשביץ והרב שמעון כהן.",
+     "year": "ב' באייר תשפ\"א, 14.4.2021",
+     "text": "",
+     "kind": "photo",
+     "group": ""
+    },
+    {
+     "web": "archive/shabbatot-hazanut/web/05b-2021-04-14-chanukat-tfila.jpg",
+     "thumb": "archive/shabbatot-hazanut/thumb/05b-2021-04-14-chanukat-tfila.jpg",
+     "file": "",
+     "caption": "ערב חנוכת ההיכל המחודש: החזנים ליד הבימה, הציבור במסכות, ומעל כולם התאורה החדשה.",
+     "year": "ב' באייר תשפ\"א, 14.4.2021",
+     "text": "",
+     "kind": "photo",
+     "group": ""
+    },
+    {
+     "web": "archive/shabbatot-hazanut/web/05c-2021-04-14-chanukat-makhela.jpg",
+     "thumb": "archive/shabbatot-hazanut/thumb/05c-2021-04-14-chanukat-makhela.jpg",
+     "file": "",
+     "caption": "החזנים והמקהלה ליד ארון הקודש, עם דגל המדינה: תפילת יום העצמאות החגיגית עם חזנות, לרגל החזרה לבית הכנסת אחרי הקורונה וחנוכת ההיכל המשופץ והתאורה החדשה.",
+     "year": "ב' באייר תשפ\"א, 14.4.2021",
+     "text": "",
+     "kind": "photo",
+     "group": ""
+    },
+    {
      "web": "archive/shabbatot-hazanut/web/06-2022-03-26-elboim-getz.jpg",
      "thumb": "archive/shabbatot-hazanut/thumb/06-2022-03-26-elboim-getz.jpg",
      "file": "",
@@ -344,7 +374,7 @@
    "description": "כשהתפילות התפצלו למניינים של עשרה, לחצר ולקפסולות, החליט ועד בית הכנסת דווקא אז לחדש את ההיכל: תקרה חדשה, תאורה חדשה וכיפת אור במרכזה. האוסף מביא את מסמכי התקופה (ההנחיות, מכתבי הרב והוועד, נוסחי התפילה המקוצרים, מפות הקפסולות) ואת רצף תמונות העבודות, מהפיגום הראשון בטבת תשפ\"א ועד חנוכת הבית המחודש ביום העצמאות תשפ\"א. פרטי קשר פרטיים הוסרו מהעותקים המפורסמים.",
    "contributor": "",
    "cover": "archive/korona-5780-5781/thumb/28-teura-20210319-093307.jpg",
-   "count": 56,
+   "count": 46,
    "items": [
     {
      "web": "archive/korona-5780-5781/web/00-siyum-hashas-5780.jpg",
@@ -757,66 +787,6 @@
      "group": "31-likrat-purim-5781"
     },
     {
-     "web": "https://www.youtube-nocookie.com/embed/gG-hN4a6vrY",
-     "thumb": "https://i.ytimg.com/vi/gG-hN4a6vrY/hqdefault.jpg",
-     "file": "https://youtu.be/gG-hN4a6vrY",
-     "caption": "סרטון: פורים בבית המדרש.",
-     "year": "פורים, תשפ\"א-תשפ\"ב (משוער)",
-     "text": "",
-     "kind": "video",
-     "group": ""
-    },
-    {
-     "web": "archive/korona-5780-5781/web/31a-purim-beit-midrash.jpg",
-     "thumb": "archive/korona-5780-5781/thumb/31a-purim-beit-midrash.jpg",
-     "file": "",
-     "caption": "פורים בבית המדרש: הילדים סביב השולחנות.",
-     "year": "פורים, תשפ\"א-תשפ\"ב (משוער)",
-     "text": "",
-     "kind": "photo",
-     "group": ""
-    },
-    {
-     "web": "archive/korona-5780-5781/web/31b-hagalat-kelim.jpg",
-     "thumb": "archive/korona-5780-5781/thumb/31b-hagalat-kelim.jpg",
-     "file": "",
-     "caption": "הגעלת כלים בחצר לקראת פסח: דוד רותח, מבערים ודליים.",
-     "year": "ערב פסח, תשפ\"א (משוער)",
-     "text": "",
-     "kind": "photo",
-     "group": ""
-    },
-    {
-     "web": "archive/korona-5780-5781/web/32-chanukat-habait-makhela.jpg",
-     "thumb": "archive/korona-5780-5781/thumb/32-chanukat-habait-makhela.jpg",
-     "file": "",
-     "caption": "החזנים והמקהלה ליד ארון הקודש, עם דגל המדינה: תפילת יום העצמאות החגיגית עם חזנות, לרגל החזרה לבית הכנסת אחרי הקורונה וחנוכת ההיכל המשופץ והתאורה החדשה.",
-     "year": "ב' באייר תשפ\"א, 14.4.2021",
-     "text": "",
-     "kind": "photo",
-     "group": ""
-    },
-    {
-     "web": "archive/korona-5780-5781/web/32-chanukat-habait-moda.jpg",
-     "thumb": "archive/korona-5780-5781/thumb/32-chanukat-habait-moda.jpg",
-     "file": "",
-     "caption": "המודעה לתפילת ערבית חגיגית של יום העצמאות עם חזנות, לרגל החזרה לבית הכנסת אחרי הקורונה וחנוכת ההיכל המשופץ: החזן צבי וייס (חזן בית הכנסת הגדול בירושלים) ולצדו החזן יקי לאער; ברכות: הרב יהודה דרעי, הרב אהרן דרשביץ והרב שמעון כהן.",
-     "year": "ב' באייר תשפ\"א, 14.4.2021",
-     "text": "",
-     "kind": "photo",
-     "group": ""
-    },
-    {
-     "web": "archive/korona-5780-5781/web/32-chanukat-habait-tfila.jpg",
-     "thumb": "archive/korona-5780-5781/thumb/32-chanukat-habait-tfila.jpg",
-     "file": "",
-     "caption": "ערב חנוכת ההיכל המחודש: החזנים ליד הבימה, הציבור במסכות, ומעל כולם התאורה החדשה.",
-     "year": "ב' באייר תשפ\"א, 14.4.2021",
-     "text": "",
-     "kind": "photo",
-     "group": ""
-    },
-    {
      "web": "archive/korona-5780-5781/web/32-yom-haatzmaut-beit-midrash.jpg",
      "thumb": "archive/korona-5780-5781/thumb/32-yom-haatzmaut-beit-midrash.jpg",
      "file": "",
@@ -857,46 +827,6 @@
      "group": "33-chanukat-habait-hamechudash-5781"
     },
     {
-     "web": "https://www.youtube-nocookie.com/embed/6iahlDYbmHA",
-     "thumb": "https://i.ytimg.com/vi/6iahlDYbmHA/hqdefault.jpg",
-     "file": "https://youtu.be/6iahlDYbmHA",
-     "caption": "סרטון: סיום מסכת ראש השנה בדף היומי בבית המדרש, בהנחיית ר' מיכאל בנסון ז\"ל.",
-     "year": "י' כסלו תשפ\"ב, 14.11.2021",
-     "text": "",
-     "kind": "video",
-     "group": ""
-    },
-    {
-     "web": "archive/korona-5780-5781/web/34-hitkansut-1.jpg",
-     "thumb": "archive/korona-5780-5781/thumb/34-hitkansut-1.jpg",
-     "file": "",
-     "caption": "סיום מסכת ראש השנה בדף היומי, בבית המדרש: סיום משותף ללומדי הכיפה, בית מוריה והמעיין, שנתיים אחרי סיום הש\"ס המשותף. \"אנחנו מקווים מאד שהסיום המשותף ייהפך למסורת בשכונתנו\" (מיכאל בנסון ז\"ל, במכתבו למחרת).",
-     "year": "י' כסלו תשפ\"ב, 14.11.2021",
-     "text": "",
-     "kind": "photo",
-     "group": ""
-    },
-    {
-     "web": "archive/korona-5780-5781/web/35-hitkansut-2.jpg",
-     "thumb": "archive/korona-5780-5781/thumb/35-hitkansut-2.jpg",
-     "file": "",
-     "caption": "דברי תורה בסיום מסכת ראש השנה.",
-     "year": "י' כסלו תשפ\"ב, 14.11.2021",
-     "text": "",
-     "kind": "photo",
-     "group": ""
-    },
-    {
-     "web": "archive/korona-5780-5781/web/36-hitkansut-3.jpg",
-     "thumb": "archive/korona-5780-5781/thumb/36-hitkansut-3.jpg",
-     "file": "",
-     "caption": "הלומדים משלוש הקהילות סביב השולחנות. למחרת כבר יצאו לדרך במסכת תענית.",
-     "year": "י' כסלו תשפ\"ב, 14.11.2021",
-     "text": "",
-     "kind": "photo",
-     "group": ""
-    },
-    {
      "web": "archive/korona-5780-5781/web/37-kitzur-tfilot-rosh-hashana-5782-p1.jpg",
      "thumb": "archive/korona-5780-5781/thumb/37-kitzur-tfilot-rosh-hashana-5782-p1.jpg",
      "file": "archive/korona-5780-5781/37-kitzur-tfilot-rosh-hashana-5782.pdf",
@@ -913,10 +843,10 @@
    "title": "תרבות וקהילה",
    "period": "לאורך השנים",
    "year_sort": 2024,
-   "description": "מה שלא נכנס לאוספים ההיסטוריים ועדיין מספר מי אנחנו: מסורות, שירה, לימוד ורגעים של קהילה. האוסף גדל עם הסרטונים בערוץ היוטיוב של בית הכנסת ועם מה שתשלחו ל-vaad@hakipabs.org.",
+   "description": "מה שלא נכנס לאוספים ההיסטוריים ועדיין מספר מי אנחנו: סיומי מסכת, פורים, הגעלת כלים לפני פסח, מסורות ושירה. האוסף גדל עם הסרטונים בערוץ היוטיוב של בית הכנסת ועם מה שתשלחו ל-vaad@hakipabs.org.",
    "contributor": "",
-   "cover": "https://i.ytimg.com/vi/8OBb2mwhqR4/hqdefault.jpg",
-   "count": 2,
+   "cover": "archive/tarbut-vekehila/thumb/11-siyum-masechet-1.jpg",
+   "count": 9,
    "items": [
     {
      "web": "https://www.youtube-nocookie.com/embed/8OBb2mwhqR4",
@@ -936,6 +866,76 @@
      "year": "",
      "text": "",
      "kind": "video",
+     "group": ""
+    },
+    {
+     "web": "https://www.youtube-nocookie.com/embed/6iahlDYbmHA",
+     "thumb": "https://i.ytimg.com/vi/6iahlDYbmHA/hqdefault.jpg",
+     "file": "https://youtu.be/6iahlDYbmHA",
+     "caption": "סרטון: סיום מסכת ראש השנה בדף היומי בבית המדרש, בהנחיית ר' מיכאל בנסון ז\"ל.",
+     "year": "י' כסלו תשפ\"ב, 14.11.2021",
+     "text": "",
+     "kind": "video",
+     "group": ""
+    },
+    {
+     "web": "archive/tarbut-vekehila/web/11-siyum-masechet-1.jpg",
+     "thumb": "archive/tarbut-vekehila/thumb/11-siyum-masechet-1.jpg",
+     "file": "",
+     "caption": "סיום מסכת ראש השנה בדף היומי, בבית המדרש, עדיין עם מסכות: סיום משותף ללומדי הכיפה, בית מוריה והמעיין, שנתיים אחרי סיום הש\"ס המשותף. \"אנחנו מקווים מאד שהסיום המשותף ייהפך למסורת בשכונתנו\" (מיכאל בנסון ז\"ל, במכתבו למחרת).",
+     "year": "י' כסלו תשפ\"ב, 14.11.2021",
+     "text": "",
+     "kind": "photo",
+     "group": ""
+    },
+    {
+     "web": "archive/tarbut-vekehila/web/12-siyum-masechet-2.jpg",
+     "thumb": "archive/tarbut-vekehila/thumb/12-siyum-masechet-2.jpg",
+     "file": "",
+     "caption": "דברי תורה בסיום מסכת ראש השנה.",
+     "year": "י' כסלו תשפ\"ב, 14.11.2021",
+     "text": "",
+     "kind": "photo",
+     "group": ""
+    },
+    {
+     "web": "archive/tarbut-vekehila/web/13-siyum-masechet-3.jpg",
+     "thumb": "archive/tarbut-vekehila/thumb/13-siyum-masechet-3.jpg",
+     "file": "",
+     "caption": "הלומדים משלוש הקהילות סביב השולחנות. למחרת כבר יצאו לדרך במסכת תענית.",
+     "year": "י' כסלו תשפ\"ב, 14.11.2021",
+     "text": "",
+     "kind": "photo",
+     "group": ""
+    },
+    {
+     "web": "archive/tarbut-vekehila/web/20-purim-beit-midrash.jpg",
+     "thumb": "archive/tarbut-vekehila/thumb/20-purim-beit-midrash.jpg",
+     "file": "",
+     "caption": "פורים בבית המדרש: הילדים סביב השולחנות.",
+     "year": "פורים, תשפ\"א-תשפ\"ב (משוער)",
+     "text": "",
+     "kind": "photo",
+     "group": ""
+    },
+    {
+     "web": "https://www.youtube-nocookie.com/embed/gG-hN4a6vrY",
+     "thumb": "https://i.ytimg.com/vi/gG-hN4a6vrY/hqdefault.jpg",
+     "file": "https://youtu.be/gG-hN4a6vrY",
+     "caption": "סרטון: פורים בבית המדרש.",
+     "year": "פורים, תשפ\"א-תשפ\"ב (משוער)",
+     "text": "",
+     "kind": "video",
+     "group": ""
+    },
+    {
+     "web": "archive/tarbut-vekehila/web/30-hagalat-kelim.jpg",
+     "thumb": "archive/tarbut-vekehila/thumb/30-hagalat-kelim.jpg",
+     "file": "",
+     "caption": "הגעלת כלים בחצר לקראת פסח: דוד רותח, מבערים ודליים.",
+     "year": "ערב פסח, תשפ\"א (משוער)",
+     "text": "",
+     "kind": "photo",
      "group": ""
     }
    ]
