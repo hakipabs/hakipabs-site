@@ -1,0 +1,21 @@
+{
+  "title": "תרבות וקהילה",
+  "period": "לאורך השנים",
+  "year_sort": 2024,
+  "description": "מה שלא נכנס לאוספים ההיסטוריים ועדיין מספר מי אנחנו: מסורות, שירה, לימוד ורגעים של קהילה. האוסף גדל עם הסרטונים בערוץ היוטיוב של בית הכנסת ועם מה שתשלחו ל-vaad@hakipabs.org.",
+  "contributor": "",
+  "approved": true,
+  "cover": "",
+  "items": {
+    "00-simchat-beit-hashoeva.video": {
+      "video": "8OBb2mwhqR4",
+      "caption": "סרטון: מסורת של שמחת בית השואבה וסיום מסכת בבית הרב אהרון דרשביץ שליט\"א.",
+      "year": ""
+    },
+    "01-kriat-hatora-sfaradit-ashkenazit.video": {
+      "video": "WH3zGVMBhv0",
+      "caption": "סרטון: \"העל עדתי\", קריאת התורה ספרדית או אשכנזית. על המנהג של בית אחד לכל העדות.",
+      "year": ""
+    }
+  }
+}

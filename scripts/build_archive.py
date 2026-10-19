@@ -5,6 +5,8 @@ archive/<collection>/album.json describes it:
   {"title", "period" (free text, e.g. "שנות ה-60"), "year_sort" (number, for ordering), "description",
    "contributor", "approved": true|false, "cover",
    "items": {"<file>": {"caption", "year", "text" (optional full transcription, Markdown-ish plain text)}}}
+A video is an item with no file: key "<nn>-<slug>.video" and {"video": "<YouTube id>", "caption", "year"}; it is
+embedded from the synagogue's YouTube channel (thumbnail from YouTube, player in the lightbox).
 Only approved collections are published. Images are resized (web 1600px, thumb 480px).
 A PDF becomes one item per page (rendered to JPEG), each linking to the PDF; the "text" of the
 document is attached to its first page. Output: data/archive.json.
@@ -48,7 +50,25 @@ def main():
         items_meta = meta.get("items", {})
         items, keep = [], set()
         files = sorted(x for x in folder.iterdir() if x.is_file() and (x.suffix.lower() in IMG_EXTS or x.suffix.lower() == ".pdf"))
-        for f in files:
+        videos = {k: v for k, v in items_meta.items() if isinstance(v, dict) and v.get("video")}
+        entries = sorted([(f.name, f) for f in files] + [(k, None) for k in videos], key=lambda e: e[0])
+        for name, f in entries:
+            if f is None:
+                m = videos[name]
+                vid = re.sub(r"[^A-Za-z0-9_-]", "", str(m["video"]))[:11]
+                if len(vid) != 11:
+                    print(f"bad video id in {folder.name}/{name}: {m['video']}"); continue
+                items.append({
+                    "web": f"https://www.youtube-nocookie.com/embed/{vid}",
+                    "thumb": f"https://i.ytimg.com/vi/{vid}/hqdefault.jpg",
+                    "file": f"https://youtu.be/{vid}",
+                    "caption": m.get("caption", ""),
+                    "year": m.get("year", ""),
+                    "text": m.get("text", ""),
+                    "kind": "video",
+                    "group": "",
+                })
+                continue
             m = items_meta.get(f.name, {})
             if f.suffix.lower() == ".pdf":
                 import pymupdf

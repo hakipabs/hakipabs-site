@@ -344,7 +344,7 @@
    "description": "כשהתפילות התפצלו למניינים של עשרה, לחצר ולקפסולות, החליט ועד בית הכנסת דווקא אז לחדש את ההיכל: תקרה חדשה, תאורה חדשה וכיפת אור במרכזה. האוסף מביא את מסמכי התקופה (ההנחיות, מכתבי הרב והוועד, נוסחי התפילה המקוצרים, מפות הקפסולות) ואת רצף תמונות העבודות, מהפיגום הראשון בטבת תשפ\"א ועד חנוכת הבית המחודש ביום העצמאות תשפ\"א. פרטי קשר פרטיים הוסרו מהעותקים המפורסמים.",
    "contributor": "",
    "cover": "archive/korona-5780-5781/thumb/28-teura-20210319-093307.jpg",
-   "count": 54,
+   "count": 56,
    "items": [
     {
      "web": "archive/korona-5780-5781/web/00-siyum-hashas-5780.jpg",
@@ -757,6 +757,16 @@
      "group": "31-likrat-purim-5781"
     },
     {
+     "web": "https://www.youtube-nocookie.com/embed/gG-hN4a6vrY",
+     "thumb": "https://i.ytimg.com/vi/gG-hN4a6vrY/hqdefault.jpg",
+     "file": "https://youtu.be/gG-hN4a6vrY",
+     "caption": "סרטון: פורים בבית המדרש.",
+     "year": "פורים, תשפ\"א-תשפ\"ב (משוער)",
+     "text": "",
+     "kind": "video",
+     "group": ""
+    },
+    {
      "web": "archive/korona-5780-5781/web/31a-purim-beit-midrash.jpg",
      "thumb": "archive/korona-5780-5781/thumb/31a-purim-beit-midrash.jpg",
      "file": "",
@@ -847,6 +857,16 @@
      "group": "33-chanukat-habait-hamechudash-5781"
     },
     {
+     "web": "https://www.youtube-nocookie.com/embed/6iahlDYbmHA",
+     "thumb": "https://i.ytimg.com/vi/6iahlDYbmHA/hqdefault.jpg",
+     "file": "https://youtu.be/6iahlDYbmHA",
+     "caption": "סרטון: סיום מסכת ראש השנה בדף היומי בבית המדרש, בהנחיית ר' מיכאל בנסון ז\"ל.",
+     "year": "י' כסלו תשפ\"ב, 14.11.2021",
+     "text": "",
+     "kind": "video",
+     "group": ""
+    },
+    {
      "web": "archive/korona-5780-5781/web/34-hitkansut-1.jpg",
      "thumb": "archive/korona-5780-5781/thumb/34-hitkansut-1.jpg",
      "file": "",
@@ -885,6 +905,38 @@
      "text": "ב\"ה, ראש השנה תשפ\"ב\n\nעקב המצב, ולאחר התיעצות עם רב ביה\"כ הרב אהרון דרשביץ, אנו נקצר את זמן התפילות.\nלהלן הנחיות לבעלי התפילה ולציבור:\n\nהתחלת התפילה בבקר בברייתא דר' ישמעאל.\n\nחזרת הש\"ץ שחרית: פיוט אתה הוא אלקינו ללא מנגינה. פיוט לא-ל עורך דין ללא מנגינה (ביום השני יאמרו במוסף). קדושה לא יותר משיר אחד. י\"ג מידות של רחמים ללא מנגינה. קריאת התורה ללא \"מי שברך\" (יאמר רק \"מי שברך את האבות הוא יברך את הבנים\").\n\nחזרת הש\"ץ מוסף: מלכיות, זכרונות ושופרות, בכל ברכה לא יותר משיר אחד.",
      "kind": "document",
      "group": "37-kitzur-tfilot-rosh-hashana-5782"
+    }
+   ]
+  },
+  {
+   "slug": "tarbut-vekehila",
+   "title": "תרבות וקהילה",
+   "period": "לאורך השנים",
+   "year_sort": 2024,
+   "description": "מה שלא נכנס לאוספים ההיסטוריים ועדיין מספר מי אנחנו: מסורות, שירה, לימוד ורגעים של קהילה. האוסף גדל עם הסרטונים בערוץ היוטיוב של בית הכנסת ועם מה שתשלחו ל-vaad@hakipabs.org.",
+   "contributor": "",
+   "cover": "https://i.ytimg.com/vi/8OBb2mwhqR4/hqdefault.jpg",
+   "count": 2,
+   "items": [
+    {
+     "web": "https://www.youtube-nocookie.com/embed/8OBb2mwhqR4",
+     "thumb": "https://i.ytimg.com/vi/8OBb2mwhqR4/hqdefault.jpg",
+     "file": "https://youtu.be/8OBb2mwhqR4",
+     "caption": "סרטון: מסורת של שמחת בית השואבה וסיום מסכת בבית הרב אהרון דרשביץ שליט\"א.",
+     "year": "",
+     "text": "",
+     "kind": "video",
+     "group": ""
+    },
+    {
+     "web": "https://www.youtube-nocookie.com/embed/WH3zGVMBhv0",
+     "thumb": "https://i.ytimg.com/vi/WH3zGVMBhv0/hqdefault.jpg",
+     "file": "https://youtu.be/WH3zGVMBhv0",
+     "caption": "סרטון: \"העל עדתי\", קריאת התורה ספרדית או אשכנזית. על המנהג של בית אחד לכל העדות.",
+     "year": "",
+     "text": "",
+     "kind": "video",
+     "group": ""
     }
    ]
   }

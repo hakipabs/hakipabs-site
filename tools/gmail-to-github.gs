@@ -6,6 +6,7 @@
  *   נושא שמתחיל ב"אירוע" + תמונה     -> images/events/ (כרטיס בבלוק "אירועים קרובים": פוסטר, כותרת, תאריך, טקסט)
  *   נושא שמכיל "אורייתא" + תמונה      -> אירוע של אותו יום (הפוסטר השבועי שמגיע מהקבוצה)
  *   נושא שמתחיל ב"אלבום" + תמונות    -> gallery/<שם האלבום>/ (דף הגלריה; כמה מיילים עם אותו נושא = אותו אלבום)
+ *   נושא שמתחיל ב"ארכיון" + קישור יוטיוב בגוף -> פריט וידאו באוסף (הסרטון עצמו יושב בערוץ היוטיוב של בית הכנסת, @HakipaBS)
  *   כל PDF אחר                        -> holidays/      (לוח חג: מוצג באתר כתמונה, 45 יום)
  *   נושא שמתחיל ב"דבר תורה"          -> data/divrei-torah.json (מכל שולח; מתפרסם רק אחרי שחבר ועדה מעביר או עונה על המייל)
  * אחרי ההעלאה ממתין כ-3 דקות לאוטומציה של גיטהאב, בודק מה האתר מציג, ושולח דוח לוועד.
@@ -63,7 +64,7 @@ function run() {
   const token = PropertiesService.getScriptProperties().getProperty('GITHUB_TOKEN');
   if (!token) throw new Error('GITHUB_TOKEN is missing in Script Properties');
   const label = GmailApp.getUserLabelByName(CONFIG.label) || GmailApp.createLabel(CONFIG.label);
-  const query = `from:(${CONFIG.senders.join(' OR ')}) has:attachment newer_than:${CONFIG.lookbackDays}d -label:${CONFIG.label}`;
+  const query = `from:(${CONFIG.senders.join(' OR ')}) newer_than:${CONFIG.lookbackDays}d -label:${CONFIG.label} (has:attachment OR subject:"${CONFIG.archivePrefix}" OR subject:"${CONFIG.albumPrefix}")`;
   const threads = GmailApp.search(query, 0, 10);
   Logger.log('query: %s -> %s thread(s)', query, threads.length);
   const uploads = [];
@@ -85,7 +86,8 @@ function run() {
         const prefix = isArchive ? CONFIG.archivePrefix : CONFIG.albumPrefix;
         const baseFolder = isArchive ? CONFIG.archiveFolder : CONFIG.galleryFolder;
         const imgs = atts.filter(a => /^image\/(jpeg|png|webp)$/i.test(a.getContentType()) || a.getContentType() === 'application/pdf');
-        if (!imgs.length) { Logger.log('album mail without images: "%s"', subj); thread.addLabel(label); return; }
+        const vids = isArchive ? youtubeIds_(msg.getPlainBody()) : [];
+        if (!imgs.length && !vids.length) { Logger.log('album mail without images or videos: "%s"', subj); thread.addLabel(label); return; }
         const albumTitle = subj.slice(prefix.length).replace(/^[\s:\-]+/, '').trim() || 'אלבום';
         const albumSlug = slug_(albumTitle) || 'album';
         const stamp = Utilities.formatDate(msg.getDate(), 'Asia/Jerusalem', 'yyyyMMdd-HHmm');
@@ -94,8 +96,16 @@ function run() {
           uploadToGitHub_(token, `${baseFolder}/${albumSlug}/${stamp}-${String(i + 1).padStart(2, '0')}.${ext}`, a.getBytes(), `Album photos from email: ${subj}`);
         });
         thread.addLabel(label);
-        if (isArchive) { const meta = { title: albumTitle, period: '', year_sort: 9999, description: cleanBody_(msg.getPlainBody()).slice(0, 3).join(' '), contributor: msg.getFrom().replace(/<.*>/, '').trim(), approved: false, items: {} }; const mf = getFile_(token, `${baseFolder}/${albumSlug}/album.json`); if (!mf.sha) putFile_(token, `${baseFolder}/${albumSlug}/album.json`, JSON.stringify(meta, null, 2) + '\n', `Archive collection from email: ${subj}`, null); }
-        uploads.push({ kind: isArchive ? 'archive' : 'album', subject: subj, path: `${baseFolder}/${albumSlug}`, album: albumSlug, albumTitle, count: imgs.length, kb: Math.round(imgs.reduce((s, a) => s + a.getSize(), 0) / 1024) });
+        if (isArchive) {
+          const mf = getFile_(token, `${baseFolder}/${albumSlug}/album.json`);
+          let meta = null; try { meta = mf.sha ? JSON.parse(mf.text) : null; } catch (e) { meta = null; }
+          const fresh = !meta;
+          if (!meta) meta = { title: albumTitle, period: '', year_sort: 9999, description: cleanBody_(msg.getPlainBody()).filter(l => !/youtu\.?be/i.test(l)).slice(0, 3).join(' '), contributor: msg.getFrom().replace(/<.*>/, '').trim(), approved: false, items: {} };
+          if (!meta.items) meta.items = {};
+          vids.forEach((id, i) => { meta.items[`${stamp}-v${String(i + 1).padStart(2, '0')}.video`] = { video: id, caption: cleanBody_(msg.getPlainBody()).filter(l => !/youtu\.?be/i.test(l))[0] || albumTitle, year: '' }; });
+          if (fresh || vids.length) putFile_(token, `${baseFolder}/${albumSlug}/album.json`, JSON.stringify(meta, null, 2) + '\n', `Archive collection from email: ${subj}`, mf.sha);
+        }
+        uploads.push({ kind: isArchive ? 'archive' : 'album', subject: subj, path: `${baseFolder}/${albumSlug}`, album: albumSlug, albumTitle, count: imgs.length + vids.length, kb: Math.round(imgs.reduce((s, a) => s + a.getSize(), 0) / 1024) });
         Logger.log('album "%s": %s photo(s) uploaded', albumTitle, imgs.length);
         return;
       }
@@ -235,6 +245,14 @@ function cleanBody_(body) {
     if (/(^|\s)(subject|to|cc|date|from)\s*:\s/i.test(l) && /@|\d{4}|<|>/.test(l)) return false;   // כותרות שהודבקו לשורה אחת
     return true;
   });
+}
+
+/** מזהי יוטיוב מתוך גוף המייל: youtu.be/ID, youtube.com/watch?v=ID, youtube.com/shorts/ID, youtube.com/live/ID */
+function youtubeIds_(body) {
+  const out = [];
+  const re = /(?:youtu\.be\/|youtube\.com\/(?:watch\?(?:[^\s]*&)?v=|shorts\/|live\/|embed\/))([A-Za-z0-9_-]{11})/g;
+  let m; while ((m = re.exec(body || ''))) { if (!out.includes(m[1])) out.push(m[1]); }
+  return out;
 }
 
 function cleanSubject_(subject) {
