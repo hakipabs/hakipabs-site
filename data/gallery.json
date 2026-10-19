@@ -51,6 +51,41 @@
    ]
   },
   {
+   "slug": "peilut-vehartzaot",
+   "title": "הרצאות, שיעורים ופעילויות",
+   "date": "2026-06-01",
+   "cover": "gallery/peilut-vehartzaot/thumb/01.jpg",
+   "description": "הרצאות ושיעורים בבית המדרש, ערבי שירה ונגינה, פעילויות לילדים ולנוער בחצר ובאולם: קהילה שלומדת ונפגשת, מגיל הגן ועד הוותיקים.",
+   "when": "לאורך השנה, לכל הגילים",
+   "count": 6,
+   "photos": [
+    {
+     "web": "gallery/peilut-vehartzaot/web/01.jpg",
+     "thumb": "gallery/peilut-vehartzaot/thumb/01.jpg"
+    },
+    {
+     "web": "gallery/peilut-vehartzaot/web/02.jpg",
+     "thumb": "gallery/peilut-vehartzaot/thumb/02.jpg"
+    },
+    {
+     "web": "gallery/peilut-vehartzaot/web/03.jpg",
+     "thumb": "gallery/peilut-vehartzaot/thumb/03.jpg"
+    },
+    {
+     "web": "gallery/peilut-vehartzaot/web/04.jpg",
+     "thumb": "gallery/peilut-vehartzaot/thumb/04.jpg"
+    },
+    {
+     "web": "gallery/peilut-vehartzaot/web/05.jpg",
+     "thumb": "gallery/peilut-vehartzaot/thumb/05.jpg"
+    },
+    {
+     "web": "gallery/peilut-vehartzaot/web/06.jpg",
+     "thumb": "gallery/peilut-vehartzaot/thumb/06.jpg"
+    }
+   ]
+  },
+  {
    "slug": "tfilot-beet-milchama",
    "title": "תפילות בעת מלחמה",
    "date": "2024-06-01",
