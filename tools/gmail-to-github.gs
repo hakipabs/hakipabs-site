@@ -43,7 +43,8 @@ const CONFIG = {
   eventDefaultDays: 14,                // אירוע בלי תאריך בנושא מוצג כך וכך ימים
   dvarPrefix: 'דבר תורה',             // דבר תורה: <פרשה> / <שם הכותב> -> data/divrei-torah.json (מתפרסם רק אחרי שחבר ועדה מעביר את המייל)
   dvarReviewers: ['vaad@hakipabs.org', 'shmueltaub@gmail.com', 'hakipa.zmanim@gmail.com'],   // מי מאשר דברי תורה: הטקסט עולה רק כשהוא מגיע (או מועבר, או נענה) מכתובת ברשימה
-  dvarMaxWords: 200,                  // היעד לאורך דבר תורה (2-3 דקות קריאה); מעבר לזה ההודעה לוועד מסמנת ⚠️, לא חוסמת
+  dvarMaxWords: 200,                  // היעד לאורך דבר תורה כפי שמופיע באתר (2-3 דקות קריאה)
+  dvarWarnWords: 250,                 // מעל זה ההודעה לוועד מסמנת ⚠️; אף פעם לא חוסם
   dvarJson: 'data/divrei-torah.json',
   dvarFiles: 'divrei-torah',          // קבצים שצורפו לדבר תורה (PDF/Word)
   dvarPendingLabel: 'hakipa-dvar-torah-pending',
@@ -162,8 +163,8 @@ function runDivreiTorah_(token, label, uploads) {
           thread.addLabel(pending);
           const from = msgs[0].getFrom();
           const words = cleanBody_(msgs[0].getPlainBody()).join(' ').split(/\s+/).filter(Boolean).length;
-          const lengthLine = words > CONFIG.dvarMaxWords
-            ? `⚠️ אורך: ${words} מילים, מעל היעד של ${CONFIG.dvarMaxWords}. אפשר לבקש מהכותב לקצר לפני האישור.`
+          const lengthLine = words > CONFIG.dvarWarnWords
+            ? `⚠️ אורך: ${words} מילים, ארוך מהיעד של ${CONFIG.dvarMaxWords}. אפשר לבקש מהכותב לקצר, או לאשר כמו שהוא.`
             : `אורך: ${words} מילים (היעד: עד ${CONFIG.dvarMaxWords}).`;
           sendReport_(`📝 דבר תורה ממתין לאישור: ${cleanSubject_(subject)}`, [
             `התקבל דבר תורה מאת ${from}.`, `נושא: ${cleanSubject_(msgs[0].getSubject())}`, lengthLine, '',
