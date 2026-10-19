@@ -846,7 +846,7 @@
    "description": "מה שלא נכנס לאוספים ההיסטוריים ועדיין מספר מי אנחנו: סיומי מסכת, פורים, הגעלת כלים לפני פסח, מסורות ושירה. האוסף גדל עם הסרטונים בערוץ היוטיוב של בית הכנסת ועם מה שתשלחו ל-vaad@hakipabs.org.",
    "contributor": "",
    "cover": "archive/tarbut-vekehila/thumb/11-siyum-masechet-1.jpg",
-   "count": 9,
+   "count": 10,
    "items": [
     {
      "web": "https://www.youtube-nocookie.com/embed/8OBb2mwhqR4",
@@ -936,6 +936,16 @@
      "year": "ערב פסח, תשפ\"א (משוער)",
      "text": "",
      "kind": "photo",
+     "group": ""
+    },
+    {
+     "web": "https://www.youtube-nocookie.com/embed/vPJpyVDsYuM",
+     "thumb": "https://i.ytimg.com/vi/vPJpyVDsYuM/hqdefault.jpg",
+     "file": "https://youtu.be/vPJpyVDsYuM",
+     "caption": "סרטון: הכנה לשבועות בתלמוד תורה הכיפה.",
+     "year": "ערב שבועות",
+     "text": "",
+     "kind": "video",
      "group": ""
     }
    ]
