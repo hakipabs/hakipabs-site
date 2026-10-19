@@ -99,11 +99,23 @@ def parse(text):
     m = re.search(r"\nמנחה " + TIME, norm)
     if m: out["weekday_mincha"] = m.group(1)
 
-    z = {}
+    z, z2 = {}, {}
     for label in ZMANIM:
-        m = re.search(re.escape(label) + r" " + TIME, norm)
-        if m: z[label] = m.group(1)
-    if len(z) >= 5: out["zmanim"] = z
+        m = re.search(re.escape(label) + r" ?" + TIME + r"\s*" + TIME + "?", norm)
+        if m:
+            z[label] = m.group(1)
+            if m.group(2): z2[label] = m.group(2)
+    if len(z) >= 5:
+        out["zmanim"] = z
+        if len(z2) == len(z):
+            out["zmanim_next"] = z2
+            # the two column headers: "יום ו' ה' מרחשוון" ... "יום ו' י"ב מרחשוון"
+            head = norm[norm.find("זמני השבוע"):norm.find("עלות השחר")] if "זמני השבוע" in norm else ""
+            head = re.sub(r"\s+", " ", head.replace("\n", " "))
+            MONTH = r"(תשרי|מרחשוון|חשוון|חשון|כסלו|טבת|שבט|אדר א'|אדר ב'|אדר|ניסן|אייר|סיוון|סיון|תמוז|מנחם אב|אב|אלול)"
+            dates = re.findall(r"([א-ת]\"[א-ת]|[א-ת]') ?" + MONTH, head)
+            if len(dates) >= 2:
+                out["zmanim_dates"] = [f"{d} {mo}" for d, mo in dates[:2]]
 
     m = re.search(r"דבר תורה: ?([^\n]+)", norm)
     foot = []
