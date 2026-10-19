@@ -111,9 +111,24 @@ nav a.nav-hi:hover{background:#e9dbb6}
 .zbar .t{display:flex;justify-content:center;gap:10px;align-items:baseline}
 .zbar .t i{font-style:normal;font-size:15px;color:var(--muted);font-variant-numeric:tabular-nums}
 .zbar .hd{grid-column:1/-1;display:flex;justify-content:space-between;font-size:12.5px;color:var(--muted);padding:2px 8px 0}
-.zbar .hd b{font-size:12.5px;color:var(--navy)}
+.zbar .hd .hl{display:none}
+.zbar .hd .d1::before{content:'ימין: ';color:var(--navy);font-weight:700}
+.zbar .hd .d2::before{content:'שמאל: ';color:var(--navy);font-weight:700}
 .zbar .src{grid-column:1/-1;text-align:left;font-size:12px;color:var(--muted);padding:0 6px 4px}
-@media (max-width:760px){.zbar{grid-template-columns:repeat(3,1fr);margin:0 4px}.zbar b{font-size:17px}}
+@media (max-width:760px){
+  .zbar{display:block;margin:0 4px;padding:4px 10px 8px}
+  .zbar .hd,.zbar div:not(.hd){display:grid;grid-template-columns:1fr 72px 72px;align-items:center;padding:7px 4px;text-align:start}
+  .zbar .hd{font-size:12.5px;padding:8px 4px 6px;border-bottom:1px solid var(--line)}
+  .zbar .hd .hl{display:block;color:var(--navy);font-weight:700;font-size:13px}
+  .zbar .hd .d1,.zbar .hd .d2{text-align:center;line-height:1.25}
+  .zbar .hd .d1::before,.zbar .hd .d2::before{content:none}
+  .zbar div:not(.hd){border-top:1px solid var(--line)}
+  .zbar .hd+div{border-top:0}
+  .zbar small{min-height:0;font-size:15px;color:var(--ink)}
+  .zbar .t{display:contents}
+  .zbar b,.zbar .t i{text-align:center;font-size:17px}
+  .zbar .src{display:none}
+}
 
 .events{padding:40px 0 0}
 .event{display:grid;grid-template-columns:140px 1fr;gap:22px;align-items:center;background:var(--sand-2);border:1px solid #e4d4ab;border-radius:16px;padding:20px;box-shadow:var(--shadow)}
@@ -633,7 +648,7 @@ fetch('data/shabbat.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(d
   if(d.zmanim) document.querySelectorAll('[data-zman]').forEach(td=>{const v=d.zmanim[td.dataset.zman]; if(v) td.textContent=v;});
   const zb=document.getElementById('zbar'); const zk=d.zmanim?Object.keys(d.zmanim).filter(k=>d.zmanim[k]):[];
   if(zb&&zk.length>=5){ const src=zb.querySelector('.src'); const z2=d.zmanim_next||null; const dts=Array.isArray(d.zmanim_dates)?d.zmanim_dates:[]; zb.innerHTML='';
-    if(z2){ const hd=document.createElement('div'); hd.className='hd'; const a=document.createElement('span'); a.innerHTML='<b>'+'ימין'+'</b>: יום ו\' '+(dts[0]||'השבוע'); const bb=document.createElement('span'); bb.innerHTML='<b>'+'שמאל'+'</b>: יום ו\' '+(dts[1]||'הבא'); hd.append(a,bb); zb.append(hd); }
+    if(z2){ const hd=document.createElement('div'); hd.className='hd'; const hl=document.createElement('span'); hl.className='hl'; hl.textContent='זמני השבוע'; const a=document.createElement('span'); a.className='d1'; a.textContent='יום ו\' '+(dts[0]||'הקרוב'); const bb=document.createElement('span'); bb.className='d2'; bb.textContent='יום ו\' '+(dts[1]||'הבא'); hd.append(hl,a,bb); zb.append(hd); }
     zk.forEach(k=>{const c=document.createElement('div'); const l=document.createElement('small'); l.textContent=k; c.append(l); if(z2&&z2[k]){ const t=document.createElement('span'); t.className='t'; const b=document.createElement('b'); b.textContent=d.zmanim[k]; const i=document.createElement('i'); i.textContent=z2[k]; t.append(b,i); c.append(t);} else { const b=document.createElement('b'); b.textContent=d.zmanim[k]; c.append(b);} zb.append(c);});
     if(src){ src.textContent=z2?'זמני השבוע מהדף השבועי: הזמן הכהה ליום שישי הקרוב, הבהיר ליום שישי הבא':'זמני היום לפי הדף השבועי'; zb.append(src);} }
 }).catch(()=>{});
