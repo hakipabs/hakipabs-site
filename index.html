@@ -318,6 +318,7 @@ footer a{color:var(--navy)}
         <div><div class="small" style="color:#c8d3e3">הדלקת נרות</div><div class="big" id="sh-candles">17:46</div></div>
         <div><div class="small" style="color:#c8d3e3">צאת השבת</div><div class="big" id="sh-havdala">18:47</div></div>
       </div>
+      <div class="small" id="sh-weather" hidden style="color:#c8d3e3;margin-top:8px"></div>
       <div class="small" style="color:#c8d3e3;margin-top:8px">ר"ת <span id="sh-rt">19:19</span> · <span id="sh-note">במוצאי שבת מתחילים לבקש "ותן טל ומטר לברכה"</span></div>
       <a class="btn btn-ghost small" style="margin-top:14px;padding:8px 14px" href="weekly/latest.pdf" target="_blank" rel="noopener">הדף השבועי המלא (PDF)</a>
       <a class="small" style="display:block;margin-top:10px;color:#c8d3e3" href="minhagim.html#behab">סליחות בה"ב בשני ובחמישי: המנהג והסיפור שלנו איתו</a>
@@ -633,6 +634,21 @@ footer a{color:var(--navy)}
 </footer>
 
 <script>
+// תחזית לשבת בבאר שבע, לכיוון המזגנים: Open-Meteo (בלי מפתח ובלי עוגיות). מוצגת מרביעי עד שבת, כשהדף השבועי כבר על השבת הקרובה.
+(function(){
+  const now=new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Jerusalem'})), dow=now.getDay();
+  if(dow<3 && !/[?&]wx=1/.test(location.search)) return;
+  const sat=new Date(now); sat.setDate(now.getDate()+((6-dow+7)%7)); const fri=new Date(sat); fri.setDate(sat.getDate()-1);
+  const iso=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'), S=iso(sat), F=iso(fri);
+  fetch('https://api.open-meteo.com/v1/forecast?latitude=31.262&longitude=34.786&hourly=temperature_2m&daily=temperature_2m_max,precipitation_probability_max&timezone=Asia%2FJerusalem&forecast_days=7')
+  .then(r=>r.ok?r.json():null).then(w=>{
+    if(!w||!w.daily||!w.hourly) return; const i=w.daily.time.indexOf(S); if(i<0) return;
+    const night=w.hourly.time.map((t,k)=>[t,w.hourly.temperature_2m[k]]).filter(([t])=>(t.startsWith(F)&&t.slice(11,13)>='20')||(t.startsWith(S)&&t.slice(11,13)<='06')).map(x=>x[1]).filter(v=>v!=null);
+    if(!night.length) return;
+    const lo=Math.round(Math.min(...night)), hi=Math.round(w.daily.temperature_2m_max[i]), rain=(w.daily.precipitation_probability_max||[])[i];
+    const el=document.getElementById('sh-weather'); const t=v=>'⁦'+v+'°⁩'; el.textContent='תחזית: ליל שבת עד '+t(lo)+', יום שבת עד '+t(hi)+(rain>=50?' · צפוי גשם':''); el.hidden=false;
+  }).catch(()=>{});
+})();
 // זמני השבת נטענים מ-data/shabbat.json; אם הטעינה נכשלת נשארים הערכים שבדף.
 fetch('data/shabbat.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(d=>{
   if(!d) return;
