@@ -235,6 +235,58 @@
    ]
   },
   {
+   "slug": "harchavat-beit-hamidrash",
+   "title": "הרחבת בית המדרש",
+   "period": "תשמ\"ז, 1986-1987",
+   "year_sort": 1987,
+   "description": "בשנת תשמ\"ז הורחב בית המדרש ונבנו השירותים. את הוועדה שטיפלה בבנייה הוביל פרופ' אלטשולר, ובין חבריה היו אהוד אביבי ומיכאל בנסון ז\"ל. השכנים התנגדו לבנייה, ערערו לוועדה המחוזית ודרשו להנמיך את המבנה. הגובה לא שונה, אבל בלחץ ראש העיר אליהו נאוי סוכם שלא יהיו חלונות בצד המערבי, הפונה לבתי השכנים. מסגרות הבטון של החלונות נבנו והחלונות נאטמו, בתקווה לפתוח אותם יום אחד. ובלשונו של פרופ' אלטשולר: \"לא היה בזה צורך. כי אז נכנסו לחיינו המזגנים.\"",
+   "contributor": "פרופ' אלטשולר",
+   "cover": "archive/harchavat-beit-hamidrash/thumb/01-kirot-habloqim.jpg",
+   "count": 4,
+   "items": [
+    {
+     "web": "archive/harchavat-beit-hamidrash/web/00-rachava.jpg",
+     "thumb": "archive/harchavat-beit-hamidrash/thumb/00-rachava.jpg",
+     "file": "",
+     "caption": "רחבת הכניסה בזמן העבודות: ערימות בלוקים בין הדקלים, ומימין הקשת של הכיפה וסורג המשושים.",
+     "year": "תשמ\"ז, 1986-1987",
+     "text": "",
+     "kind": "photo",
+     "group": ""
+    },
+    {
+     "web": "archive/harchavat-beit-hamidrash/web/01-kirot-habloqim.jpg",
+     "thumb": "archive/harchavat-beit-hamidrash/thumb/01-kirot-habloqim.jpg",
+     "file": "",
+     "caption": "קירות הבלוקים של האגף החדש עולים לצד בית המדרש. מימין, שולי קליפת הכיפה.",
+     "year": "תשמ\"ז, 1986-1987",
+     "text": "",
+     "kind": "photo",
+     "group": ""
+    },
+    {
+     "web": "archive/harchavat-beit-hamidrash/web/02-poalim.jpg",
+     "thumb": "archive/harchavat-beit-hamidrash/thumb/02-poalim.jpg",
+     "file": "",
+     "caption": "הפועלים באתר, בין קירות הבלוקים החדשים. על גג המבנה הקיים עובדים פועלים נוספים.",
+     "year": "תשמ\"ז, 1986-1987",
+     "text": "",
+     "kind": "photo",
+     "group": ""
+    },
+    {
+     "web": "archive/harchavat-beit-hamidrash/web/03-al-hagag.jpg",
+     "thumb": "archive/harchavat-beit-hamidrash/thumb/03-al-hagag.jpg",
+     "file": "",
+     "caption": "העבודה על גג המבנה: שברי בטון וברזל על הגג, וסולם עץ לאורך הקיר.",
+     "year": "תשמ\"ז, 1986-1987",
+     "text": "",
+     "kind": "photo",
+     "group": ""
+    }
+   ]
+  },
+  {
    "slug": "shabbatot-hazanut",
    "title": "חזנות",
    "period": "תשע\"א ואילך, 2010 עד היום",
