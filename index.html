@@ -69,7 +69,7 @@ a{color:var(--navy-2)}
 
 /* header */
 header{position:sticky;top:0;z-index:20;background:rgba(250,248,243,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
-.nav{display:flex;align-items:center;justify-content:space-between;height:66px;gap:16px}
+.nav{display:flex;align-items:center;justify-content:flex-start;height:66px;gap:28px}
 .brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--navy);font-weight:700}
 .brand .mark{display:block;flex:none}
 @media (max-width:600px){.brand .mark{width:40px;height:30px}}
@@ -87,7 +87,15 @@ nav .sub-btn{display:block;background:none;border:0;padding:8px 12px;border-radi
 nav .sub-btn:hover,nav .sub.open .sub-btn{background:var(--sand-2)}
 nav ul.sub-list{display:none;position:absolute;top:100%;inset-inline-end:0;min-width:190px;flex-direction:column;gap:2px;background:var(--bg);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);padding:6px;z-index:30}
 nav .sub:hover ul.sub-list,nav .sub.open ul.sub-list,nav .sub:focus-within ul.sub-list{display:flex}
-@media (max-width:1080px){nav a,nav .sub-btn{padding:8px 8px;font-size:14.5px} nav ul{gap:2px}}
+@media (max-width:1180px){nav a,nav .sub-btn{padding:8px 8px;font-size:14.5px} nav ul{gap:2px}}
+@media (max-width:1020px){
+  .nav{justify-content:space-between}
+  nav ul{display:none;position:absolute;inset-inline:0;top:66px;background:var(--bg);flex-direction:column;padding:10px 16px 16px;border-bottom:1px solid var(--line)}
+  nav ul.open{display:flex}
+  .menu-btn{display:inline-block}
+  nav .sub-btn{display:none}
+  nav ul.sub-list,nav .sub:hover ul.sub-list{display:flex;position:static;border:0;box-shadow:none;padding:0;min-width:0;background:none}
+}
 
 /* hero */
 .hero{position:relative;min-height:560px;display:grid;align-items:end;color:#fff;overflow:hidden}
@@ -242,11 +250,6 @@ footer a{color:var(--navy)}
   .week .cell{border-inline-start:0;border-top:1px solid var(--line)}
   .campaign{grid-template-columns:1fr;padding:30px}
   footer .cols{grid-template-columns:1fr}
-  nav ul{display:none;position:absolute;inset-inline:0;top:66px;background:var(--bg);flex-direction:column;padding:10px 16px 16px;border-bottom:1px solid var(--line)}
-  nav ul.open{display:flex}
-  nav .sub-btn{display:none}
-  nav ul.sub-list,nav .sub:hover ul.sub-list{display:flex;position:static;border:0;box-shadow:none;padding:0;min-width:0;background:none}
-  .menu-btn{display:inline-block}
   .hero{min-height:520px}
   section{padding:52px 0}
   table{display:block;overflow-x:auto;max-width:100%}
@@ -294,11 +297,11 @@ footer a{color:var(--navy)}
         <li><a href="divrei-torah.html">קצרצרים לשבת</a></li>
         <li><a href="#talmud-torah" class="nav-hi">תלמוד תורה</a></li>
         <li><a href="#kids">ילדים ונוער</a></li>
+        <li><a href="archive.html">ההיסטוריה שלנו</a></li>
         <li class="sub">
           <button type="button" class="sub-btn" aria-expanded="false">הקהילה <span aria-hidden="true">▾</span></button>
           <ul class="sub-list">
             <li><a href="#kehila">על הקהילה</a></li>
-            <li><a href="archive.html">ההיסטוריה שלנו</a></li>
             <li><a href="gallery.html">גלריה</a></li>
             <li><a href="#contact">יצירת קשר</a></li>
           </ul>
@@ -316,6 +319,10 @@ footer a{color:var(--navy)}
   document.addEventListener('click',e=>{ if(!sub.contains(e.target)) set(false); });
   document.addEventListener('keydown',e=>{ if(e.key==='Escape') set(false); });
   sub.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>set(false)));
+})();
+// בטלפון: לחיצה על פריט בתפריט סוגרת אותו.
+(function(){ const nav=document.querySelector('nav[aria-label="ראשי"]'); if(!nav) return; const ul=nav.querySelector(':scope > ul'), btn=nav.querySelector('.menu-btn');
+  nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{ ul.classList.remove('open'); btn.setAttribute('aria-expanded','false'); }));
 })();
 </script>
 
