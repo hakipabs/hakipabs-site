@@ -126,6 +126,7 @@ footer{border-top:1px solid var(--line);padding:26px 0 44px;color:var(--muted);f
   if(curName){ el('week-title').textContent='השבוע: פרשת '+curName; document.querySelectorAll('.p-now').forEach(s=>s.textContent=curName); el('send-btn').href='mailto:vaad@hakipabs.org?subject='+encodeURIComponent('דבר תורה: '+curName+' / '); el('send-btn').textContent='שליחת קצרצר לפרשת '+curName; }
   else el('week').hidden=true;
 
+  // שיתוף: בטלפון/טאבלט חלונית השיתוף של המכשיר; במחשב (עכבר) רק העתקת הקישור.
   // כתובת קצרה ויציבה לכל קצרצר (#t-xxxx), נגזרת מה-id; הקישורים הישנים (#id בעברית) ממשיכים לעבוד.
   const shortKey=id=>{ let h=2166136261; for(const c of (id||'')){ h^=c.codePointAt(0); h=Math.imul(h,16777619); } return 't-'+(h>>>0).toString(36); };
   function shareBtn(e){
@@ -134,7 +135,7 @@ footer{border-top:1px solid var(--line);padding:26px 0 44px;color:var(--muted);f
       const url=location.origin+location.pathname+'#'+shortKey(e.id);
       const title=e.title||('קצרצר לפרשת '+(e.parasha||'').replace(/^פרשת\s+/,''));
       const text='קצרצרים לשבת: "'+title+'"'+(e.author?', '+e.author:'');
-      if(navigator.share){ try{ await navigator.share({title:'קצרצרים לשבת', text, url}); }catch(err){} return; }
+      if(navigator.share && matchMedia('(pointer:coarse)').matches){ try{ await navigator.share({title:'קצרצרים לשבת', text, url}); }catch(err){} return; }
       try{ await navigator.clipboard.writeText(text+'\n'+url); b.textContent='הקישור הועתק'; }catch(err){ window.prompt('העתיקו את הקישור:', url); }
       setTimeout(()=>{ b.textContent='שיתוף'; },2500);
     });
