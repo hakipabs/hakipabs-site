@@ -80,6 +80,14 @@ nav a:hover{background:var(--sand-2)}
 nav a.nav-hi{background:var(--sand-2);color:#5a4718}
 nav a.nav-hi:hover{background:#e9dbb6}
 .menu-btn{display:none;background:none;border:1px solid var(--line);border-radius:8px;padding:8px 10px;font:inherit}
+nav a.nav-donate{background:var(--navy);color:#fff;font-weight:700}
+nav a.nav-donate:hover{background:var(--navy-2)}
+nav .sub{position:relative}
+nav .sub-btn{display:block;background:none;border:0;padding:8px 12px;border-radius:8px;font:inherit;font-weight:500;font-size:15px;color:var(--ink);cursor:pointer}
+nav .sub-btn:hover,nav .sub.open .sub-btn{background:var(--sand-2)}
+nav ul.sub-list{display:none;position:absolute;top:100%;inset-inline-end:0;min-width:190px;flex-direction:column;gap:2px;background:var(--bg);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);padding:6px;z-index:30}
+nav .sub:hover ul.sub-list,nav .sub.open ul.sub-list,nav .sub:focus-within ul.sub-list{display:flex}
+@media (max-width:1080px){nav a,nav .sub-btn{padding:8px 8px;font-size:14.5px} nav ul{gap:2px}}
 
 /* hero */
 .hero{position:relative;min-height:560px;display:grid;align-items:end;color:#fff;overflow:hidden}
@@ -236,6 +244,8 @@ footer a{color:var(--navy)}
   footer .cols{grid-template-columns:1fr}
   nav ul{display:none;position:absolute;inset-inline:0;top:66px;background:var(--bg);flex-direction:column;padding:10px 16px 16px;border-bottom:1px solid var(--line)}
   nav ul.open{display:flex}
+  nav .sub-btn{display:none}
+  nav ul.sub-list,nav .sub:hover ul.sub-list{display:flex;position:static;border:0;box-shadow:none;padding:0;min-width:0;background:none}
   .menu-btn{display:inline-block}
   .hero{min-height:520px}
   section{padding:52px 0}
@@ -278,20 +288,36 @@ footer a{color:var(--navy)}
     <nav aria-label="ראשי">
       <button class="menu-btn" aria-expanded="false" onclick="var u=this.nextElementSibling;u.classList.toggle('open');this.setAttribute('aria-expanded',u.classList.contains('open'))">תפריט</button>
       <ul>
+        <li><a href="#truma" class="nav-donate">לתרומה</a></li>
         <li><a href="#tefila">זמני תפילה</a></li>
         <li><a href="#shiurim">שיעורים</a></li>
         <li><a href="divrei-torah.html">קצרצרים לשבת</a></li>
         <li><a href="#talmud-torah" class="nav-hi">תלמוד תורה</a></li>
         <li><a href="#kids">ילדים ונוער</a></li>
-        <li><a href="#kehila">הקהילה</a></li>
-        <li><a href="archive.html">ההיסטוריה שלנו</a></li>
-        <li><a href="gallery.html">גלריה</a></li>
-        <li><a href="#truma">תרומה</a></li>
-        <li><a href="#contact">יצירת קשר</a></li>
+        <li class="sub">
+          <button type="button" class="sub-btn" aria-expanded="false">הקהילה <span aria-hidden="true">▾</span></button>
+          <ul class="sub-list">
+            <li><a href="#kehila">על הקהילה</a></li>
+            <li><a href="archive.html">ההיסטוריה שלנו</a></li>
+            <li><a href="gallery.html">גלריה</a></li>
+            <li><a href="#contact">יצירת קשר</a></li>
+          </ul>
+        </li>
       </ul>
     </nav>
   </div>
 </header>
+
+<script>
+// תפריט "הקהילה": פתיחה בלחיצה (גם במגע), סגירה בלחיצה בחוץ או ב-Escape.
+(function(){ const sub=document.querySelector('nav .sub'); if(!sub) return; const b=sub.querySelector('.sub-btn');
+  const set=o=>{ sub.classList.toggle('open',o); b.setAttribute('aria-expanded',o); };
+  b.addEventListener('click',e=>{ e.stopPropagation(); set(!sub.classList.contains('open')); });
+  document.addEventListener('click',e=>{ if(!sub.contains(e.target)) set(false); });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape') set(false); });
+  sub.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>set(false)));
+})();
+</script>
 
 <main id="top">
 
