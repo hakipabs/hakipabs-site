@@ -52,6 +52,8 @@ h2{font-size:26px;margin:44px 0 14px}
 .dvar .more{background:none;border:0;color:var(--navy-2);font:inherit;font-weight:700;cursor:pointer;padding:0;margin-top:4px}
 .dvar .files{margin-top:12px;font-size:15px}
 .dvar .files a{margin-left:14px}
+.dvar .share{display:inline-flex;align-items:center;gap:6px;margin-top:14px;background:none;border:1px solid var(--line);border-radius:999px;color:var(--navy-2);font:inherit;font-size:15px;font-weight:500;padding:6px 14px;cursor:pointer}
+.dvar .share:hover{border-color:var(--navy-2)}
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 22px}
 .chips a{text-decoration:none;background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:4px 14px;font-size:15px;color:var(--navy)}
 .chips a:hover{background:var(--sand-2)}
@@ -124,6 +126,20 @@ footer{border-top:1px solid var(--line);padding:26px 0 44px;color:var(--muted);f
   if(curName){ el('week-title').textContent='השבוע: פרשת '+curName; document.querySelectorAll('.p-now').forEach(s=>s.textContent=curName); el('send-btn').href='mailto:vaad@hakipabs.org?subject='+encodeURIComponent('דבר תורה: '+curName+' / '); el('send-btn').textContent='שליחת קצרצר לפרשת '+curName; }
   else el('week').hidden=true;
 
+  // כתובת קצרה ויציבה לכל קצרצר (#t-xxxx), נגזרת מה-id; הקישורים הישנים (#id בעברית) ממשיכים לעבוד.
+  const shortKey=id=>{ let h=2166136261; for(const c of (id||'')){ h^=c.codePointAt(0); h=Math.imul(h,16777619); } return 't-'+(h>>>0).toString(36); };
+  function shareBtn(e){
+    const b=document.createElement('button'); b.type='button'; b.className='share'; b.textContent='שיתוף';
+    b.addEventListener('click',async()=>{
+      const url=location.origin+location.pathname+'#'+shortKey(e.id);
+      const title=e.title||('קצרצר לפרשת '+(e.parasha||'').replace(/^פרשת\s+/,''));
+      const text='קצרצרים לשבת: "'+title+'"'+(e.author?', '+e.author:'');
+      if(navigator.share){ try{ await navigator.share({title:'קצרצרים לשבת', text, url}); }catch(err){} return; }
+      try{ await navigator.clipboard.writeText(text+'\n'+url); b.textContent='הקישור הועתק'; }catch(err){ window.prompt('העתיקו את הקישור:', url); }
+      setTimeout(()=>{ b.textContent='שיתוף'; },2500);
+    });
+    return b;
+  }
   function render(e, hl){
     const art=document.createElement('article'); art.className='dvar'+(hl?' hl':''); art.id=e.id||'';
     const h=document.createElement('h3'); h.textContent=e.title||('דבר תורה לפרשת '+(e.parasha||'').replace(/^פרשת\s+/,'')); art.append(h);
@@ -131,6 +147,7 @@ footer{border-top:1px solid var(--line);padding:26px 0 44px;color:var(--muted);f
     const ps=(e.paragraphs||[]).filter(Boolean); const LIMIT=3; const long=ps.length>LIMIT;
     ps.forEach((t,i)=>{ const p=document.createElement('p'); p.textContent=t; if(long&&i>=LIMIT-1&&!hl) p.hidden=true; art.append(p); });
     if(long&&!hl){ const btn=document.createElement('button'); btn.className='more'; btn.type='button'; btn.textContent='להמשך קריאה'; btn.addEventListener('click',()=>{ art.querySelectorAll('p[hidden]').forEach(p=>p.hidden=false); btn.remove(); }); art.append(btn); }
+    if(e.id) art.append(shareBtn(e));
     if(Array.isArray(e.files)&&e.files.length){ const f=document.createElement('div'); f.className='files'; f.textContent='קבצים: '; e.files.forEach((path,i)=>{ const a=document.createElement('a'); a.href=path; a.target='_blank'; a.rel='noopener'; a.textContent=/\.pdf$/i.test(path)?'PDF':'Word'; if(e.files.length>1) a.textContent+=' '+(i+1); f.append(a); }); art.append(f); }
     return art;
   }
@@ -147,7 +164,7 @@ footer{border-top:1px solid var(--line);padding:26px 0 44px;color:var(--muted);f
     groups.forEach((g,k)=>{ const sec=document.createElement('section'); sec.className='group'; sec.id='p-'+k; const h=document.createElement('h2'); h.textContent='פרשת '+g.name; sec.append(h); g.items.forEach(e=>{ const art=render(e,false); if(mine.includes(e)) art.id=''; sec.append(art); }); el('groups').append(sec); });
   }
   // קישור ישיר לדבר תורה (#id) או לפרשה (#p-...)
-  if(location.hash.length>1){ let id=''; try{ id=decodeURIComponent(location.hash.slice(1)); }catch(e){ id=location.hash.slice(1); } const t=document.getElementById(id); if(t){ t.querySelectorAll('p[hidden]').forEach(p=>p.hidden=false); const m=t.querySelector('.more'); if(m) m.remove(); t.scrollIntoView({block:'start'}); } }
+  if(location.hash.length>1){ let id=''; try{ id=decodeURIComponent(location.hash.slice(1)); }catch(e){ id=location.hash.slice(1); } if(/^t-[0-9a-z]+$/.test(id)){ const hit=list.find(x=>shortKey(x.id)===id); if(hit) id=hit.id; } const t=document.getElementById(id); if(t){ t.querySelectorAll('p[hidden]').forEach(p=>p.hidden=false); const m=t.querySelector('.more'); if(m) m.remove(); t.scrollIntoView({block:'start'}); } }
 })();
 </script>
 <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "07d95a4b7bbb4b21aa67c3de7fd0d09a"}'></script><!-- End Cloudflare Web Analytics -->
