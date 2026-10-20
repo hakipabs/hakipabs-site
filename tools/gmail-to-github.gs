@@ -10,6 +10,7 @@
  *   כל PDF אחר                        -> holidays/      (לוח חג: מוצג באתר כתמונה, 45 יום)
  *   נושא שמתחיל ב"דבר תורה"          -> data/divrei-torah.json (מכל שולח; מתפרסם רק אחרי שחבר ועדה מעביר או עונה על המייל)
  * אחרי ההעלאה ממתין כ-3 דקות לאוטומציה של גיטהאב, בודק מה האתר מציג, ושולח דוח לוועד.
+ * כל ריצה (גם בלי מיילים, גם כשנכשלת) נרשמת כשורה בגיליון "אתר הכיפה: יומן ריצות" בדרייב של הוועד.
  *
  * מייל של אירוע, דוגמה:
  *   נושא:  אירוע: מסיבת חתנים 17.10
@@ -52,6 +53,8 @@ const CONFIG = {
   lookbackDays: 10,
   reportTo: 'vaad@hakipabs.org',       // הדוח אחרי כל ריצה. אפשר כמה כתובות מופרדות בפסיק
   siteUrl: 'https://hakipabs.org',
+  logSheetName: 'אתר הכיפה: יומן ריצות',   // גיליון בדרייב של הוועד, שורה לכל ריצה (נוצר לבד בריצה הראשונה)
+  logKeepRows: 9000,                   // כשנה של ריצות שעתיות; שורות ישנות יותר נמחקות מהגיליון
   waitForSiteMs: 180000,               // כמה לחכות לאוטומציה של גיטהאב לפני הבדיקה (3 דקות)
 };
 
@@ -62,7 +65,38 @@ function setup() {
   Logger.log('setup done: label "%s", hourly trigger on run()', CONFIG.label);
 }
 
+/** הריצה השעתית. עוטפת את העבודה כדי שכל ריצה, גם כזו שקורסת, תכתוב שורה ביומן הריצות. */
+let RUNLOG_ = null;
 function run() {
+  const started = new Date();
+  RUNLOG_ = { found: 0, dvar: 0, uploads: [], notes: [], errors: [] };
+  try { runMain_(); }
+  catch (e) { RUNLOG_.errors.push(String(e)); throw e; }
+  finally { try { writeRunLog_(started, RUNLOG_); } catch (e2) { Logger.log('run log failed: %s', e2); } }
+}
+function note_(text) { if (RUNLOG_) RUNLOG_.notes.push(text); }
+function noteError_(subject, e) { if (RUNLOG_) RUNLOG_.errors.push(`${subject}: ${e}`); }
+
+/** יומן הריצות: גיליון גוגל אחד, שורה לכל ריצה. המזהה נשמר ב-Script Properties (LOG_SHEET_ID). */
+function writeRunLog_(started, log) {
+  const props = PropertiesService.getScriptProperties();
+  let ss = null; const id = props.getProperty('LOG_SHEET_ID');
+  if (id) { try { ss = SpreadsheetApp.openById(id); } catch (e) { ss = null; } }
+  if (!ss) {
+    ss = SpreadsheetApp.create(CONFIG.logSheetName); props.setProperty('LOG_SHEET_ID', ss.getId());
+    const first = ss.getSheets()[0]; first.setName('ריצות'); first.setRightToLeft(true);
+    first.appendRow(['זמן', 'משך (שניות)', 'מיילים חדשים', 'דברי תורה', 'מה עלה לאתר', 'הערות', 'שגיאות']); first.setFrozenRows(1);
+    first.getRange(1, 1, 1, 7).setFontWeight('bold');
+    Logger.log('run log created: %s', ss.getUrl());
+  }
+  const sh = ss.getSheets()[0];
+  sh.appendRow([Utilities.formatDate(started, 'Asia/Jerusalem', 'yyyy-MM-dd HH:mm'), Math.round((new Date() - started) / 1000),
+    log.found, log.dvar, log.uploads.map(u => `${u.kind}: ${u.subject}`).join(' | '), log.notes.join(' | '), log.errors.join(' | ')]);
+  if (log.errors.length) sh.getRange(sh.getLastRow(), 1, 1, 7).setBackground('#fde2e1');
+  const extra = sh.getLastRow() - 1 - CONFIG.logKeepRows; if (extra > 0) sh.deleteRows(2, extra);
+}
+
+function runMain_() {
   const token = PropertiesService.getScriptProperties().getProperty('GITHUB_TOKEN');
   if (!token) throw new Error('GITHUB_TOKEN is missing in Script Properties');
   const label = GmailApp.getUserLabelByName(CONFIG.label) || GmailApp.createLabel(CONFIG.label);
@@ -70,6 +104,7 @@ function run() {
   const threads = GmailApp.search(query, 0, 10);
   Logger.log('query: %s -> %s thread(s)', query, threads.length);
   const uploads = [];
+  if (RUNLOG_) { RUNLOG_.found = threads.length; RUNLOG_.uploads = uploads; }
   runDivreiTorah_(token, label, uploads);
 
   threads.forEach(thread => {
@@ -89,7 +124,7 @@ function run() {
         const baseFolder = isArchive ? CONFIG.archiveFolder : CONFIG.galleryFolder;
         const imgs = atts.filter(a => /^image\/(jpeg|png|webp)$/i.test(a.getContentType()) || a.getContentType() === 'application/pdf');
         const vids = isArchive ? youtubeIds_(msg.getPlainBody()) : [];
-        if (!imgs.length && !vids.length) { Logger.log('album mail without images or videos: "%s"', subj); thread.addLabel(label); return; }
+        if (!imgs.length && !vids.length) { Logger.log('album mail without images or videos: "%s"', subj); note_(`אלבום בלי תמונות: ${subj}`); thread.addLabel(label); return; }
         const albumTitle = subj.slice(prefix.length).replace(/^[\s:\-]+/, '').trim() || 'אלבום';
         const albumSlug = slug_(albumTitle) || 'album';
         const stamp = Utilities.formatDate(msg.getDate(), 'Asia/Jerusalem', 'yyyyMMdd-HHmm');
@@ -114,7 +149,7 @@ function run() {
 
       const isEvent = subj.startsWith(CONFIG.eventPrefix) || CONFIG.eventKeywords.some(k => subj.includes(k));
       if (isEvent) {
-        if (!img) { Logger.log('event without a poster image: "%s"', subj); thread.addLabel(label); return; }
+        if (!img) { Logger.log('event without a poster image: "%s"', subj); note_(`אירוע בלי פוסטר: ${subj}`); thread.addLabel(label); return; }
         const ev = addEvent_(token, subj, msg.getPlainBody(), msg.getDate(), img);
         thread.addLabel(label);
         uploads.push({ kind: 'event', subject: subj, path: ev.poster, event: ev, kb: Math.round(img.getSize() / 1024) });
@@ -122,7 +157,7 @@ function run() {
         return;
       }
 
-      if (!pdf) { Logger.log('no PDF in "%s"', subj); thread.addLabel(label); return; }
+      if (!pdf) { Logger.log('no PDF in "%s"', subj); note_(`בלי PDF: ${subj}`); thread.addLabel(label); return; }
       const isWeekly = subj.startsWith(CONFIG.subjectPrefix);
       const folder = isWeekly ? CONFIG.folder : CONFIG.holidayFolder;
       const name = fileNameFor_(subj, msg.getDate());
@@ -133,6 +168,7 @@ function run() {
       Logger.log('uploaded %s (%s KB)', path, Math.round(pdf.getSize() / 1024));
     } catch (e) {
       Logger.log('ERROR on "%s": %s', subject, e);
+      noteError_(subject, e);
       sendReport_(`❌ אתר הכיפה: ההעלאה של "${subject}" נכשלה`,
         `המייל: ${subject}\nשגיאה: ${e}\n\n${howToFix_()}`);
     }
@@ -150,6 +186,7 @@ function runDivreiTorah_(token, label, uploads) {
   const query = `subject:"${CONFIG.dvarPrefix}" newer_than:${CONFIG.lookbackDays}d -label:${CONFIG.label}`;
   const threads = GmailApp.search(query, 0, 20);
   Logger.log('dvar query: %s -> %s thread(s)', query, threads.length);
+  if (RUNLOG_) RUNLOG_.dvar = threads.length;
   const isDvar = m => cleanSubject_(m.getSubject()).startsWith(CONFIG.dvarPrefix);
   const isReviewer = m => CONFIG.dvarReviewers.some(r => (m.getFrom() || '').toLowerCase().includes(r.toLowerCase()));
   threads.forEach(thread => {
@@ -161,6 +198,7 @@ function runDivreiTorah_(token, label, uploads) {
       if (!approved) {
         if (!thread.getLabels().some(l => l.getName() === CONFIG.dvarPendingLabel)) {
           thread.addLabel(pending);
+          note_(`דבר תורה ממתין לאישור: ${cleanSubject_(subject)}`);
           const from = msgs[0].getFrom();
           const words = cleanBody_(msgs[0].getPlainBody()).join(' ').split(/\s+/).filter(Boolean).length;
           const lengthLine = words > CONFIG.dvarWarnWords
@@ -181,6 +219,7 @@ function runDivreiTorah_(token, label, uploads) {
       Logger.log('dvar torah added: %s / %s', entry.parasha, entry.author);
     } catch (e) {
       Logger.log('ERROR on dvar "%s": %s', subject, e);
+      noteError_(subject, e);
       sendReport_(`❌ אתר הכיפה: דבר התורה "${subject}" לא עלה`, `המייל: ${subject}\nשגיאה: ${e}\n\n${howToFix_()}`);
     }
   });
