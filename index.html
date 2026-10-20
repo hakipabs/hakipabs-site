@@ -311,7 +311,7 @@ footer a{color:var(--navy)}
 <div class="wrap week" id="week">
   <div class="card">
     <div class="cell">
-      <span class="eyebrow">שבת הקרובה</span>
+      <span class="eyebrow" id="sh-label">זמני השבת</span>
       <div id="sh-parasha" style="font-size:26px;font-weight:700;font-family:'Frank Ruhl Libre',serif">פרשת נח</div>
       <div class="muted small" style="color:#c8d3e3"><span id="sh-date">ו' מרחשוון תשפ"ז</span> · הפטרה: <span id="sh-haftara">רני עקרה</span></div>
       <div style="display:flex;gap:28px;margin-top:14px">
@@ -634,11 +634,18 @@ footer a{color:var(--navy)}
 </footer>
 
 <script>
-// תחזית לשבת בבאר שבע, לכיוון המזגנים: Open-Meteo (בלי מפתח ובלי עוגיות). מוצגת מרביעי עד שבת, כשהדף השבועי כבר על השבת הקרובה.
-(function(){
-  const now=new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Jerusalem'})), dow=now.getDay();
-  if(dow<3 && !/[?&]wx=1/.test(location.search)) return;
-  const sat=new Date(now); sat.setDate(now.getDate()+((6-dow+7)%7)); const fri=new Date(sat); fri.setDate(sat.getDate()-1);
+// השבת הקרובה לפי לוח השנה (שעון ירושלים): היום אם היום שבת, אחרת השבת הבאה.
+function comingShabbat(){ const now=new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Jerusalem'})); const sat=new Date(now); sat.setDate(now.getDate()+((6-now.getDay()+7)%7)); return sat; }
+// האם הדף השבועי הוא של השבת הקרובה: משווים את היום בחודש העברי שבדף (hebrew_date) ליום העברי של השבת הקרובה. בתוך שבוע אין התאמה מקרית.
+function sheetIsCurrent(hebrewDate){
+  const tok=((hebrewDate||'').trim().split(/\s+/)[0]||'').replace(/["'׳״]/g,''); if(!tok) return null;
+  const V={'א':1,'ב':2,'ג':3,'ד':4,'ה':5,'ו':6,'ז':7,'ח':8,'ט':9,'י':10,'כ':20,'ל':30}; let n=0; for(const ch of tok){ if(!V[ch]) return null; n+=V[ch]; }
+  const day=parseInt(new Intl.DateTimeFormat('en-u-ca-hebrew',{day:'numeric'}).format(comingShabbat()),10);
+  return day ? n===day : null;
+}
+// תחזית לשבת בבאר שבע, לכיוון המזגנים: Open-Meteo (בלי מפתח ובלי עוגיות). מוצגת רק כשהדף השבועי הוא של השבת הקרובה.
+function loadShabbatWeather(){
+  const sat=comingShabbat(); const fri=new Date(sat); fri.setDate(sat.getDate()-1);
   const iso=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'), S=iso(sat), F=iso(fri);
   fetch('https://api.open-meteo.com/v1/forecast?latitude=31.262&longitude=34.786&hourly=temperature_2m&daily=temperature_2m_max,precipitation_probability_max&timezone=Asia%2FJerusalem&forecast_days=7')
   .then(r=>r.ok?r.json():null).then(w=>{
@@ -648,7 +655,7 @@ footer a{color:var(--navy)}
     const lo=Math.round(Math.min(...night)), hi=Math.round(w.daily.temperature_2m_max[i]), rain=(w.daily.precipitation_probability_max||[])[i];
     const el=document.getElementById('sh-weather'); const t=v=>'⁦'+v+'°⁩'; el.textContent='תחזית: ליל שבת עד '+t(lo)+', יום שבת עד '+t(hi)+(rain>=50?' · צפוי גשם':''); el.hidden=false;
   }).catch(()=>{});
-})();
+}
 // זמני השבת נטענים מ-data/shabbat.json; אם הטעינה נכשלת נשארים הערכים שבדף.
 fetch('data/shabbat.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(d=>{
   if(!d) return;
@@ -656,6 +663,9 @@ fetch('data/shabbat.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(d
   set('sh-parasha',d.parasha); set('sh-date',d.hebrew_date); set('sh-haftara',d.haftara);
   set('sh-candles',d.candles); set('sh-havdala',d.havdala); set('sh-rt',d.rabbeinu_tam);
   set('sh-note',d.note); set('sh-footnote',d.footnote);
+  const cur=sheetIsCurrent(d.hebrew_date);   // true / false / null (לא ידוע)
+  set('sh-label', cur===true?'השבת הקרובה':cur===false?'שבת שעברה':'זמני השבת');
+  if(cur===true || /[?&]wx=1/.test(location.search)) loadShabbatWeather();
   const fill=(id,rows)=>{const dl=document.getElementById(id); if(!dl||!Array.isArray(rows)) return; dl.innerHTML='';
     rows.forEach(([k,v])=>{const dt=document.createElement('dt');dt.textContent=k;const dd=document.createElement('dd');dd.textContent=v;dl.append(dt,dd);});};
   fill('sh-friday',d.friday); fill('sh-shabbat',d.shabbat);
