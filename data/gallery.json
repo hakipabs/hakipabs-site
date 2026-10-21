@@ -7,7 +7,7 @@
    "cover": "gallery/אורייתא/thumb/20261018-1014-01.jpg",
    "description": "",
    "when": "",
-   "count": 4,
+   "count": 5,
    "photos": [
     {
      "web": "gallery/אורייתא/web/20261018-1014-01.jpg",
@@ -24,6 +24,10 @@
     {
      "web": "gallery/אורייתא/web/20261018-1014-04.jpg",
      "thumb": "gallery/אורייתא/thumb/20261018-1014-04.jpg"
+    },
+    {
+     "web": "gallery/אורייתא/web/20261018-1014-05.jpg",
+     "thumb": "gallery/אורייתא/thumb/20261018-1014-05.jpg"
     }
    ]
   },
@@ -57,7 +61,7 @@
    "cover": "gallery/peilut-vehartzaot/thumb/01.jpg",
    "description": "הרצאות ושיעורים בבית המדרש, ערבי שירה ונגינה, פעילויות לילדים ולנוער בחצר ובאולם: קהילה שלומדת ונפגשת, מגיל הגן ועד הוותיקים.",
    "when": "לאורך השנה, לכל הגילים",
-   "count": 6,
+   "count": 5,
    "photos": [
     {
      "web": "gallery/peilut-vehartzaot/web/01.jpg",
@@ -74,10 +78,6 @@
     {
      "web": "gallery/peilut-vehartzaot/web/04.jpg",
      "thumb": "gallery/peilut-vehartzaot/thumb/04.jpg"
-    },
-    {
-     "web": "gallery/peilut-vehartzaot/web/05.jpg",
-     "thumb": "gallery/peilut-vehartzaot/thumb/05.jpg"
     },
     {
      "web": "gallery/peilut-vehartzaot/web/06.jpg",
