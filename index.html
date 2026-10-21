@@ -670,11 +670,19 @@ footer a{color:var(--navy)}
 // השבת הקרובה לפי לוח השנה (שעון ירושלים): היום אם היום שבת, אחרת השבת הבאה.
 function comingShabbat(){ const now=new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Jerusalem'})); const sat=new Date(now); sat.setDate(now.getDate()+((6-now.getDay()+7)%7)); return sat; }
 // האם הדף השבועי הוא של השבת הקרובה: משווים את היום בחודש העברי שבדף (hebrew_date) ליום העברי של השבת הקרובה. בתוך שבוע אין התאמה מקרית.
-function sheetIsCurrent(hebrewDate){
-  const tok=((hebrewDate||'').trim().split(/\s+/)[0]||'').replace(/["'׳״]/g,''); if(!tok) return null;
-  const V={'א':1,'ב':2,'ג':3,'ד':4,'ה':5,'ו':6,'ז':7,'ח':8,'ט':9,'י':10,'כ':20,'ל':30}; let n=0; for(const ch of tok){ if(!V[ch]) return null; n+=V[ch]; }
-  const day=parseInt(new Intl.DateTimeFormat('en-u-ca-hebrew',{day:'numeric'}).format(comingShabbat()),10);
-  return day ? n===day : null;
+// היום בחודש מתוך תאריך עברי בדף ("י"ג מרחשוון" -> 13), או null
+function hebDayOf(text){
+  const tok=((text||'').trim().split(/\s+/)[0]||'').replace(/["'׳״]/g,''); if(!tok) return null;
+  const V={'א':1,'ב':2,'ג':3,'ד':4,'ה':5,'ו':6,'ז':7,'ח':8,'ט':9,'י':10,'כ':20,'ל':30}; let n=0; for(const ch of tok){ if(!V[ch]) return null; n+=V[ch]; } return n;
+}
+const calDay=d=>parseInt(new Intl.DateTimeFormat('en-u-ca-hebrew',{day:'numeric'}).format(d),10)||null;
+// האם הדף השבועי הוא של השבת הקרובה. שני סימנים מהדף: התאריך בכותרת (יום השבת), והתאריך הראשון בטבלת זמני השבוע (יום שישי שלפניה).
+// מספיק שאחד מהם תואם, כי לפעמים התאריך בכותרת נשאר מהשבוע הקודם.
+function sheetIsCurrent(d){
+  const sat=comingShabbat(), fri=new Date(sat); fri.setDate(sat.getDate()-1);
+  const h=hebDayOf(d.hebrew_date), z=hebDayOf((d.zmanim_dates||[])[0]);
+  if(h===null && z===null) return null;
+  return h===calDay(sat) || z===calDay(fri);
 }
 // תחזית לשבת בבאר שבע, לכיוון המזגנים: Open-Meteo (בלי מפתח ובלי עוגיות). מוצגת רק כשהדף השבועי הוא של השבת הקרובה.
 function loadShabbatWeather(){
@@ -696,7 +704,14 @@ fetch('data/shabbat.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(d
   set('sh-parasha',d.parasha); set('sh-date',d.hebrew_date); set('sh-haftara',d.haftara);
   set('sh-candles',d.candles); set('sh-havdala',d.havdala); set('sh-rt',d.rabbeinu_tam);
   set('sh-note',d.note); set('sh-footnote',d.footnote);
-  const cur=sheetIsCurrent(d.hebrew_date);   // true / false / null (לא ידוע)
+  const cur=sheetIsCurrent(d);   // true / false / null (לא ידוע)
+  // הדף של השבת הקרובה אבל התאריך בכותרת לא תואם (הועתק מהשבוע הקודם): מציגים את התאריך לפי לוח השנה
+  if(cur===true && hebDayOf(d.hebrew_date)!==calDay(comingShabbat())){ try{
+    const sat=comingShabbat(), day=calDay(sat), parts=(d.hebrew_date||'').trim().split(/\s+/);
+    const hebNum=n=>{ const T=['','א','ב','ג','ד','ה','ו','ז','ח','ט'], X=['','י','כ','ל']; let s=n===15?'טו':n===16?'טז':X[Math.floor(n/10)]+T[n%10]; return s.length>1?s.slice(0,-1)+'"'+s.slice(-1):s+"'"; };
+    let month=parts[1]||''; if(!(hebDayOf(d.hebrew_date)<day) || !month) month=new Intl.DateTimeFormat('he-u-ca-hebrew',{month:'long'}).format(sat);   // החודש התחלף מאז: לפי לוח השנה
+    set('sh-date', [hebNum(day), month].concat(parts.slice(2)).join(' '));
+  }catch(e){} }
   set('sh-label', cur===true?'השבת הקרובה':cur===false?'שבת שעברה':'זמני השבת');
   if(cur===true || /[?&]wx=1/.test(location.search)) loadShabbatWeather();
   const fill=(id,rows)=>{const dl=document.getElementById(id); if(!dl||!Array.isArray(rows)) return; dl.innerHTML='';

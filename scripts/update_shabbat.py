@@ -123,8 +123,14 @@ def parse(text):
     if "קידוש לבנה" in norm: foot.append("קידוש לבנה במוצאי שבת")
     if foot: out["footnote"] = " · ".join(foot)
 
+    notes = []
     m = re.search(r"מתחילים לבקש\s*\n?\s*\"([^\"]+)\"", norm)
-    out["note"] = f"במוצאי שבת מתחילים לבקש \"{m.group(1)}\"" if m else ""
+    if m: notes.append(f"במוצאי שבת מתחילים לבקש \"{m.group(1)}\"")
+    m = re.search(r"במוצא[\"״]?ש\s+עוברים\s+לשעון\s+(חורף|קיץ)", norm)
+    if m: notes.append(f"במוצאי שבת עוברים לשעון {m.group(1)}")
+    m = re.search(r"מניין\s*ב\s*(?:ב\s*)?יום\s+(\S+)\s+מתחילים\s+את\s+התפילה\s+עם\s+סליחות\s+בה[\"״]ב", norm)
+    if m: notes.append(f"ביום {m.group(1)} מניין ב' מתחיל בסליחות בה\"ב")
+    out["note"] = " · ".join(notes)
 
     m = re.search(r"תפילת ילדים[^\n]*?" + TIME, norm)
     if m: out["kids_tefila"] = m.group(1)
