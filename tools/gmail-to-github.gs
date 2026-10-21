@@ -55,7 +55,9 @@ const CONFIG = {
   siteUrl: 'https://hakipabs.org',
   logSheetName: 'אתר הכיפה: יומן ריצות',   // גיליון בדרייב של הוועד, שורה לכל ריצה (נוצר לבד בריצה הראשונה)
   logKeepRows: 9000,                   // כשנה של ריצות שעתיות; שורות ישנות יותר נמחקות מהגיליון
-  waitForSiteMs: 180000,               // כמה לחכות לאוטומציה של גיטהאב לפני הבדיקה (3 דקות)
+  waitForSiteMs: 90000,                // בדיקה ראשונה של האתר דקה וחצי אחרי ההעלאה
+  recheckMs: 30000,                    // אם האתר עוד לא התעדכן: בודקים שוב כל חצי דקה
+  reportDeadlineMs: 300000,            // עד 5 דקות מתחילת הריצה (גוגל עוצר ריצה אחרי 6); אחר כך הדוח יוצא כ'האתר עוד מתעדכן'
 };
 
 function setup() {
@@ -67,8 +69,9 @@ function setup() {
 
 /** הריצה השעתית. עוטפת את העבודה כדי שכל ריצה, גם כזו שקורסת, תכתוב שורה ביומן הריצות. */
 let RUNLOG_ = null;
+let RUN_STARTED_ = Date.now();
 function run() {
-  const started = new Date();
+  const started = new Date(); RUN_STARTED_ = started.getTime();
   RUNLOG_ = { found: 0, dvar: 0, uploads: [], notes: [], errors: [] };
   try { runMain_(); }
   catch (e) { RUNLOG_.errors.push(String(e)); throw e; }
@@ -175,8 +178,19 @@ function runMain_() {
   });
 
   if (uploads.length) {
-    Utilities.sleep(CONFIG.waitForSiteMs);
-    uploads.forEach(u => sendReport_(...buildReport_(token, u)));
+    // גיטהאב לפעמים מעדכן את האתר תוך דקה ולפעמים תוך כמה דקות: בודקים שוב ושוב עד הדדליין, ורק אז שולחים דוח "עוד מתעדכן".
+    const deadline = RUN_STARTED_ + CONFIG.reportDeadlineMs;
+    Utilities.sleep(Math.max(0, Math.min(CONFIG.waitForSiteMs, deadline - Date.now())));
+    let left = uploads.slice();
+    while (left.length) {
+      const still = [];
+      left.forEach(u => {
+        const [subject, body, pending] = buildReport_(token, u);
+        if (pending && Date.now() + CONFIG.recheckMs < deadline) still.push(u); else sendReport_(subject, body);
+      });
+      if (!still.length) break;
+      Utilities.sleep(CONFIG.recheckMs); left = still;
+    }
   }
 }
 
@@ -349,6 +363,8 @@ function addEvent_(token, subj, body, mailDate, img) {
   try { events = JSON.parse(file.text); } catch (e) { events = []; }
   if (!Array.isArray(events)) events = [];
   events = events.filter(e => e.poster !== poster);
+  // אורייתא וכדומה: פוסטר שהועלה מוקדם (מוואטסאפ) והמייל הרגיל של אותו יום = אותו אירוע. החדש מחליף, לא מתווסף.
+  if (byKeyword) events = events.filter(e => !(e.date === dateStr && CONFIG.eventKeywords.some(k => (e.title || '').includes(k) || (e.poster || '').includes(k))));
   const entry = { title, date: dateStr, when, place: '', text, poster };
   events.push(entry);
   events.sort((a, b) => (a.date || '').localeCompare(b.date || ''));
@@ -391,7 +407,7 @@ function uploadToGitHub_(token, path, bytes, message) {
 /** בודק מה האתר מציג אחרי ההעלאה ומרכיב את הדוח. מחזיר [נושא, גוף]. */
 function buildReport_(token, u) {
   const lines = [`המייל: ${u.subject}`, `הקובץ שהועלה: ${u.path} (${u.kb} KB)`, ''];
-  let ok = true;
+  let ok = true, pending = false;   // pending = ההעלאה הצליחה אבל האתר עוד לא מראה אותה; ok=false = בעיה אמיתית
 
   if (u.kind === 'archive') {
     lines.push(`האוסף נשמר ב-${u.path} עם ${u.count} פריטים, כטיוטה. הוא יופיע באתר אחרי שחבר ועד יאשר: לפתוח את ${u.path}/album.json, לשנות "approved": false ל-true, להוסיף כיתובים ותקופה, ו-Commit.`);
@@ -399,17 +415,17 @@ function buildReport_(token, u) {
   } else if (u.kind === 'album') {
     const gal = fetchJson_(`${CONFIG.siteUrl}/data/gallery.json`);
     const al = gal && (gal.albums || []).find(a => a.slug === u.album);
-    if (!al) { ok = false; lines.push('⚠️ האלבום עדיין לא מופיע בגלריה. ייתכן שהאוטומציה (הקטנת תמונות) עוד רצה; לבדוק שוב בעוד כמה דקות.'); }
+    if (!al) { pending = true; lines.push('⏳ האלבום עדיין לא מופיע בגלריה. ייתכן שהאוטומציה (הקטנת תמונות) עוד רצה; לבדוק שוב בעוד כמה דקות.'); }
     else lines.push(`האלבום "${al.title}" מופיע בגלריה עם ${al.count} תמונות: ${CONFIG.siteUrl}/gallery.html?album=${encodeURIComponent(al.slug)}`);
   } else if (u.kind === 'event') {
     const list = fetchJson_(`${CONFIG.siteUrl}/${CONFIG.eventsJson}`);
     const item = Array.isArray(list) && list.find(e => e.poster === u.path);
-    if (!item) { ok = false; lines.push('⚠️ האירוע עדיין לא מופיע באתר. ייתכן שהאתר עוד נבנה; לבדוק שוב בעוד כמה דקות.'); }
+    if (!item) { pending = true; lines.push('⏳ האירוע עדיין לא מופיע באתר. ייתכן שהאתר עוד נבנה; לבדוק שוב בעוד כמה דקות.'); }
     else lines.push('מה האתר מציג:', `• ${item.title}`, `• מתי: ${item.when || '(לא צוין)'}`, `• טקסט: ${item.text || '(ללא)'}`, `• יוצג עד: ${item.date}`);
   } else if (u.kind === 'dvar') {
     const list = fetchJson_(`${CONFIG.siteUrl}/${CONFIG.dvarJson}`);
     const item = Array.isArray(list) && list.find(e => e.id === u.entry.id);
-    if (!item) { ok = false; lines.push('⚠️ דבר התורה עדיין לא מופיע באתר. ייתכן שהאתר עוד נבנה; לבדוק שוב בעוד כמה דקות.'); }
+    if (!item) { pending = true; lines.push('⏳ דבר התורה עדיין לא מופיע באתר. ייתכן שהאתר עוד נבנה; לבדוק שוב בעוד כמה דקות.'); }
     else lines.push('מה האתר מציג:', `• פרשת ${item.parasha} · ${item.author}${item.title ? ' · ' + item.title : ''}`,
       `• פסקת הפתיחה (מופיעה בדף הבית כשזו פרשת השבוע): ${(item.paragraphs[0] || '').slice(0, 220)}`,
       `• ${item.paragraphs.length} פסקאות${item.files.length ? ', ' + item.files.length + ' קבצים מצורפים' : ''}`,
@@ -418,11 +434,12 @@ function buildReport_(token, u) {
     const runInfo = latestRun_(token, u.kind === 'weekly' ? 'weekly-sheet.yml' : 'holidays.yml');
     if (runInfo) lines.push(`האוטומציה בגיטהאב: ${runInfo.status}${runInfo.conclusion ? ' / ' + runInfo.conclusion : ''}  ${runInfo.url}`);
     if (runInfo && runInfo.conclusion && runInfo.conclusion !== 'success') ok = false;
+    if (runInfo && !runInfo.conclusion) pending = true;
     if (u.kind === 'weekly') {
       const d = fetchJson_(`${CONFIG.siteUrl}/data/shabbat.json`);
-      if (!d) { ok = false; lines.push('לא הצלחתי לקרוא את נתוני השבת מהאתר.'); }
+      if (!d) { pending = true; lines.push('לא הצלחתי לקרוא את נתוני השבת מהאתר.'); }
       else {
-        if (d.source_pdf !== u.name) { ok = false; lines.push(`⚠️ האתר עדיין מציג נתונים מקובץ אחר (${d.source_pdf}). ייתכן שהאוטומציה עוד רצה; לבדוק שוב בעוד כמה דקות.`); }
+        if (d.source_pdf !== u.name) { pending = true; lines.push(`⏳ האתר עדיין מציג נתונים מקובץ אחר (${d.source_pdf}). ייתכן שהאוטומציה עוד רצה; לבדוק שוב בעוד כמה דקות.`); }
         lines.push('', 'מה האתר מציג עכשיו:',
           `• ${d.parasha || '(פרשה לא נמצאה)'} · ${d.hebrew_date || ''}`,
           `• הדלקת נרות ${d.candles || '?'} · צאת השבת ${d.havdala || '?'} · ר"ת ${d.rabbeinu_tam || '?'}`,
@@ -435,14 +452,15 @@ function buildReport_(token, u) {
     } else {
       const h = fetchJson_(`${CONFIG.siteUrl}/data/holidays.json`);
       const item = h && (h.items || []).find(e => e.pdf === u.path);
-      if (!item) { ok = false; lines.push('⚠️ הלוח עדיין לא מופיע ברשימת לוחות החגים באתר. ייתכן שהאוטומציה עוד רצה.'); }
+      if (!item) { pending = true; lines.push('⏳ הלוח עדיין לא מופיע ברשימת לוחות החגים באתר. ייתכן שהאוטומציה עוד רצה.'); }
       else lines.push(`הלוח מופיע באתר בכותרת "${item.title}" ויוצג עד ${item.until || (item.added + ' + 45 יום')}.`);
     }
   }
 
   lines.push('', `לבדיקה בעין: ${CONFIG.siteUrl}`, '', howToFix_());
-  const subject = (ok ? '✅ אתר הכיפה עודכן: ' : '⚠️ אתר הכיפה, דרושה בדיקה: ') + u.subject;
-  return [subject, lines.join('\n')];
+  if (pending && ok) lines.unshift('ההעלאה לגיטהאב הצליחה, אבל האתר עוד לא הראה אותה בזמן הבדיקה. זה קורה כשגיטהאב איטי, ובדרך כלל מסתדר לבד תוך כמה דקות.', '');
+  const subject = (!ok ? '⚠️ אתר הכיפה, דרושה בדיקה: ' : pending ? '⏳ אתר הכיפה, נשמר והאתר עוד מתעדכן: ' : '✅ אתר הכיפה עודכן: ') + u.subject;
+  return [subject, lines.join('\n'), pending && ok];
 }
 
 function howToFix_() {
