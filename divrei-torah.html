@@ -115,13 +115,13 @@ footer{border-top:1px solid var(--line);padding:26px 0 44px;color:var(--muted);f
 <script>
 (async function(){
   const el=id=>document.getElementById(id);
-  const norm=t=>(t||'').replace(/^פרשת\s+/,'').replace(/[֑-ׇ]/g,'').replace(/[\s\-–־'"״׳]/g,'');
+  const norm=t=>(t||'').replace(/^פרשו?ת\s+/,'').replace(/[֑-ׇ]/g,'').replace(/[\s\-–־'"״׳]/g,'');
   const gem=n=>{ const L=[[400,'ת'],[300,'ש'],[200,'ר'],[100,'ק'],[90,'צ'],[80,'פ'],[70,'ע'],[60,'ס'],[50,'נ'],[40,'מ'],[30,'ל'],[20,'כ'],[10,'י'],[9,'ט'],[8,'ח'],[7,'ז'],[6,'ו'],[5,'ה'],[4,'ד'],[3,'ג'],[2,'ב'],[1,'א']]; n=n%1000; let tail=''; if(n%100===15){tail='טו';n-=15;} else if(n%100===16){tail='טז';n-=16;} let r=''; for(const [v,c] of L){ while(n>=v){r+=c;n-=v;} } r+=tail; return r.length>1?r.slice(0,-1)+'"'+r.slice(-1):r+"'"; };
   const fmtDate=iso=>{ const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(iso||''); if(!m) return ''; const d=new Date(+m[1],+m[2]-1,+m[3]); const civil=`${+m[3]}.${+m[2]}.${m[1]}`; try{ const parts=new Intl.DateTimeFormat('he-IL-u-ca-hebrew',{day:'numeric',month:'long',year:'numeric'}).formatToParts(d); const g=t=>(parts.find(x=>x.type===t)||{}).value||''; const day=parseInt(g('day'),10), year=parseInt(g('year'),10); if(day&&year&&g('month')) return `${gem(day)} ב${g('month')} ${gem(year)} (${civil})`; }catch(e){} return civil; };
   let sh=null, list=[];
   try{ const [a,b]=await Promise.all([fetch('data/shabbat.json',{cache:'no-store'}),fetch('data/divrei-torah.json',{cache:'no-store'})]); sh=a.ok?await a.json():null; list=b.ok?await b.json():[]; }catch(e){}
   if(!Array.isArray(list)) list=[];
-  const curName=((sh&&sh.parasha)||'').replace(/^פרשת\s+/,'').trim();
+  const curName=((sh&&sh.parasha)||'').replace(/^פרשו?ת\s+/,'').trim();
   const cur=norm(curName);
   if(curName){ el('week-title').textContent='השבוע: פרשת '+curName; document.querySelectorAll('.p-now').forEach(s=>s.textContent=curName); el('send-btn').href='mailto:vaad@hakipabs.org?subject='+encodeURIComponent('דבר תורה: '+curName+' / '); el('send-btn').textContent='שליחת קצרצר לפרשת '+curName; }
   else el('week').hidden=true;
@@ -133,7 +133,7 @@ footer{border-top:1px solid var(--line);padding:26px 0 44px;color:var(--muted);f
     const b=document.createElement('button'); b.type='button'; b.className='share'; b.textContent='שיתוף';
     b.addEventListener('click',async()=>{
       const url=location.origin+location.pathname+'#'+shortKey(e.id);
-      const title=e.title||('קצרצר לפרשת '+(e.parasha||'').replace(/^פרשת\s+/,''));
+      const title=e.title||('קצרצר לפרשת '+(e.parasha||'').replace(/^פרשו?ת\s+/,''));
       const text='קצרצרים לשבת: "'+title+'"'+(e.author?', '+e.author:'');
       if(navigator.share && matchMedia('(pointer:coarse)').matches){ try{ await navigator.share({title:'קצרצרים לשבת', text, url}); }catch(err){} return; }
       try{ await navigator.clipboard.writeText(text+'\n'+url); b.textContent='הקישור הועתק'; }catch(err){ window.prompt('העתיקו את הקישור:', url); }
@@ -143,8 +143,8 @@ footer{border-top:1px solid var(--line);padding:26px 0 44px;color:var(--muted);f
   }
   function render(e, hl){
     const art=document.createElement('article'); art.className='dvar'+(hl?' hl':''); art.id=e.id||'';
-    const h=document.createElement('h3'); h.textContent=e.title||('דבר תורה לפרשת '+(e.parasha||'').replace(/^פרשת\s+/,'')); art.append(h);
-    const by=document.createElement('p'); by.className='by'; const b=document.createElement('b'); b.textContent=e.author||''; by.append(b); const d=e.written||fmtDate(e.date); if(d) by.append(' · '+d); if(!hl&&e.parasha) by.append(' · פרשת '+e.parasha.replace(/^פרשת\s+/,'')); art.append(by);
+    const h=document.createElement('h3'); h.textContent=e.title||('דבר תורה לפרשת '+(e.parasha||'').replace(/^פרשו?ת\s+/,'')); art.append(h);
+    const by=document.createElement('p'); by.className='by'; const b=document.createElement('b'); b.textContent=e.author||''; by.append(b); const d=e.written||fmtDate(e.date); if(d) by.append(' · '+d); if(!hl&&e.parasha) by.append(' · פרשת '+e.parasha.replace(/^פרשו?ת\s+/,'')); art.append(by);
     const ps=(e.paragraphs||[]).filter(Boolean); const LIMIT=3; const long=ps.length>LIMIT;
     ps.forEach((t,i)=>{ const p=document.createElement('p'); p.textContent=t; if(long&&i>=LIMIT-1&&!hl) p.hidden=true; art.append(p); });
     if(long&&!hl){ const btn=document.createElement('button'); btn.className='more'; btn.type='button'; btn.textContent='להמשך קריאה'; btn.addEventListener('click',()=>{ art.querySelectorAll('p[hidden]').forEach(p=>p.hidden=false); btn.remove(); }); art.append(btn); }
@@ -160,7 +160,7 @@ footer{border-top:1px solid var(--line);padding:26px 0 44px;color:var(--muted);f
   if(!list.length){ el('all-empty').hidden=false; el('chips').hidden=true; }
   else{
     const groups=new Map();
-    list.slice().sort(byDate).forEach(e=>{ const k=norm(e.parasha); if(!groups.has(k)) groups.set(k,{name:(e.parasha||'').replace(/^פרשת\s+/,''),items:[]}); groups.get(k).items.push(e); });
+    list.slice().sort(byDate).forEach(e=>{ const k=norm(e.parasha); if(!groups.has(k)) groups.set(k,{name:(e.parasha||'').replace(/^פרשו?ת\s+/,''),items:[]}); groups.get(k).items.push(e); });
     groups.forEach((g,k)=>{ const a=document.createElement('a'); a.href='#p-'+k; a.textContent=g.name+' ('+g.items.length+')'; el('chips').append(a); });
     groups.forEach((g,k)=>{ const sec=document.createElement('section'); sec.className='group'; sec.id='p-'+k; const h=document.createElement('h2'); h.textContent='פרשת '+g.name; sec.append(h); g.items.forEach(e=>{ const art=render(e,false); if(mine.includes(e)) art.id=''; sec.append(art); }); el('groups').append(sec); });
   }

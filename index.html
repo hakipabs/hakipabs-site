@@ -767,12 +767,12 @@ fetch('data/events.json',{cache:'no-store'}).then(r=>r.ok?r.json():[]).then(list
 // דבר תורה לפרשת השבוע: data/divrei-torah.json (נכנס מהמייל אחרי אישור חבר ועדה). מוצג רק כשיש אחד לפרשה הנוכחית.
 Promise.all([fetch('data/shabbat.json',{cache:'no-store'}).then(r=>r.ok?r.json():null),fetch('data/divrei-torah.json',{cache:'no-store'}).then(r=>r.ok?r.json():null)]).then(([sh,list])=>{
   if(!sh||!Array.isArray(list)||!list.length) return;
-  const norm=t=>(t||'').replace(/^פרשת\s+/,'').replace(/[\u0591-\u05C7]/g,'').replace(/[\s\-–־'"״׳]/g,'');
+  const norm=t=>(t||'').replace(/^פרשו?ת\s+/,'').replace(/[\u0591-\u05C7]/g,'').replace(/[\s\-–־'"״׳]/g,'');
   const cur=norm(sh.parasha); if(!cur) return;
   const mine=list.filter(e=>norm(e.parasha)===cur).sort((a,b)=>(b.date||'').localeCompare(a.date||''));
   if(!mine.length) return;
   const e=mine[0], g=id=>document.getElementById(id);
-  g('dv-parasha').textContent=(sh.parasha||'').replace(/^פרשת\s+/,'');
+  g('dv-parasha').textContent=(sh.parasha||'').replace(/^פרשו?ת\s+/,'');
   g('dv-title').textContent=e.title||('דבר תורה לפרשת '+e.parasha);
   g('dv-by').textContent=e.author||'';
   g('dv-text').textContent=(e.paragraphs&&e.paragraphs[0])||'';
@@ -785,7 +785,7 @@ fetch('data/yearly.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(y=
   if(!y||!Array.isArray(y.rows)||!y.rows.length) return;
   document.getElementById('yr-year').textContent=y.year||'';
   const tb=document.querySelector('#yr-table tbody'); tb.innerHTML='';
-  const cur=(document.getElementById('sh-parasha').textContent||'').replace(/^פרשת\s+/,'').trim();
+  const cur=(document.getElementById('sh-parasha').textContent||'').replace(/^פרשו?ת\s+/,'').trim();
   const norm=t=>t.replace(/[\s\-·'"]/g,'');
   let marked=false;
   y.rows.forEach(r=>{

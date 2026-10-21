@@ -465,6 +465,10 @@ function buildReport_(token, u) {
           `• מזל טוב: ${((d.mazal_tov && d.mazal_tov.items) || []).length} · תנחומים: ${((d.nichumim && d.nichumim.items) || []).length}`);
         const missing = ['parasha', 'candles', 'havdala', 'friday', 'shabbat'].filter(k => !d[k] || (Array.isArray(d[k]) && !d[k].length));
         if (missing.length) { ok = false; lines.push('', `⚠️ שדות שלא נקראו מה-PDF: ${missing.join(', ')} (נשארו ערכי השבוע הקודם)`); }
+        // בדיקות שהאוטומציה עושה מול הדף עצמו ומול הלוח השנתי (scripts/update_shabbat.py, sanity_checks)
+        if (d.source_pdf === u.name && Array.isArray(d.checks) && d.checks.length) {
+          ok = false; lines.push('', '⚠️ בדיקות שלא עברו (כדאי לבדוק מול מי שהכין את הדף):', ...d.checks.map(c => `• ${c}`));
+        }
       }
     } else {
       const h = fetchJson_(`${CONFIG.siteUrl}/data/holidays.json`);
