@@ -79,6 +79,8 @@ nav a{display:block;padding:8px 12px;border-radius:8px;text-decoration:none;colo
 nav a:hover{background:var(--sand-2)}
 nav a.nav-hi{background:var(--sand-2);color:#5a4718}
 nav a.nav-hi:hover{background:#e9dbb6}
+#wd-shacharit td:first-child,#wd-arvit td:first-child,#wd-shacharit td.time{white-space:nowrap}
+#wd-shacharit td.small{line-height:1.35}
 .menu-btn{display:none;background:none;border:1px solid var(--line);border-radius:8px;padding:8px 10px;font:inherit}
 nav a.nav-donate{background:var(--navy);color:#fff;font-weight:700}
 nav a.nav-donate:hover{background:var(--navy-2)}
@@ -431,7 +433,7 @@ footer a{color:var(--navy)}
     <div class="grid g3">
       <div class="card">
         <h3>שחרית</h3>
-        <table>
+        <table id="wd-shacharit">
           <tr><td>מניין א'</td><td class="time">5:35</td><td class="muted small">ב', ה': 5:30</td></tr>
           <tr><td>מניין ב'</td><td class="time">6:00</td><td class="muted small">ב', ה': 5:40</td></tr>
           <tr><td>מניין ג'</td><td class="time">6:30</td><td></td></tr>
@@ -450,7 +452,7 @@ footer a{color:var(--navy)}
       </div>
       <div class="card">
         <h3>ערבית</h3>
-        <table>
+        <table id="wd-arvit">
           <tr><td>מניין א'</td><td class="time">18:30</td></tr>
           <tr><td>מניין ב'</td><td class="time">19:45</td></tr>
           <tr><td>מניין ג'</td><td class="time">20:45</td></tr>
@@ -717,7 +719,13 @@ fetch('data/shabbat.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(d
   const fill=(id,rows)=>{const dl=document.getElementById(id); if(!dl||!Array.isArray(rows)) return; dl.innerHTML='';
     rows.forEach(([k,v])=>{const dt=document.createElement('dt');dt.textContent=k;const dd=document.createElement('dd');dd.textContent=v;dl.append(dt,dd);});};
   fill('sh-friday',d.friday); fill('sh-shabbat',d.shabbat);
-  set('wd-mincha',d.weekday_mincha); set('kids-time',d.kids_tefila);
+  set('wd-mincha',d.weekday_mincha);
+  // שחרית וערבית בימי חול: מהדף השבועי (אם נקראו), אחרת נשארת הטבלה שבדף
+  const fillWd=(id,rows,notes)=>{ const t=document.getElementById(id); if(!t||!Array.isArray(rows)||rows.length<3) return; t.innerHTML='';
+    rows.forEach(r=>{ const tr=document.createElement('tr'); const a=document.createElement('td'); a.textContent=r.name; const b=document.createElement('td'); b.className='time'; b.textContent=r.time; tr.append(a,b);
+      if(notes){ let n=r.note||''; if(r.name==="מניין ז'" && /בלבד/.test(n)) n+=' · בחופשות כל יום'; const c=document.createElement('td'); c.className='muted small'; c.textContent=n; tr.append(c); }
+      t.append(tr); }); };
+  fillWd('wd-shacharit',d.weekday_shacharit,true); fillWd('wd-arvit',d.weekday_arvit,false); set('kids-time',d.kids_tefila);
   const greet=(id,data)=>{const box=document.getElementById(id); if(!box) return false; const items=(data&&Array.isArray(data.items))?data.items.filter(Boolean):[]; if(!items.length){box.hidden=true; return false;}
     const text=items.join('   ·   ')+(data.closing?('   ·   '+data.closing):'');
     box.querySelectorAll('.copy').forEach(c=>c.textContent=text);

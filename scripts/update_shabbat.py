@@ -143,6 +143,72 @@ def parse(text):
     return out
 
 
+def weekday_minyanim(pdf):
+    """Weekday Shacharit and Arvit rows from the "ימי השבוע" box, read by position on the page
+    (plain text extraction scrambles the RTL notes). Returns {} when the layout is not recognised."""
+    from pypdf import PdfReader
+    frags = []
+    def visit(text, cm, tm, fd, fs):
+        t = text.strip()
+        if t:
+            y = tm[5] * cm[3] + cm[5] if cm else tm[5]
+            x = tm[4] * cm[0] + cm[4] if cm else tm[4]
+            frags.append((round(y, 1), round(x, 1), t))
+    PdfReader(str(pdf)).pages[0].extract_text(visitor_text=visit)
+    row = lambda y0, x0, x1: [f for f in frags if abs(f[0] - y0) < 0.6 and x0 <= f[1] < x1]
+    labels = sorted({f[0] for f in frags if f[1] > 470 and re.search(r"מני?ין", f[2])}, reverse=True)
+    mincha = [f[0] for f in frags if f[1] > 470 and f[2] == "מנחה"]
+    if not labels or not mincha:
+        return {}
+    my = mincha[0]
+
+    def time_at(y):
+        t = "".join(f[2] for f in sorted(row(y, 438, 470), key=lambda f: f[1]))
+        m = re.search(r"\d{1,2}:\d{2}", t)
+        return m.group(0) if m else ""
+
+    def note_at(y):
+        """The side note of a minyan row, rebuilt by meaning: groups of days and their time,
+        e.g. "ב', ה': 5:30" / "ב': 5:40 · ה': 5:50" / "א', ו' בלבד" (the PDF stores it in visual order)."""
+        frs = sorted(row(y, 265, 438), key=lambda f: -f[1])
+        raw = " ".join(f[2] for f in frs)
+        raw = re.sub(r"(\d{2})\s*(\d{1,2}:)", r"\2\1", raw)            # "30 5:" -> "5:30"
+        raw = re.sub(r"(\d{1,2}:)\s+(\d{2})", r"\1\2", raw)
+        if not raw.strip():
+            return ""
+        groups = []
+        for g in raw.split(";"):
+            tm = re.findall(r"\d{1,2}:\d{2}", g)
+            words = re.sub(r"ב?\s*י\s*ו?\s*מ?\s*י?\s*ם", " ", g)            # "יום"/"ימים"/"בימים", also split into letters ("י ו ם")
+            words = re.sub(r"\d{1,2}:\d{2}|בלבד|[()\-,;'\"]", " ", words)
+            days = [c for c in re.findall(r"[א-ו]", re.sub(r"[א-ת]{2,}", " ", words))]
+            days = list(dict.fromkeys(days))
+            if days or tm:
+                groups.append((days, tm[0] if tm else ""))
+        if not groups:
+            return ""
+        fmt = lambda ds: ", ".join(d + "'" for d in ds)
+        if "בלבד" in raw and not any(t for _, t in groups):
+            return fmt([d for ds, _ in groups for d in ds]) + " בלבד"
+        return " · ".join((fmt(ds) + ": " if ds else "") + t for ds, t in groups if ds or t)
+
+    def name_at(y):
+        txt = " ".join(f[2] for f in row(y, 470, 600))
+        m = re.search(r"מני?ין\s*([א-ט])", txt)
+        return f"מניין {m.group(1)}'" if m else ""
+
+    sh, ar = [], []
+    for y in labels:
+        n, t = name_at(y), time_at(y)
+        if not n or not t:
+            continue
+        (sh if y > my else ar).append({"name": n, "time": t, **({"note": note_at(y)} if y > my and note_at(y) else {})})
+    res = {}
+    if len(sh) >= 4: res["weekday_shacharit"] = sh
+    if len(ar) >= 3: res["weekday_arvit"] = ar
+    return res
+
+
 def main():
     try:
         sys.stdout.reconfigure(encoding="utf-8")
@@ -154,6 +220,10 @@ def main():
     from pypdf import PdfReader
     text = "\n".join(p.extract_text() or "" for p in PdfReader(str(pdf)).pages)
     found = parse(text)
+    try:
+        found.update(weekday_minyanim(pdf))
+    except Exception as e:
+        print(f"weekday minyanim not read: {e}")
     old = json.loads(DATA.read_text(encoding="utf-8")) if DATA.exists() else {}
     new = {**old, **found, "source_pdf": pdf.name}
     DATA.write_text(json.dumps(new, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
