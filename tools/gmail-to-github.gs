@@ -51,6 +51,7 @@ const CONFIG = {
   dvarPendingLabel: 'hakipa-dvar-torah-pending',
   label: 'hakipa-site-uploaded',
   lookbackDays: 10,
+  ackSenders: ['hakipa.zmanim@gmail.com'],   // מי מקבל תשובה אוטומטית על דף שבועי/לוח חג ששלח (עלה / יש מה לבדוק / נכשל). לא להוסיף קבוצות גוגל
   reportTo: 'vaad@hakipabs.org',       // הדוח אחרי כל ריצה. אפשר כמה כתובות מופרדות בפסיק
   siteUrl: 'https://hakipabs.org',
   logSheetName: 'אתר הכיפה: יומן ריצות',   // גיליון בדרייב של הוועד, שורה לכל ריצה (נוצר לבד בריצה הראשונה)
@@ -112,9 +113,10 @@ function runMain_() {
 
   threads.forEach(thread => {
     const subject = thread.getFirstMessageSubject();
+    let msgRef = null;
     try {
       const msgs = thread.getMessages();
-      const msg = msgs[msgs.length - 1];
+      const msg = msgs[msgs.length - 1]; msgRef = msg;
       const subj = cleanSubject_(msg.getSubject());
       if (subj.startsWith(CONFIG.dvarPrefix)) return;   // דברי תורה מטופלים ב-runDivreiTorah_
       const atts = msg.getAttachments();
@@ -160,20 +162,25 @@ function runMain_() {
         return;
       }
 
-      if (!pdf) { Logger.log('no PDF in "%s"', subj); note_(`בלי PDF: ${subj}`); thread.addLabel(label); return; }
+      if (!pdf) {
+        Logger.log('no PDF in "%s"', subj); note_(`בלי PDF: ${subj}`); thread.addLabel(label);
+        if (subj.startsWith(CONFIG.subjectPrefix)) ackSender_(msg, `שלום,\nהמייל "${subj}" התקבל, אבל לא נמצא בו קובץ PDF, ולכן הדף לא עלה לאתר.\nכדי שיעלה, צריך לשלוח מייל חדש עם הדף מצורף כ-PDF.`);
+        return;
+      }
       const isWeekly = subj.startsWith(CONFIG.subjectPrefix);
       const folder = isWeekly ? CONFIG.folder : CONFIG.holidayFolder;
       const name = fileNameFor_(subj, msg.getDate());
       const path = `${folder}/${name}`;
       uploadToGitHub_(token, path, pdf.getBytes(), `Sheet from email: ${subj}`);
       thread.addLabel(label);
-      uploads.push({ kind: isWeekly ? 'weekly' : 'holiday', subject: subj, path, name, kb: Math.round(pdf.getSize() / 1024) });
+      uploads.push({ kind: isWeekly ? 'weekly' : 'holiday', subject: subj, path, name, kb: Math.round(pdf.getSize() / 1024), msg });
       Logger.log('uploaded %s (%s KB)', path, Math.round(pdf.getSize() / 1024));
     } catch (e) {
       Logger.log('ERROR on "%s": %s', subject, e);
       noteError_(subject, e);
       sendReport_(`❌ אתר הכיפה: ההעלאה של "${subject}" נכשלה`,
         `המייל: ${subject}\nשגיאה: ${e}\n\n${howToFix_()}`);
+      if (msgRef) ackSender_(msgRef, `שלום,\nהמייל "${cleanSubject_(subject)}" התקבל, אבל ההעלאה לאתר נכשלה. הוועד קיבל הודעה על כך ויטפל בזה.`);
     }
   });
 
@@ -186,7 +193,8 @@ function runMain_() {
       const still = [];
       left.forEach(u => {
         const [subject, body, pending] = buildReport_(token, u);
-        if (pending && Date.now() + CONFIG.recheckMs < deadline) still.push(u); else sendReport_(subject, body);
+        if (pending && Date.now() + CONFIG.recheckMs < deadline) still.push(u);
+        else { sendReport_(subject, body); if (u.msg) ackSender_(u.msg, ackText_(u, subject)); }
       });
       if (!still.length) break;
       Utilities.sleep(CONFIG.recheckMs); left = still;
@@ -518,6 +526,40 @@ function fetchJson_(url) {
     const res = UrlFetchApp.fetch(url + '?t=' + Date.now(), { muteHttpExceptions: true });
     return res.getResponseCode() === 200 ? JSON.parse(res.getContentText()) : null;
   } catch (e) { return null; }
+}
+
+/** תשובה קצרה לשולח (רק לכתובות ב-CONFIG.ackSenders, ורק לשולח עצמו, לא "השב לכולם"). */
+function ackSender_(msg, text) {
+  try {
+    const from = (msg.getFrom() || '').toLowerCase();
+    if (!(CONFIG.ackSenders || []).some(a => from.includes(a.toLowerCase()))) return;
+    msg.reply(`${text}\n\nאתר בית הכנסת הכיפה (הודעה אוטומטית)\n${CONFIG.siteUrl}`, { name: 'אתר בית הכנסת הכיפה' });
+  } catch (e) { Logger.log('ack failed: %s', e); }
+}
+
+/** נוסח התשובה לשולח, לפי תוצאת הדוח לוועד (✅ / ⏳ / ⚠️) ולפי מה שהאתר מציג. */
+function ackText_(u, reportSubject) {
+  const what = u.kind === 'weekly' ? 'הדף' : 'הלוח';
+  if (reportSubject.startsWith('⏳')) return `שלום,\n${what} "${u.subject}" התקבל ונשמר. האתר יתעדכן בעוד כמה דקות.\nתודה!`;
+  if (u.kind !== 'weekly') return reportSubject.startsWith('✅')
+    ? `שלום,\n${what} "${u.subject}" עלה לאתר ויוצג בעמוד הבית.\nתודה!`
+    : `שלום,\n${what} "${u.subject}" התקבל, אבל משהו בעיבוד לא הסתדר. הוועד קיבל הודעה ויבדוק.`;
+  const d = fetchJson_(`${CONFIG.siteUrl}/data/shabbat.json`) || {};
+  const shown = [d.parasha, d.hebrew_date, d.candles && `הדלקת נרות ${d.candles}`, d.havdala && `צאת השבת ${d.havdala}`].filter(Boolean).join(' · ');
+  const lines = ['שלום,', `הדף "${u.subject}" עלה לאתר.`];
+  if (shown) lines.push(`באתר מוצג עכשיו: ${shown}.`);
+  const checks = d.source_pdf === u.name && Array.isArray(d.checks) ? d.checks : [];
+  const missing = ['parasha', 'candles', 'havdala', 'friday', 'shabbat'].filter(k => !d[k] || (Array.isArray(d[k]) && !d[k].length));
+  if (checks.length || missing.length) {
+    lines.push('', 'הבדיקה האוטומטית מצאה משהו שכדאי לבדוק:');
+    checks.forEach(c => lines.push(`• ${c}`));
+    if (missing.length) lines.push('• חלק מהפרטים לא נקראו מהדף, והאתר ממשיך להציג את ערכי השבוע הקודם בשדות האלה.');
+    lines.push('', 'אם צריך לתקן, אפשר לשלוח את הדף המתוקן במייל חדש, באותו נושא (לא כתשובה למייל הזה).');
+  } else if (!reportSubject.startsWith('✅')) {
+    lines.push('', 'משהו בעיבוד באתר לא הסתדר. הוועד קיבל הודעה ויבדוק.');
+  }
+  lines.push('', 'תודה!');
+  return lines.join('\n');
 }
 
 function sendReport_(subject, body) {
