@@ -296,8 +296,13 @@ function paragraphs_(body) {
 /** גוף המייל בלי כותרות של העברה (Forwarded message, From/Date/Subject/To, גם בעברית) ובלי ציטוטים. */
 function cleanBody_(body) {
   const HEADER = /^(from|date|subject|to|cc|sent|מאת|תאריך|נושא|אל|עותק)\s*:/i;
-  return (body || '').split(/\r?\n/).map(l => l.trim()).filter(l => {
+  const FOOTER = /קיבלת הודעה זו|you received this message|googlegroups\.com|לביטול הרישום|unsubscribe/i;   // מכאן והלאה: שוליים של קבוצת גוגל
+  const raw = (body || '').split(/\r?\n/).map(l => l.replace(/[\u200e\u200f]/g, '').trim());
+  const cut = raw.findIndex(l => FOOTER.test(l));
+  const kept = cut >= 0 ? raw.slice(0, cut).concat([raw[cut].slice(0, raw[cut].search(FOOTER)).trim()]) : raw;   // מה שלפני השוליים באותה שורה נשמר
+  return kept.filter(l => {
     if (!l) return false;
+    if (/^\[(image|תמונה|cid)[^\]]*\]$/i.test(l)) return false;        // [image: image.png] של תמונה בגוף המייל
     if (/^>/.test(l) || /^-{2,}/.test(l) || /wrote:$/.test(l) || /כתב\/ה:$/.test(l)) return false;
     if (/forwarded message|הודעה שהועברה|begin forwarded/i.test(l)) return false;
     if (HEADER.test(l)) return false;
@@ -347,12 +352,22 @@ function addEvent_(token, subj, body, mailDate, img) {
     }
     rest = rest.replace(m[0], '').replace(/\s{2,}/g, ' ').trim();
   }
-  if (!date || isNaN(date)) { date = new Date(mailDate); if (!byKeyword) date.setDate(date.getDate() + CONFIG.eventDefaultDays); }   // אורייתא וכדומה: אותו יום
-  const title = rest.replace(/[\s,\-:]+$/, '') || 'אירוע';
+  // בלי תאריך בנושא: "מחר" = יום אחרי המייל; "הערב"/"היום" (וכל אורייתא בלי מילה כזו) = יום המייל; אירוע רגיל = 14 יום
+  const relTomorrow = /(^|\s)מחר(\s|$)/.test(rest);
+  if (!date || isNaN(date)) { date = new Date(mailDate); if (relTomorrow) date.setDate(date.getDate() + 1); else if (!byKeyword) date.setDate(date.getDate() + CONFIG.eventDefaultDays); }
+  const subjRest = rest.replace(/[\s,\-:]+$/, '');
+  let title = subjRest.replace(/^(?:מחר|הערב|היום)\s+/, '');          // "מחר באורייתא" -> "באורייתא" -> "אורייתא"
+  CONFIG.eventKeywords.forEach(k => { title = title.replace(new RegExp('^ב(?=' + k + ')'), ''); });
+  title = title || 'אירוע';
   const lines = cleanBody_(body);
-  const start = (lines[0] && lines[0].replace(/\s+/g,' ') === title) ? 1 : 0;   // שורה ראשונה שחוזרת על הכותרת מדולגת
-  const when = lines[start] || '';
-  const text = lines.slice(start + 1, start + 6).join(' ').slice(0, 400);
+  const norm = t => (t || '').replace(/\s+/g, ' ').trim();
+  const start = (lines[0] && (norm(lines[0]) === title || norm(lines[0]) === subjRest)) ? 1 : 0;   // שורה ראשונה שחוזרת על הנושא מדולגת
+  let when = lines[start] || '';
+  const more = lines.slice(start + 1, start + 6);
+  if (when.length > 70) { more.unshift(when); when = ''; }             // שורה ארוכה היא תיאור, לא "מתי ואיפה"
+  let text = more.join(' ');
+  if (subjRest && text.startsWith(subjRest)) text = text.slice(subjRest.length).trim();   // "מחר באורייתא הרב..." -> "הרב..."
+  text = text.slice(0, 400);
   const ext = img.getContentType().includes('png') ? 'png' : img.getContentType().includes('webp') ? 'webp' : 'jpg';
   const dateStr = Utilities.formatDate(date, 'Asia/Jerusalem', 'yyyy-MM-dd');
   const poster = `${CONFIG.eventsFolder}/${slug_(title) || 'event'}-${dateStr}.${ext}`;
@@ -364,8 +379,10 @@ function addEvent_(token, subj, body, mailDate, img) {
   if (!Array.isArray(events)) events = [];
   events = events.filter(e => e.poster !== poster);
   // אורייתא וכדומה: פוסטר שהועלה מוקדם (מוואטסאפ) והמייל הרגיל של אותו יום = אותו אירוע. החדש מחליף, לא מתווסף.
-  if (byKeyword) events = events.filter(e => !(e.date === dateStr && CONFIG.eventKeywords.some(k => (e.title || '').includes(k) || (e.poster || '').includes(k))));
-  const entry = { title, date: dateStr, when, place: '', text, poster };
+  const sameKw = e => e.date === dateStr && CONFIG.eventKeywords.some(k => (e.title || '').includes(k) || (e.poster || '').includes(k));
+  const prev = byKeyword ? events.find(sameKw) : null;               // מה שהועלה מוקדם (שעה/מקום שנכתבו ידנית) נשמר אם המייל החדש לא מביא אותם
+  if (byKeyword) events = events.filter(e => !sameKw(e));
+  const entry = { title, date: dateStr, when: when || (prev && prev.when) || '', place: (prev && prev.place) || '', text: text || (prev && prev.text) || '', poster };
   events.push(entry);
   events.sort((a, b) => (a.date || '').localeCompare(b.date || ''));
   putFile_(token, CONFIG.eventsJson, JSON.stringify(events, null, 2) + '\n', `Event from email: ${subj}`, file.sha);
