@@ -16,7 +16,7 @@
 -->
 <style>
 /* צבעי האתר. כל המידות ביחידות vmin (הצלע הקצרה של המסך), כך שאותו דף עובד לרוחב ולגובה. */
-:root{--bg:#faf8f3;--paper:#ffffff;--ink:#1d2430;--muted:#5d6675;--line:#e6e1d6;--navy:#1e3a5f;--navy-2:#2b5283;--sand:#c9a86a;--sand-2:#f1e7cf;--sand-d:#8a6d2e;--teal:#2f7f7a;
+:root{--k:1.35;--z:1;--bg:#faf8f3;--paper:#ffffff;--ink:#1d2430;--muted:#5d6675;--line:#e6e1d6;--navy:#1e3a5f;--navy-2:#2b5283;--sand:#c9a86a;--sand-2:#f1e7cf;--sand-d:#8a6d2e;--teal:#2f7f7a;
   --shadow:0 .15vmin .3vmin rgba(20,30,50,.06),0 1.2vmin 3.4vmin rgba(20,30,50,.08)}
 *{box-sizing:border-box}
 html,body{margin:0;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font-family:Heebo,system-ui,Arial,sans-serif;cursor:none}
@@ -26,75 +26,92 @@ html.rot270 .stage{inset:auto;top:0;left:0;width:100vh;height:100vw;transform-or
 header{flex:none;height:11vmin;display:flex;align-items:center;justify-content:space-between;padding:0 4vmin;background:var(--paper);border-bottom:.4vmin solid var(--sand);box-shadow:var(--shadow);position:relative;z-index:2}
 .brand{display:flex;align-items:center;gap:1.8vmin}
 .brand img{height:7.5vmin;border-radius:1.2vmin}
-.brand b{font-family:"Frank Ruhl Libre",serif;font-size:4.2vmin;display:block;line-height:1.1;color:var(--navy)}
-.brand small{font-size:2.2vmin;color:var(--muted)}
+.brand b{font-family:"Frank Ruhl Libre",serif;font-size:calc(var(--k) * var(--z) * 4.2vmin);display:block;line-height:1.1;color:var(--navy)}
+.brand small{font-size:calc(var(--k) * var(--z) * 2.2vmin);color:var(--muted)}
 .now{text-align:left}
-.now .clock{font-size:6vmin;font-weight:700;line-height:1;font-variant-numeric:tabular-nums;color:var(--navy)}
-.now .date{font-size:2.3vmin;color:var(--muted);margin-top:.6vmin}
+.now .clock{font-size:calc(var(--k) * var(--z) * 6vmin);font-weight:700;line-height:1;font-variant-numeric:tabular-nums;color:var(--navy)}
+.now .date{font-size:calc(var(--k) * var(--z) * 2.3vmin);color:var(--muted);margin-top:.6vmin}
 main{flex:1;position:relative;overflow:hidden}
 .slide{position:absolute;inset:0;padding:4vmin 4vmin 6vmin;display:flex;flex-direction:column;opacity:0;transition:opacity 1.1s ease;pointer-events:none}
 .slide.on{opacity:1}
-.eyebrow{font-size:2.6vmin;letter-spacing:.06em;color:var(--teal);font-weight:700;margin-bottom:1vmin}
-h1{font-family:"Frank Ruhl Libre",serif;font-weight:700;font-size:7vmin;line-height:1.1;margin:0 0 2.5vmin;color:var(--navy)}
-h2{font-family:"Frank Ruhl Libre",serif;font-weight:700;font-size:4vmin;margin:0 0 1.6vmin;color:var(--navy)}
+.eyebrow{font-size:calc(var(--k) * var(--z) * 2.6vmin);letter-spacing:.06em;color:var(--teal);font-weight:700;margin-bottom:1vmin}
+h1{font-family:"Frank Ruhl Libre",serif;font-weight:700;font-size:calc(var(--k) * var(--z) * 7vmin);line-height:1.1;margin:0 0 2.5vmin;color:var(--navy)}
+h2{font-family:"Frank Ruhl Libre",serif;font-weight:700;font-size:calc(var(--k) * var(--z) * 4vmin);margin:0 0 1.6vmin;color:var(--navy)}
 .muted{color:var(--muted)}
 .grid{display:grid;gap:3vmin;flex:1;min-height:0;align-items:start}
 .g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:1fr 1fr 1fr}
 .card{background:var(--paper);border:.15vmin solid var(--line);border-radius:2vmin;padding:3vmin 3vmin;min-height:0;overflow:hidden;box-shadow:var(--shadow)}
-dl.times{display:grid;grid-template-columns:1fr auto;gap:1.3vmin 2vmin;margin:0;font-size:3.4vmin}
-.card > div > dl.times{font-size:4vmin}
+dl.times{display:grid;grid-template-columns:1fr auto;gap:1.3vmin 2vmin;margin:0;font-size:calc(var(--k) * var(--z) * 3.4vmin)}
+.card > div > dl.times{font-size:calc(var(--k) * var(--z) * 4vmin)}
 dl.times dt{color:var(--ink)}
 dl.times dd{margin:0;font-weight:700;font-variant-numeric:tabular-nums;color:var(--navy)}
-dl.times dd small{display:block;font-weight:400;font-size:2.2vmin;color:var(--sand-d);text-align:left}
+dl.times dd small{display:block;font-weight:400;font-size:calc(var(--k) * var(--z) * 2.2vmin);color:var(--sand-d);text-align:left}
 .bigtimes{display:flex;flex-wrap:wrap;gap:3vmin 8vmin;margin:0 0 3vmin}
-.bigtimes div{font-size:2.8vmin;color:var(--muted)}
-.bigtimes b{display:block;font-size:11vmin;line-height:1;color:var(--navy);font-variant-numeric:tabular-nums;font-weight:900}
-.bigtimes b.sm{font-size:7vmin}
-.note{font-size:2.8vmin;color:var(--teal);margin-top:auto;padding-top:2vmin}
+.bigtimes div{font-size:calc(var(--k) * var(--z) * 2.8vmin);color:var(--muted)}
+.bigtimes b{display:block;font-size:calc(var(--k) * var(--z) * 11vmin);line-height:1;color:var(--navy);font-variant-numeric:tabular-nums;font-weight:900}
+.bigtimes b.sm{font-size:calc(var(--k) * var(--z) * 7vmin)}
+.note{font-size:calc(var(--k) * var(--z) * 2.8vmin);color:var(--teal);margin-top:auto;padding-top:2vmin}
 .event{display:grid;grid-template-columns:auto 1fr;gap:4vmin;flex:1;min-height:0;align-items:center}
-.event img{max-height:68vmin;max-width:42vmin;border-radius:1.6vmin;box-shadow:0 1.6vmin 4vmin rgba(20,30,50,.18)}
-.event .when{font-size:4.2vmin;color:var(--sand-d);font-weight:700;margin-bottom:2vmin}
-.event p{font-size:3.4vmin;line-height:1.5;margin:0}
+.event img{max-height:calc(var(--z) * 68vmin);max-width:calc(var(--z) * 42vmin);border-radius:1.6vmin;box-shadow:0 1.6vmin 4vmin rgba(20,30,50,.18)}
+.event .when{font-size:calc(var(--k) * var(--z) * 4.2vmin);color:var(--sand-d);font-weight:700;margin-bottom:2vmin}
+.event p{font-size:calc(var(--k) * var(--z) * 3.4vmin);line-height:1.5;margin:0}
 .dvar{display:grid;grid-template-columns:1fr auto;gap:4vmin;flex:1;min-height:0}
-.dvar .main{min-height:0;display:flex;flex-direction:column;background:var(--paper);border:.15vmin solid var(--line);border-inline-start:.8vmin solid var(--sand);border-radius:2vmin;padding:3vmin 3.4vmin;box-shadow:var(--shadow)}
-.dvar .main h1{font-size:5.6vmin;margin-bottom:1vmin}
-.dvar .by{font-size:3vmin;color:var(--muted);margin:0 0 2vmin}
-.dvar .txt{font-size:var(--fs,3.3vmin);line-height:1.55;overflow:hidden}
+.dvar .main{display:flex;flex-direction:column;background:var(--paper);border:.15vmin solid var(--line);border-inline-start:.8vmin solid var(--sand);border-radius:2vmin;padding:3vmin 3.4vmin;box-shadow:var(--shadow)}
+.dvar .main h1{font-size:calc(var(--k) * var(--z) * 5.6vmin);margin-bottom:1vmin}
+.dvar .by{font-size:calc(var(--k) * var(--z) * 3vmin);color:var(--muted);margin:0 0 2vmin}
+.dvar .txt{font-size:calc(var(--k) * var(--z) * var(--fs,3.3vmin));line-height:1.55}
 .dvar .txt p{margin:0 0 1.4vmin}
-.qr{align-self:end;text-align:center;font-size:2.4vmin;color:var(--muted)}
+.qr{align-self:end;text-align:center;font-size:calc(var(--k) * var(--z) * 2.4vmin);color:var(--muted)}
 .qr .box{background:#fff;padding:1.4vmin;border-radius:1.4vmin;display:inline-block;margin-bottom:1vmin;border:.15vmin solid var(--line);box-shadow:var(--shadow)}
 .qr img,.qr canvas{display:block;width:20vmin;height:20vmin}
 .photo{position:absolute;inset:0;overflow:hidden}
 .photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .photo .bg{filter:blur(4vmin) brightness(1.08) saturate(.9);opacity:.55;transform:scale(1.15)}
 .photo img.fit{object-fit:contain;padding:2.4vmin 2.4vmin 14vmin}
-.photo .cap{position:absolute;inset-inline:4vmin;bottom:3.4vmin;padding:2.2vmin 3vmin;background:rgba(255,255,255,.94);border-radius:1.8vmin;box-shadow:var(--shadow);font-size:3vmin;line-height:1.4;color:var(--ink);border-inline-start:.8vmin solid var(--sand)}
-.photo .cap b{display:block;color:var(--teal);font-size:2.4vmin;letter-spacing:.05em;margin-bottom:.4vmin}
-.list{list-style:none;margin:0;padding:0;font-size:4vmin;columns:2;column-gap:4vmin}
+.photo .cap{position:absolute;inset-inline:4vmin;bottom:3.4vmin;padding:2.2vmin 3vmin;background:rgba(255,255,255,.94);border-radius:1.8vmin;box-shadow:var(--shadow);font-size:calc(var(--k) * var(--z) * 3vmin);line-height:1.4;color:var(--ink);border-inline-start:.8vmin solid var(--sand)}
+.photo .cap b{display:block;color:var(--teal);font-size:calc(var(--k) * var(--z) * 2.4vmin);letter-spacing:.05em;margin-bottom:.4vmin}
+.list{list-style:none;margin:0;padding:0;font-size:calc(var(--k) * var(--z) * 4vmin);columns:2;column-gap:4vmin}
 .list li{break-inside:avoid;margin:0 0 2vmin;padding-inline-start:1.6vmin;border-inline-start:.5vmin solid var(--sand);color:var(--navy);font-weight:500}
-.list li span{display:block;font-size:2.8vmin;color:var(--muted);font-weight:400}
-.ticker{font-size:3.6vmin;line-height:1.6}
+.list li span{display:block;font-size:calc(var(--k) * var(--z) * 2.8vmin);color:var(--muted);font-weight:400}
+.ticker{font-size:calc(var(--k) * var(--z) * 3.6vmin);line-height:1.6}
 .ticker p{margin:0 0 2vmin}
 .donate{display:grid;grid-template-columns:1fr auto;gap:5vmin;flex:1;align-items:center}
-.donate p{font-size:3.6vmin;line-height:1.55;margin:0 0 2.5vmin;color:var(--ink)}
-.donate .cta{font-size:4.4vmin;font-weight:900;color:var(--sand-d)}
+.donate p{font-size:calc(var(--k) * var(--z) * 3.6vmin);line-height:1.55;margin:0 0 2.5vmin;color:var(--ink)}
+.donate .cta{font-size:calc(var(--k) * var(--z) * 4.4vmin);font-weight:900;color:var(--sand-d)}
 .donate .qr img,.donate .qr canvas{width:30vmin;height:30vmin}
 .wash{position:absolute;inset:0;background:linear-gradient(90deg,rgba(250,248,243,.97) 55%,rgba(250,248,243,.82))}
 .dots{position:absolute;bottom:1.8vmin;inset-inline:0;display:flex;justify-content:center;gap:.9vmin;z-index:5}
 .dots i{width:1.1vmin;height:1.1vmin;border-radius:50%;background:var(--line)}
 .dots i.on{background:var(--sand)}
 .bar{position:absolute;bottom:0;inset-inline-start:0;height:.5vmin;background:var(--sand);width:0;z-index:5}
-.empty{display:flex;align-items:center;justify-content:center;font-size:4vmin;color:var(--muted)}
+.empty{display:flex;align-items:center;justify-content:center;font-size:calc(var(--k) * var(--z) * 4vmin);color:var(--muted)}
+
+.wk{grid-template-columns:1.55fr .8fr 1fr}
+.stack{display:grid;gap:3vmin}
+.wtab{display:grid;grid-template-columns:auto 1fr auto;gap:1.4vmin 2vmin;align-items:baseline;font-size:calc(var(--k) * var(--z) * 3.4vmin)}
+.wtab .nt{font-size:.62em;color:var(--sand-d)}
+.wtab b{color:var(--navy);font-variant-numeric:tabular-nums}
+.dvar{display:flex}
+.dvar .main{flex:1}
+.dvar .cont{font-size:.55em;color:var(--muted);font-weight:500}
+.dvar .more{color:var(--teal);font-size:.8em}
+.dhead{display:flex;justify-content:space-between;align-items:flex-start;gap:3vmin}
+.dhead .qr{align-self:flex-start;flex:none;font-size:calc(var(--k) * var(--z) * 1.8vmin)}
+.dhead .qr .box{padding:1vmin}
+.dhead .qr img,.dhead .qr canvas{width:13vmin;height:13vmin}
 
 /* מסך אנכי: עמודה אחת, תמונות מעל הטקסט */
 html.portrait .g2,html.portrait .g3{grid-template-columns:1fr}
+html.portrait .wk{grid-template-columns:1fr 1fr}
+html.portrait .wk > .card:first-child{grid-column:1 / -1}
 html.portrait .grid{align-content:start}
 html.portrait .event{grid-template-columns:1fr;align-items:start;justify-items:center;text-align:center}
-html.portrait .event img{max-width:80vmin;max-height:95vmin}
+html.portrait .event img{max-width:calc(var(--z) * 80vmin);max-height:calc(var(--z) * 92vmin)}
 html.portrait .dvar{grid-template-columns:1fr;grid-template-rows:1fr auto}
 html.portrait .dvar .qr img,html.portrait .dvar .qr canvas{width:16vmin;height:16vmin}
 html.portrait header{height:auto;min-height:11vmin;padding:2vmin 4vmin;gap:3vmin}
-html.portrait .brand b{font-size:3.8vmin}
+html.portrait .brand b{font-size:calc(var(--k) * 3vmin)}
+html.portrait .brand small{display:none}
 html.portrait .now .date{white-space:nowrap}
 html.portrait .dvar .qr{justify-self:center}
 html.portrait .donate{grid-template-columns:1fr;align-content:center}
@@ -102,12 +119,12 @@ html.portrait .donate .qr{justify-self:center;align-self:start}
 html.portrait .list{columns:1}
 html.portrait .wash{background:linear-gradient(180deg,rgba(250,248,243,.96) 60%,rgba(250,248,243,.86))}
 html.portrait .photo img.fit{padding:3vmin 3vmin 22vmin}
-html.portrait h1{font-size:7.6vmin}
-html.portrait .bigtimes b{font-size:13vmin}
-html.portrait .bigtimes b.sm{font-size:8vmin}
+html.portrait h1{font-size:calc(var(--k) * var(--z) * 7.6vmin)}
+html.portrait .bigtimes b{font-size:calc(var(--k) * var(--z) * 13vmin)}
+html.portrait .bigtimes b.sm{font-size:calc(var(--k) * var(--z) * 8vmin)}
 .arr{display:inline-block}
 html.portrait .arr{transform:rotate(-90deg)}
-html.portrait .dvar .txt{font-size:calc(var(--fs,3.2vmin) * 1.18)}
+html.portrait .dvar .txt{font-size:calc(var(--k) * var(--z) * var(--fs,3.2vmin) * 1.18)}
 </style>
 </head>
 <body>
@@ -130,7 +147,9 @@ const SEC=Math.max(6,parseInt(qs.get('sec')||'14',10));
 const ROT=qs.get('rotate'), H=document.documentElement;
 if(ROT==='90') H.classList.add('rot'); if(ROT==='270') H.classList.add('rot270');
 const orient=()=>H.classList.toggle('portrait', !!ROT || qs.get('layout')==='portrait' || innerHeight>innerWidth);
-orient(); addEventListener('resize',orient);
+orient(); addEventListener('resize',()=>{ orient(); fitAll(); });
+const K=parseFloat(qs.get('size')||'');
+if(K>0.5&&K<3) H.style.setProperty('--k',K);   // ?size=1.6 = גדול יותר, ?size=1.1 = קטן יותר
 const $=id=>document.getElementById(id);
 const esc=t=>String(t==null?'':t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const J=u=>fetch(u+(u.includes('?')?'&':'?')+'t='+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.json():null).catch(()=>null);
@@ -171,7 +190,9 @@ async function build(){
   if(sh && Array.isArray(sh.weekday_shacharit)){
     const sc=sh.weekday_shacharit.map(r=>[r.name,r.time,(r.name==="מניין ז'"&&/בלבד/.test(r.note||''))?r.note+' · בחופשות כל יום':r.note]);
     S.push({dur:SEC,html:`<div class="eyebrow">זמני תפילה</div><h1>תפילות בימי חול</h1>
-      <div class="grid g3"><div class="card"><h2>שחרית</h2>${dl(sc)}</div><div class="card"><h2>מנחה</h2>${dl([['מניין יחיד',sh.weekday_mincha||'']])}<div class="note" style="font-size:2.4vmin">השעה מתעדכנת לפי השקיעה</div></div><div class="card"><h2>ערבית</h2>${dl((sh.weekday_arvit||[]).map(r=>[r.name,r.time]))}</div></div>`});
+      <div class="grid wk"><div class="card"><h2>שחרית</h2><div class="wtab">${sc.map(([n,t,nt])=>`<span>${esc(n)}</span><span class="nt">${esc(nt||'')}</span><b>${esc(t)}</b>`).join('')}</div></div>
+      <div class="card"><h2>מנחה</h2><div class="wtab"><span>מניין יחיד</span><span></span><b>${esc(sh.weekday_mincha||'')}</b></div><div class="note" style="font-size:calc(var(--k) * var(--z) * 2.2vmin)">מתעדכן לפי השקיעה</div></div>
+      <div class="card"><h2>ערבית</h2><div class="wtab">${(sh.weekday_arvit||[]).map(r=>`<span>${esc(r.name)}</span><span></span><b>${esc(r.time)}</b>`).join('')}</div></div></div>`});
   }
   // זמני היום (מטבלת זמני השבוע של הדף)
   if(sh && sh.zmanim){
@@ -187,11 +208,22 @@ async function build(){
   if(sh && Array.isArray(dv)){
     const cur=norm(sh.parasha), mine=dv.filter(e=>norm(e.parasha)===cur).sort((a,b)=>(b.date||'').localeCompare(a.date||''));
     mine.slice(0,2).forEach((e,i)=>{
-      const words=(e.paragraphs||[]).join(' ').split(/\s+/).length; const fs=words>230?2.6:words>170?2.9:3.2;
+      const wc=t=>t.split(/\s+/).filter(Boolean).length;
+      const paras=(e.paragraphs||[]).filter(Boolean), words=wc(paras.join(' '));
+      // ארוך מ-120 מילים: שני שקפים, החיתוך בסוף משפט קרוב לאמצע
+      let pages=[paras];
+      if(words>120){
+        const sents=[]; paras.forEach((p,pi)=>(p.match(/[^.!?:]+[.!?:]*["'״)]*\s*/g)||[p]).forEach(t=>sents.push({t:t.trim(),pi})));
+        let acc=0, cut=sents.length; for(let k=0;k<sents.length;k++){ acc+=wc(sents[k].t); if(acc>=words/2){ cut=k+1; break; } }
+        const join=arr=>{ const out=[]; let last=-1; arr.forEach(x=>{ if(x.pi!==last){ out.push([]); last=x.pi; } out[out.length-1].push(x.t); }); return out.map(a=>a.join(' ')); };
+        if(cut>0 && cut<sents.length) pages=[join(sents.slice(0,cut)), join(sents.slice(cut))];
+      }
+      pages.forEach((pg,pn)=>{
+      const pw=wc(pg.join(' ')); const fs=pw>170?2.9:3.2;
       const key=(id=>{ let h=2166136261; for(const c of (id||'')){ h^=c.codePointAt(0); h=Math.imul(h,16777619); } return 't-'+(h>>>0).toString(36); })(e.id);
-      S.push({dur:Math.max(SEC+8, Math.round(words/3.2)),html:`<div class="eyebrow">והאר עינינו בתורתך · דבר תורה מחברי הקהילה · פרשת ${esc((sh.parasha||'').replace(/^פרשו?ת\s+/,''))}</div>
-        <div class="dvar"><div class="main"><h1>${esc(e.title||'דבר תורה')}</h1><div class="by">${esc(e.author||'')}${e.written?' · '+esc(e.written):''}</div><div class="txt" style="--fs:${fs}vmin">${(e.paragraphs||[]).map(p=>`<p>${esc(p)}</p>`).join('')}</div></div>
-        ${qrSlot('qr-dv'+i, SITE+'/divrei-torah.html?d='+key, 'לקריאה ולשיתוף')}</div>`});
+      S.push({dur:Math.max(SEC+6, Math.round(pw/2.6)),html:`<div class="eyebrow">והאר עינינו בתורתך · דבר תורה מחברי הקהילה · פרשת ${esc((sh.parasha||'').replace(/^פרשו?ת\s+/,''))}${pages.length>1?` · ${pn+1}/${pages.length}`:''}</div>
+        <div class="dvar"><div class="main"><div class="dhead"><div><h1>${esc(e.title||'דבר תורה')}${pn?' <span class="cont">(המשך)</span>':''}</h1><div class="by">${esc(e.author||'')}${e.written?' · '+esc(e.written):''}</div></div>${qrSlot('qr-dv'+i+'-'+pn, SITE+'/divrei-torah.html?d='+key, 'לקריאה ולשיתוף')}</div><div class="txt" style="--fs:${fs}vmin">${pg.map(p=>`<p>${esc(p)}</p>`).join('')}${pn<pages.length-1?'<p class="more">← המשך בשקף הבא</p>':''}</div></div></div>`});
+      });
     });
   }
   // שיעורים היום
@@ -210,13 +242,13 @@ async function build(){
   // תמונות: אחת מהגלריה ואחת מהארכיון, אחרות בכל סבב
   const gphotos=[]; (gal&&gal.albums||[]).forEach(a=>(a.photos||[]).forEach(p=>gphotos.push({src:p.web,label:'מהגלריה',cap:a.title+(a.when?' · '+a.when:'')})));
   const aphotos=[]; (arc&&arc.collections||[]).forEach(c=>(c.items||[]).forEach(it=>{ if(it.kind==='photo'&&it.web) aphotos.push({src:it.web,label:'מההיסטוריה שלנו · '+c.title,cap:(it.caption||'').slice(0,180)+(it.year?' · '+it.year:'')}); }));
-  [...pick(gphotos,1),...pick(aphotos,1)].forEach(p=>S.push({dur:SEC,photo:true,html:`<div class="photo"><img class="bg" src="${esc(p.src)}" alt=""><img class="fit" src="${esc(p.src)}" alt=""><div class="cap"><b>${esc(p.label)}</b>${esc(p.cap)}</div></div>`}));
+  [...pick(gphotos,1),...pick(aphotos,1)].forEach(p=>S.push({dur:SEC,photo:true,nofit:true,html:`<div class="photo"><img class="bg" src="${esc(p.src)}" alt=""><img class="fit" src="${esc(p.src)}" alt=""><div class="cap"><b>${esc(p.label)}</b>${esc(p.cap)}</div></div>`}));
   // תרומה
   S.push({dur:SEC+4,photo:true,html:`<div class="photo"><img src="images/campaign/courtyard.jpg" alt=""><div class="wash"></div></div>
     <div style="position:relative;padding:4vmin 4vmin 6vmin;height:100%;display:flex;flex-direction:column"><div class="eyebrow">קמפיין השיפוץ</div><div class="donate"><div><h1>מחדשים את הלב של באר שבע</h1>
     <p>החצר הפנימית של בית הכנסת כבר לא עונה על צרכי הציבור הרחב שפוקד את המקום. התוכנית: מתחם רב-תכליתי מקורה ונעים לתפילה, ללימוד ולאירועי קהילה, שירותים חדשים, הצללה ונגישות.</p>
-    <p style="font-size:3vmin;color:var(--teal)">"זה הזמן לרומם את בית ה'. כל אחד מאיתנו יכול להיות שותף, על פי יכולתו ונדיבות ליבו." הרב אהרן דרשביץ, רב קהילת הכיפה</p>
-    <p class="muted" style="font-size:2.8vmin">ביט / פייבוקס: 058-749-3234 · התרומה מוכרת לצרכי מס לפי סעיף 46</p><div class="cta">סרקו ותרמו באשראי <span class="arr">←</span></div></div>${qrSlot('qr-don',DONATE,'תרומה מאובטחת')}</div></div>`});
+    <p style="font-size:calc(var(--k) * var(--z) * 3vmin);color:var(--teal)">"זה הזמן לרומם את בית ה'. כל אחד מאיתנו יכול להיות שותף, על פי יכולתו ונדיבות ליבו." הרב אהרן דרשביץ, רב קהילת הכיפה</p>
+    <p class="muted" style="font-size:calc(var(--k) * var(--z) * 2.8vmin)">ביט / פייבוקס: 058-749-3234 · התרומה מוכרת לצרכי מס לפי סעיף 46</p><div class="cta">סרקו ותרמו באשראי <span class="arr">←</span></div></div>${qrSlot('qr-don',DONATE,'תרומה מאובטחת')}</div></div>`});
   // האתר
   S.push({dur:SEC-2,html:`<div class="eyebrow">באתר שלנו</div><div class="donate"><div><h1>hakipabs.org</h1><p>זמני תפילה ושבת, שיעורים, אירועים, דבר תורה לפרשה מחברי הקהילה, הגלריה וההיסטוריה של הכיפה.</p><div class="cta">סרקו לאתר <span class="arr">←</span></div></div>${qrSlot('qr-site',SITE,'hakipabs.org')}</div>`});
   return S;
@@ -229,6 +261,11 @@ function render(list){
   list.forEach((s,i)=>{ const el=document.createElement('section'); el.className='slide'; el.innerHTML=s.html; if(s.photo) el.style.padding='0'; main.append(el); s.el=el; const d=document.createElement('i'); dots.append(d); s.dot=d; });
   document.querySelectorAll('[data-qr]').forEach(b=>{ try{ new QRCode(b,{text:b.dataset.qr,width:300,height:300,colorDark:'#132841',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M}); }catch(e){ b.closest('.qr').style.display='none'; } });
 }
+function fit(el){
+  let z=1; el.style.setProperty('--z','1');
+  for(let g=0; g<24 && el.scrollHeight>el.clientHeight+2 && z>0.5; g++){ z-=0.04; el.style.setProperty('--z',z.toFixed(2)); }
+}
+function fitAll(){ slides.forEach(s=>{ if(!s.nofit && s.el) fit(s.el); }); }
 function show(i){
   if(!slides.length) return;
   slides.forEach(s=>{ s.el.classList.remove('on'); s.dot.classList.remove('on'); });
@@ -238,7 +275,9 @@ function show(i){
 }
 async function refresh(first){
   const list=await build(); if(!list.length) return;
-  slides=list; render(slides); show(first?0:0);
+  slides=list; render(slides); fitAll(); show(first?0:0);
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(fitAll);
+  document.querySelectorAll('main img').forEach(im=>{ if(!im.complete) im.addEventListener('load',fitAll,{once:true}); });
 }
 refresh(true);
 setInterval(()=>refresh(false), 10*60*1000);                       // נתונים חדשים כל 10 דקות
