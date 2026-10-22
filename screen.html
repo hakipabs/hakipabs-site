@@ -11,7 +11,8 @@
 <!--
   מסך תצוגה ללוח המודעות בבית הכנסת: שקפים מתחלפים במסך מלא, מתוך הנתונים של האתר (הדף השבועי,
   אירועים, דבר תורה, שיעורים, גלריה וארכיון). אין מה לעדכן כאן ידנית: כשהאתר מתעדכן, גם המסך.
-  פתיחה: https://hakipabs.org/screen.html בדפדפן של הטלוויזיה / מחשב, במסך מלא (F11). לחיצה על המסך = מסך מלא.
+  פתיחה: https://hakipabs.org/screen.html בדפדפן של הטלוויזיה / מחשב, במסך מלא (F11). לחיצה ראשונה = מסך מלא;
+  אחר כך לחיצה בצד שמאל = השקף הבא, בצד ימין = הקודם; החלקה במסך מגע; חיצים / כפתורי הבא-הקודם בשלט.
   ?sec=15 משנה את משך כל שקף (בשניות). הנתונים נטענים מחדש כל 10 דקות, והדף כולו כל לילה.
 -->
 <style>
@@ -282,8 +283,23 @@ async function refresh(first){
 refresh(true);
 setInterval(()=>refresh(false), 10*60*1000);                       // נתונים חדשים כל 10 דקות
 setInterval(()=>{ const d=jlm(); if(d.getHours()===3 && d.getMinutes()<10) location.reload(); }, 9*60*1000);   // טעינה מלאה פעם בלילה
-document.addEventListener('keydown',e=>{ if(e.key==='ArrowLeft') show(idx+1); if(e.key==='ArrowRight') show(idx-1); });
-document.addEventListener('click',()=>{ if(!document.fullscreenElement && document.documentElement.requestFullscreen) document.documentElement.requestFullscreen().catch(()=>{}); });
+// ניווט ידני. בכיוון הקריאה העברי: שמאלה = הבא, ימינה = הקודם.
+const NEXT=['ArrowLeft','ArrowDown','PageDown','MediaTrackNext','MediaFastForward'], PREV=['ArrowRight','ArrowUp','PageUp','MediaTrackPrevious','MediaRewind'];
+document.addEventListener('keydown',e=>{ if(NEXT.includes(e.key)) show(idx+1); else if(PREV.includes(e.key)) show(idx-1); });
+// "שמאל" של התוכן גם כשהעמוד מסובב (?rotate=90 / 270)
+const contentLeft=(x,y)=> ROT==='90' ? y<innerHeight/2 : ROT==='270' ? y>innerHeight/2 : x<innerWidth/2;
+let swiped=false, fsTried=false;
+document.addEventListener('click',e=>{
+  if(swiped){ swiped=false; return; }
+  if(!fsTried){ fsTried=true; if(document.documentElement.requestFullscreen && !document.fullscreenElement){ document.documentElement.requestFullscreen().catch(()=>{}); return; } }   // לחיצה ראשונה בלבד: מסך מלא
+  show(idx + (contentLeft(e.clientX,e.clientY) ? 1 : -1));
+});
+// החלקה במסך מגע: אצבע ימינה = הבא (כמו דפדוף בספר עברי), שמאלה = הקודם
+let t0=null;
+document.addEventListener('touchstart',e=>{ const t=e.touches[0]; t0={x:t.clientX,y:t.clientY}; },{passive:true});
+document.addEventListener('touchend',e=>{ if(!t0) return; const t=e.changedTouches[0]; let dx=t.clientX-t0.x, dy=t.clientY-t0.y; t0=null;
+  if(ROT==='90'){ const k=dx; dx=dy; dy=-k; } else if(ROT==='270'){ const k=dx; dx=-dy; dy=k; }
+  if(Math.abs(dx)>60 && Math.abs(dx)>Math.abs(dy)*1.5){ swiped=true; show(idx + (dx>0 ? 1 : -1)); } },{passive:true});
 // המסך לא נכבה
 let lock=null; const wake=async()=>{ try{ lock=await navigator.wakeLock.request('screen'); }catch(e){} }; wake(); document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible') wake(); });
 })();
