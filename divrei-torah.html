@@ -3,17 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>קצרצרים לשבת · בית הכנסת הכיפה</title>
-<meta name="description" content="קצרצרים לשבת: דבר תורה קצר על פרשת השבוע מחברי קהילת בית הכנסת העל-עדתי הכיפה, באר שבע, לשולחן השבת.">
+<title>והאר עינינו בתורתך · בית הכנסת הכיפה</title>
+<meta name="description" content="והאר עינינו בתורתך: דבר תורה קצר על פרשת השבוע מחברי קהילת בית הכנסת העל-עדתי הכיפה, באר שבע, לשולחן השבת.">
 <link rel="canonical" href="https://hakipabs.org/divrei-torah.html">
 <meta property="og:type" content="website">
-<meta property="og:title" content="קצרצרים לשבת · בית הכנסת הכיפה, באר שבע">
+<meta property="og:title" content="והאר עינינו בתורתך · דבר תורה מחברי הקהילה · בית הכנסת הכיפה">
 <meta property="og:description" content="חברי הקהילה כותבים על הפרשה, כל שבוע כותבים אחרים.">
 <meta property="og:image" content="https://hakipabs.org/images/campaign/exterior.jpg">
 <meta property="og:url" content="https://hakipabs.org/divrei-torah.html">
 <meta property="og:locale" content="he_IL">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="קצרצרים לשבת · בית הכנסת הכיפה, באר שבע">
+<meta name="twitter:title" content="והאר עינינו בתורתך · דבר תורה מחברי הקהילה · בית הכנסת הכיפה">
 <meta name="twitter:image" content="https://hakipabs.org/images/campaign/exterior.jpg">
 <link rel="icon" type="image/png" href="images/favicon.png">
 <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
@@ -81,32 +81,32 @@ footer{border-top:1px solid var(--line);padding:26px 0 44px;color:var(--muted);f
 </div></header>
 
 <main id="main" class="wrap">
-  <span class="eyebrow">תורה</span>
-  <h1>קצרצרים לשבת</h1>
-  <p class="muted">דבר תורה קצר מחברי הקהילה, לשולחן השבת. כל שבוע כותבים אחרים, והדברים על דעת הכותבים.</p>
+  <span class="eyebrow">דבר תורה מחברי הקהילה</span>
+  <h1>והאר עינינו בתורתך</h1>
+  <p class="muted">דבר תורה קצר על פרשת השבוע, לשולחן השבת. כל שבוע כותבים אחרים, והדברים על דעת הכותבים.</p>
 
   <section id="week">
     <h2 id="week-title">השבוע</h2>
     <div id="week-list"></div>
-    <p id="week-empty" class="empty" hidden>עדיין אין קצרצר לפרשת <span id="week-p"></span>. <a href="#send">רוצים לכתוב אותו?</a></p>
+    <p id="week-empty" class="empty" hidden>עדיין אין דבר תורה לפרשת <span id="week-p"></span>. <a href="#send">רוצים לכתוב אותו?</a></p>
   </section>
 
   <section id="all">
     <h2>כל הפרשות</h2>
     <nav class="chips" id="chips" aria-label="פרשות"></nav>
     <div id="groups"></div>
-    <p id="all-empty" class="empty" hidden>המדור חדש. הקצרצר הראשון יופיע כאן.</p>
+    <p id="all-empty" class="empty" hidden>המדור חדש. דבר התורה הראשון יופיע כאן.</p>
   </section>
 
   <section id="send" class="send">
-    <h2>איך שולחים קצרצר</h2>
+    <h2>איך שולחים דבר תורה</h2>
     <p>כל אחד ואחת מהקהילה מוזמנים לכתוב. רעיון אחד, קצר וברור, עדיף על מאמר ארוך.</p>
     <ol>
       <li>כותבים <strong>עד 200 מילים</strong> (2-3 דקות קריאה) בגוף המייל. אפשר לצרף גם PDF או Word, והם יקושרו.</li>
       <li>שולחים ל-<a href="mailto:vaad@hakipabs.org">vaad@hakipabs.org</a> עם הנושא <code>דבר תורה: <span class="p-now">הפרשה</span> / שם הכותב</code>.</li>
-      <li>חבר ועדה עובר על הדברים ומעביר הלאה. תוך כשעה הקצרצר כאן, ובשבוע של הפרשה גם בדף הבית.</li>
+      <li>חבר ועדה עובר על הדברים ומעביר הלאה. תוך כשעה דבר התורה כאן, ובשבוע של הפרשה גם בדף הבית.</li>
     </ol>
-    <a class="btn" id="send-btn" href="mailto:vaad@hakipabs.org?subject=%D7%93%D7%91%D7%A8%20%D7%AA%D7%95%D7%A8%D7%94%3A%20">שליחת קצרצר</a>
+    <a class="btn" id="send-btn" href="mailto:vaad@hakipabs.org?subject=%D7%93%D7%91%D7%A8%20%D7%AA%D7%95%D7%A8%D7%94%3A%20">שליחת דבר תורה</a>
   </section>
 </main>
 
@@ -123,19 +123,19 @@ footer{border-top:1px solid var(--line);padding:26px 0 44px;color:var(--muted);f
   if(!Array.isArray(list)) list=[];
   const curName=((sh&&sh.parasha)||'').replace(/^פרשו?ת\s+/,'').trim();
   const cur=norm(curName);
-  if(curName){ el('week-title').textContent='השבוע: פרשת '+curName; document.querySelectorAll('.p-now').forEach(s=>s.textContent=curName); el('send-btn').href='mailto:vaad@hakipabs.org?subject='+encodeURIComponent('דבר תורה: '+curName+' / '); el('send-btn').textContent='שליחת קצרצר לפרשת '+curName; }
+  if(curName){ el('week-title').textContent='השבוע: פרשת '+curName; document.querySelectorAll('.p-now').forEach(s=>s.textContent=curName); el('send-btn').href='mailto:vaad@hakipabs.org?subject='+encodeURIComponent('דבר תורה: '+curName+' / '); el('send-btn').textContent='שליחת דבר תורה לפרשת '+curName; }
   else el('week').hidden=true;
 
   // שיתוף: בטלפון/טאבלט חלונית השיתוף של המכשיר; במחשב (עכבר) רק העתקת הקישור.
-  // כתובת קצרה ויציבה לכל קצרצר (#t-xxxx), נגזרת מה-id; הקישורים הישנים (#id בעברית) ממשיכים לעבוד.
+  // כתובת קצרה ויציבה לכל דבר תורה (#t-xxxx), נגזרת מה-id; הקישורים הישנים (#id בעברית) ממשיכים לעבוד.
   const shortKey=id=>{ let h=2166136261; for(const c of (id||'')){ h^=c.codePointAt(0); h=Math.imul(h,16777619); } return 't-'+(h>>>0).toString(36); };
   function shareBtn(e){
     const b=document.createElement('button'); b.type='button'; b.className='share'; b.textContent='שיתוף';
     b.addEventListener('click',async()=>{
       const url=location.origin+location.pathname+'#'+shortKey(e.id);
-      const title=e.title||('קצרצר לפרשת '+(e.parasha||'').replace(/^פרשו?ת\s+/,''));
-      const text='קצרצרים לשבת: "'+title+'"'+(e.author?', '+e.author:'');
-      if(navigator.share && matchMedia('(pointer:coarse)').matches){ try{ await navigator.share({title:'קצרצרים לשבת', text, url}); }catch(err){} return; }
+      const title=e.title||('דבר תורה לפרשת '+(e.parasha||'').replace(/^פרשו?ת\s+/,''));
+      const text='והאר עינינו בתורתך: "'+title+'"'+(e.author?', '+e.author:'');
+      if(navigator.share && matchMedia('(pointer:coarse)').matches){ try{ await navigator.share({title:'והאר עינינו בתורתך', text, url}); }catch(err){} return; }
       try{ await navigator.clipboard.writeText(text+'\n'+url); b.textContent='הקישור הועתק'; }catch(err){ window.prompt('העתיקו את הקישור:', url); }
       setTimeout(()=>{ b.textContent='שיתוף'; },2500);
     });
