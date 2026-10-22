@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>מסך לוח המודעות · בית הכנסת הכיפה</title>
+<link rel="icon" href="images/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&family=Frank+Ruhl+Libre:wght@500;700&display=swap" rel="stylesheet">
+<!--
+  מסך תצוגה ללוח המודעות בבית הכנסת: שקפים מתחלפים במסך מלא, מתוך הנתונים של האתר (הדף השבועי,
+  אירועים, דבר תורה, שיעורים, גלריה וארכיון). אין מה לעדכן כאן ידנית: כשהאתר מתעדכן, גם המסך.
+  פתיחה: https://hakipabs.org/screen.html בדפדפן של הטלוויזיה / מחשב, במסך מלא (F11). לחיצה על המסך = מסך מלא.
+  ?sec=15 משנה את משך כל שקף (בשניות). הנתונים נטענים מחדש כל 10 דקות, והדף כולו כל לילה.
+-->
+<style>
+:root{--navy:#1e3a5f;--navy-2:#2b5283;--deep:#132841;--sand:#c9a86a;--sand-2:#f1e7cf;--ink:#1d2430;--paper:#faf8f3;--teal:#2f7f7a}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--deep);color:#fff;font-family:Heebo,system-ui,Arial,sans-serif;cursor:none}
+.stage{position:fixed;inset:0;display:flex;flex-direction:column}
+header{flex:none;height:11vh;display:flex;align-items:center;justify-content:space-between;padding:0 4vw;background:linear-gradient(90deg,var(--navy),var(--deep));border-bottom:.35vh solid var(--sand)}
+.brand{display:flex;align-items:center;gap:1.6vw}
+.brand img{height:7.5vh;border-radius:1.2vh}
+.brand b{font-family:"Frank Ruhl Libre",serif;font-size:4.2vh;display:block;line-height:1.1}
+.brand small{font-size:2.2vh;color:#c8d3e3}
+.now{text-align:left}
+.now .clock{font-size:6vh;font-weight:700;line-height:1;font-variant-numeric:tabular-nums}
+.now .date{font-size:2.3vh;color:#c8d3e3;margin-top:.6vh}
+main{flex:1;position:relative;overflow:hidden}
+.slide{position:absolute;inset:0;padding:4vh 4vw 5vh;display:flex;flex-direction:column;opacity:0;transition:opacity 1.1s ease;pointer-events:none}
+.slide.on{opacity:1}
+.eyebrow{font-size:2.6vh;letter-spacing:.06em;color:var(--sand);font-weight:700;margin-bottom:1vh}
+h1{font-family:"Frank Ruhl Libre",serif;font-weight:700;font-size:7vh;line-height:1.1;margin:0 0 2.5vh}
+h2{font-family:"Frank Ruhl Libre",serif;font-weight:700;font-size:4vh;margin:0 0 1.6vh;color:var(--sand-2)}
+.muted{color:#c8d3e3}
+.grid{display:grid;gap:3vw;flex:1;min-height:0;align-items:start}
+.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:1fr 1fr 1fr}
+.card{background:rgba(255,255,255,.06);border:.15vh solid rgba(255,255,255,.14);border-radius:2vh;padding:3vh 2.4vw;min-height:0;overflow:hidden}
+dl.times{display:grid;grid-template-columns:1fr auto;gap:1.3vh 2vw;margin:0;font-size:3.4vh}
+.card > div > dl.times{font-size:4vh}
+dl.times dt{color:#e8edf4}
+dl.times dd{margin:0;font-weight:700;font-variant-numeric:tabular-nums;color:#fff}
+dl.times dd small{display:block;font-weight:400;font-size:2.2vh;color:var(--sand-2);text-align:left}
+.bigtimes{display:flex;gap:6vw;margin:0 0 3vh}
+.bigtimes div{font-size:2.8vh;color:#c8d3e3}
+.bigtimes b{display:block;font-size:11vh;line-height:1;color:#fff;font-variant-numeric:tabular-nums;font-weight:900}
+.note{font-size:2.8vh;color:var(--sand-2);margin-top:auto;padding-top:2vh}
+.event{display:grid;grid-template-columns:auto 1fr;gap:4vw;flex:1;min-height:0;align-items:center}
+.event img{max-height:68vh;max-width:40vw;border-radius:1.6vh;box-shadow:0 2vh 6vh rgba(0,0,0,.45)}
+.event .when{font-size:4.2vh;color:var(--sand);font-weight:700;margin-bottom:2vh}
+.event p{font-size:3.4vh;line-height:1.5;margin:0}
+.dvar{display:grid;grid-template-columns:1fr auto;gap:4vw;flex:1;min-height:0}
+.dvar .by{font-size:3.2vh;color:var(--sand-2);margin:-1vh 0 2.5vh}
+.dvar .txt{font-size:var(--fs,3.3vh);line-height:1.55;overflow:hidden}
+.dvar .txt p{margin:0 0 1.4vh}
+.qr{align-self:end;text-align:center;font-size:2.4vh;color:#c8d3e3}
+.qr .box{background:#fff;padding:1.4vh;border-radius:1.4vh;display:inline-block;margin-bottom:1vh}
+.qr img,.qr canvas{display:block;width:20vh;height:20vh}
+.photo{position:absolute;inset:0}
+.photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:saturate(1.05)}
+.photo .bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:blur(4vh) brightness(.45);transform:scale(1.1)}
+.photo img.fit{object-fit:contain}
+.photo .cap{position:absolute;inset-inline:0;bottom:0;padding:6vh 4vw 4vh;background:linear-gradient(0deg,rgba(10,20,35,.92),rgba(10,20,35,0));font-size:3.2vh;line-height:1.4}
+.photo .cap b{display:block;color:var(--sand);font-size:2.5vh;letter-spacing:.05em;margin-bottom:.6vh}
+.list{list-style:none;margin:0;padding:0;font-size:4vh;columns:2;column-gap:4vw}
+.list li{break-inside:avoid;margin:0 0 2vh;padding-inline-start:1.6vw;border-inline-start:.4vh solid var(--sand)}
+.list li span{display:block;font-size:2.8vh;color:#c8d3e3}
+.ticker{font-size:3.6vh;line-height:1.6}
+.ticker p{margin:0 0 2vh}
+.donate{display:grid;grid-template-columns:1fr auto;gap:5vw;flex:1;align-items:center}
+.donate p{font-size:3.6vh;line-height:1.55;margin:0 0 2.5vh;color:#e8edf4}
+.donate .cta{font-size:4.4vh;font-weight:900;color:var(--sand)}
+.donate .qr img,.donate .qr canvas{width:30vh;height:30vh}
+.dots{position:fixed;bottom:1.8vh;inset-inline:0;display:flex;justify-content:center;gap:.9vh;z-index:5}
+.dots i{width:1.1vh;height:1.1vh;border-radius:50%;background:rgba(255,255,255,.28)}
+.dots i.on{background:var(--sand)}
+.bar{position:fixed;bottom:0;inset-inline-start:0;height:.5vh;background:var(--sand);width:0;z-index:5}
+.empty{display:flex;align-items:center;justify-content:center;font-size:4vh;color:#c8d3e3}
+</style>
+</head>
+<body>
+<div class="stage">
+  <header>
+    <div class="brand"><img src="images/apple-touch-icon.png" alt=""><div><b>בית הכנסת העל-עדתי "הכיפה"</b><small>שכונה ה', באר שבע · hakipabs.org</small></div></div>
+    <div class="now"><div class="clock" id="clock">--:--</div><div class="date" id="date"></div></div>
+  </header>
+  <main id="main"><div class="slide on empty">טוען...</div></main>
+</div>
+<div class="dots" id="dots"></div>
+<div class="bar" id="bar"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+(function(){
+const SITE='https://hakipabs.org';
+const DONATE='https://pages.greeninvoice.co.il/payments/links/c010e65b-c770-4e56-bc14-3f844a10050a';
+const qs=new URLSearchParams(location.search);
+const SEC=Math.max(6,parseInt(qs.get('sec')||'14',10));
+const $=id=>document.getElementById(id);
+const esc=t=>String(t==null?'':t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const J=u=>fetch(u+(u.includes('?')?'&':'?')+'t='+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.json():null).catch(()=>null);
+
+// ---------- תאריך עברי ושעון ----------
+const GEM=n=>{ const L=[[400,'ת'],[300,'ש'],[200,'ר'],[100,'ק'],[90,'צ'],[80,'פ'],[70,'ע'],[60,'ס'],[50,'נ'],[40,'מ'],[30,'ל'],[20,'כ'],[10,'י'],[9,'ט'],[8,'ח'],[7,'ז'],[6,'ו'],[5,'ה'],[4,'ד'],[3,'ג'],[2,'ב'],[1,'א']]; n=n%1000; let tail=''; if(n%100===15){tail='טו';n-=15;} else if(n%100===16){tail='טז';n-=16;} let s=''; for(const [v,c] of L){ while(n>=v){s+=c;n-=v;} } s+=tail; return s.length>1? s.slice(0,-1)+'"'+s.slice(-1) : s+"'"; };
+const jlm=()=>new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Jerusalem'}));
+const hebParts=d=>{ try{ const p=new Intl.DateTimeFormat('en-u-ca-hebrew',{day:'numeric',month:'long',year:'numeric'}).formatToParts(d); const g=t=>(p.find(x=>x.type===t)||{}).value||''; const m=new Intl.DateTimeFormat('he-u-ca-hebrew',{month:'long'}).format(d); return {day:parseInt(g('day'),10),month:m,year:parseInt(g('year'),10)}; }catch(e){ return null; } };
+const hebDate=d=>{ const h=hebParts(d); return h? `${GEM(h.day)} ${h.month} ${GEM(h.year)}` : ''; };
+const DAYS=['ראשון','שני','שלישי','רביעי','חמישי','שישי','שבת'];
+function tick(){ const d=jlm(); $('clock').textContent=String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0'); $('date').textContent=`יום ${DAYS[d.getDay()]} · ${hebDate(d)} · ${d.getDate()}.${d.getMonth()+1}.${d.getFullYear()}`; }
+tick(); setInterval(tick,15000);
+
+// ---------- עזרים ----------
+const comingShabbat=()=>{ const n=jlm(); const s=new Date(n); s.setDate(n.getDate()+((6-n.getDay()+7)%7)); return s; };
+const dayOf=t=>{ const tok=((t||'').trim().split(/\s+/)[0]||'').replace(/["'׳״]/g,''); const V={'א':1,'ב':2,'ג':3,'ד':4,'ה':5,'ו':6,'ז':7,'ח':8,'ט':9,'י':10,'כ':20,'ל':30}; let n=0; for(const c of tok){ if(!V[c]) return null; n+=V[c]; } return n||null; };
+function sheetIsCurrent(d){ const sat=comingShabbat(), fri=new Date(sat); fri.setDate(sat.getDate()-1); const h=dayOf(d.hebrew_date), z=dayOf((d.zmanim_dates||[])[0]); const hs=hebParts(sat), hf=hebParts(fri); if(h===null&&z===null) return false; return (hs&&h===hs.day)||(hf&&z===hf.day); }
+const norm=t=>(t||'').replace(/^פרשו?ת\s+/,'').replace(/[֑-ׇ]/g,'').replace(/[\s\-–־'"״׳]/g,'');
+const dl=rows=>'<dl class="times">'+rows.map(([k,v,n])=>`<dt>${esc(k)}</dt><dd>${esc(v)}${n?`<small>${esc(n)}</small>`:''}</dd>`).join('')+'</dl>';
+const qrSlot=(id,text,label)=>`<div class="qr"><div class="box" id="${id}" data-qr="${esc(text)}"></div><div>${esc(label)}</div></div>`;
+const pick=(arr,n)=>{ const a=arr.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a.slice(0,n); };
+
+// ---------- בניית השקפים ----------
+async function build(){
+  const [sh,ev,dv,shi,gal,arc]=await Promise.all([J('data/shabbat.json'),J('data/events.json'),J('data/divrei-torah.json'),J('data/shiurim.json'),J('data/gallery.json'),J('data/archive.json')]);
+  const S=[]; const now=jlm(); const todayIso=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+
+  // שבת: רק כשהדף השבועי הוא של השבת הקרובה
+  if(sh && sheetIsCurrent(sh)){
+    const sat=comingShabbat(), hs=hebParts(sat);
+    const dateTxt = hs ? `${GEM(hs.day)} ${hs.month}` : (sh.hebrew_date||'');
+    S.push({dur:SEC+4,html:`<div class="eyebrow">שבת קודש · ${esc(dateTxt)}${sh.haftara?' · הפטרה: '+esc(sh.haftara):''}</div><h1>${esc(sh.parasha||'')}</h1>
+      <div class="bigtimes"><div>הדלקת נרות<b>${esc(sh.candles||'')}</b></div><div>צאת השבת<b>${esc(sh.havdala||'')}</b></div>${sh.rabbeinu_tam?`<div>רבנו תם<b style="font-size:7vh">${esc(sh.rabbeinu_tam)}</b></div>`:''}</div>
+      <div class="grid g2"><div class="card"><h2>ליל שבת ובוקר</h2>${dl(sh.friday||[])}</div><div class="card"><h2>אחר הצהריים ומוצאי שבת</h2>${dl(sh.shabbat||[])}</div></div>
+      ${sh.note?`<div class="note">${esc(sh.note)}</div>`:''}`});
+  }
+  // תפילות בימי חול
+  if(sh && Array.isArray(sh.weekday_shacharit)){
+    const sc=sh.weekday_shacharit.map(r=>[r.name,r.time,(r.name==="מניין ז'"&&/בלבד/.test(r.note||''))?r.note+' · בחופשות כל יום':r.note]);
+    S.push({dur:SEC,html:`<div class="eyebrow">זמני תפילה</div><h1>תפילות בימי חול</h1>
+      <div class="grid g3"><div class="card"><h2>שחרית</h2>${dl(sc)}</div><div class="card"><h2>מנחה</h2>${dl([['מניין יחיד',sh.weekday_mincha||'']])}<div class="note" style="font-size:2.4vh">השעה מתעדכנת לפי השקיעה</div></div><div class="card"><h2>ערבית</h2>${dl((sh.weekday_arvit||[]).map(r=>[r.name,r.time]))}</div></div>`});
+  }
+  // זמני היום (מטבלת זמני השבוע של הדף)
+  if(sh && sh.zmanim){
+    const z=Object.entries(sh.zmanim); const half=Math.ceil(z.length/2);
+    S.push({dur:SEC,html:`<div class="eyebrow">זמני היום · לפי יום שישי ${esc((sh.zmanim_dates||[])[0]||'')}</div><h1>זמני השבוע</h1>
+      <div class="grid g2" style="font-size:1.2em"><div class="card"><div style="font-size:1.15em">${dl(z.slice(0,half))}</div></div><div class="card"><div style="font-size:1.15em">${dl(z.slice(half))}</div></div></div>`});
+  }
+  // אירועים קרובים
+  (Array.isArray(ev)?ev:[]).filter(e=>!e.date||e.date>=todayIso).forEach(e=>{
+    S.push({dur:SEC+4,html:`<div class="eyebrow">אירועים קרובים</div><div class="event">${e.poster?`<img src="${esc(e.poster)}" alt="">`:'<div></div>'}<div><h1>${esc(e.title)}</h1>${e.when?`<div class="when">${esc(e.when)}</div>`:''}${e.text?`<p>${esc(e.text)}</p>`:''}</div></div>`});
+  });
+  // דבר תורה לפרשת השבוע
+  if(sh && Array.isArray(dv)){
+    const cur=norm(sh.parasha), mine=dv.filter(e=>norm(e.parasha)===cur).sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+    mine.slice(0,2).forEach((e,i)=>{
+      const words=(e.paragraphs||[]).join(' ').split(/\s+/).length; const fs=words>230?2.7:words>170?3.0:3.3;
+      const key=(id=>{ let h=2166136261; for(const c of (id||'')){ h^=c.codePointAt(0); h=Math.imul(h,16777619); } return 't-'+(h>>>0).toString(36); })(e.id);
+      S.push({dur:Math.max(SEC+8, Math.round(words/3.2)),html:`<div class="eyebrow">והאר עינינו בתורתך · דבר תורה מחברי הקהילה · פרשת ${esc((sh.parasha||'').replace(/^פרשו?ת\s+/,''))}</div>
+        <div class="dvar"><div style="min-height:0;display:flex;flex-direction:column"><h1>${esc(e.title||'דבר תורה')}</h1><div class="by">${esc(e.author||'')}${e.written?' · '+esc(e.written):''}</div><div class="txt" style="--fs:${fs}vh">${(e.paragraphs||[]).map(p=>`<p>${esc(p)}</p>`).join('')}</div></div>
+        ${qrSlot('qr-dv'+i, SITE+'/divrei-torah.html?d='+key, 'לקריאה ולשיתוף')}</div>`});
+    });
+  }
+  // שיעורים היום
+  if(shi){
+    const dn=DAYS[now.getDay()], wk=(shi.weekly||[]).find(d=>d.day===dn), daily=(shi.daily||[]).filter(it=>!it.days||dn!=='שבת');
+    const items=[...daily.map(it=>({...it,days:it.days})), ...((wk&&wk.items)||[])];
+    if(items.length) S.push({dur:SEC+2,html:`<div class="eyebrow">שיעורים</div><h1>שיעורים היום, יום ${esc(dn)}</h1>
+      <ul class="list">${items.slice(0,12).map(it=>`<li>${esc(it.title)}<span>${esc([it.when,it.who,it.place].filter(Boolean).join(' · '))}</span></li>`).join('')}</ul>`});
+  }
+  // מזל טוב / ניחומים
+  if(sh){
+    const mz=(sh.mazal_tov&&sh.mazal_tov.items)||[], nc=(sh.nichumim&&sh.nichumim.items)||[];
+    if(mz.length) S.push({dur:SEC,html:`<div class="eyebrow">שמחות בקהילה</div><h1>מזל טוב!</h1><div class="ticker">${mz.map(t=>`<p>${esc(t)}</p>`).join('')}${sh.mazal_tov.closing?`<p class="muted">${esc(sh.mazal_tov.closing)}</p>`:''}</div>`});
+    if(nc.length) S.push({dur:SEC,html:`<div class="eyebrow">ניחומים</div><h1>המקום ינחם</h1><div class="ticker">${nc.map(t=>`<p>${esc(t)}</p>`).join('')}</div>`});
+  }
+  // תמונות: אחת מהגלריה ואחת מהארכיון, אחרות בכל סבב
+  const gphotos=[]; (gal&&gal.albums||[]).forEach(a=>(a.photos||[]).forEach(p=>gphotos.push({src:p.web,label:'מהגלריה',cap:a.title+(a.when?' · '+a.when:'')})));
+  const aphotos=[]; (arc&&arc.collections||[]).forEach(c=>(c.items||[]).forEach(it=>{ if(it.kind==='photo'&&it.web) aphotos.push({src:it.web,label:'מההיסטוריה שלנו · '+c.title,cap:(it.caption||'').slice(0,180)+(it.year?' · '+it.year:'')}); }));
+  [...pick(gphotos,1),...pick(aphotos,1)].forEach(p=>S.push({dur:SEC,photo:true,html:`<div class="photo"><img class="bg" src="${esc(p.src)}" alt=""><img class="fit" src="${esc(p.src)}" alt=""><div class="cap"><b>${esc(p.label)}</b>${esc(p.cap)}</div></div>`}));
+  // תרומה
+  S.push({dur:SEC+4,photo:true,html:`<div class="photo"><img class="bg" src="images/campaign/courtyard.jpg" alt="" style="filter:blur(.6vh) brightness(.32)"></div>
+    <div style="position:relative;padding:4vh 4vw 5vh;height:100%;display:flex;flex-direction:column"><div class="eyebrow">קמפיין השיפוץ</div><div class="donate"><div><h1>מחדשים את הלב של באר שבע</h1>
+    <p>החצר הפנימית של בית הכנסת כבר לא עונה על צרכי הציבור הרחב שפוקד את המקום. התוכנית: מתחם רב-תכליתי מקורה ונעים לתפילה, ללימוד ולאירועי קהילה, שירותים חדשים, הצללה ונגישות.</p>
+    <p style="font-size:3vh;color:var(--sand-2)">"זה הזמן לרומם את בית ה'. כל אחד מאיתנו יכול להיות שותף, על פי יכולתו ונדיבות ליבו." הרב אהרן דרשביץ, רב קהילת הכיפה</p>
+    <p class="muted" style="font-size:2.8vh">ביט / פייבוקס: 058-749-3234 · התרומה מוכרת לצרכי מס לפי סעיף 46</p><div class="cta">סרקו ותרמו באשראי ←</div></div>${qrSlot('qr-don',DONATE,'תרומה מאובטחת')}</div></div>`});
+  // האתר
+  S.push({dur:SEC-2,html:`<div class="eyebrow">באתר שלנו</div><div class="donate"><div><h1>hakipabs.org</h1><p>זמני תפילה ושבת, שיעורים, אירועים, דבר תורה לפרשה מחברי הקהילה, הגלריה וההיסטוריה של הכיפה.</p><div class="cta">סרקו לאתר ←</div></div>${qrSlot('qr-site',SITE,'hakipabs.org')}</div>`});
+  return S;
+}
+
+// ---------- הצגה ----------
+let slides=[], idx=-1, timer=null;
+function render(list){
+  const main=$('main'); main.innerHTML=''; const dots=$('dots'); dots.innerHTML='';
+  list.forEach((s,i)=>{ const el=document.createElement('section'); el.className='slide'; el.innerHTML=s.html; if(s.photo) el.style.padding='0'; main.append(el); s.el=el; const d=document.createElement('i'); dots.append(d); s.dot=d; });
+  document.querySelectorAll('[data-qr]').forEach(b=>{ try{ new QRCode(b,{text:b.dataset.qr,width:300,height:300,colorDark:'#132841',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M}); }catch(e){ b.closest('.qr').style.display='none'; } });
+}
+function show(i){
+  if(!slides.length) return;
+  slides.forEach(s=>{ s.el.classList.remove('on'); s.dot.classList.remove('on'); });
+  idx=(i+slides.length)%slides.length; const s=slides[idx]; s.el.classList.add('on'); s.dot.classList.add('on');
+  const bar=$('bar'); bar.style.transition='none'; bar.style.width='0'; void bar.offsetWidth; bar.style.transition=`width ${s.dur}s linear`; bar.style.width='100%';
+  clearTimeout(timer); timer=setTimeout(()=>show(idx+1), s.dur*1000);
+}
+async function refresh(first){
+  const list=await build(); if(!list.length) return;
+  slides=list; render(slides); show(first?0:0);
+}
+refresh(true);
+setInterval(()=>refresh(false), 10*60*1000);                       // נתונים חדשים כל 10 דקות
+setInterval(()=>{ const d=jlm(); if(d.getHours()===3 && d.getMinutes()<10) location.reload(); }, 9*60*1000);   // טעינה מלאה פעם בלילה
+document.addEventListener('keydown',e=>{ if(e.key==='ArrowLeft') show(idx+1); if(e.key==='ArrowRight') show(idx-1); });
+document.addEventListener('click',()=>{ if(!document.fullscreenElement && document.documentElement.requestFullscreen) document.documentElement.requestFullscreen().catch(()=>{}); });
+// המסך לא נכבה
+let lock=null; const wake=async()=>{ try{ lock=await navigator.wakeLock.request('screen'); }catch(e){} }; wake(); document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible') wake(); });
+})();
+</script>
+</body>
+</html>
