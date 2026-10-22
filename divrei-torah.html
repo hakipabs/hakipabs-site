@@ -132,7 +132,7 @@ footer{border-top:1px solid var(--line);padding:26px 0 44px;color:var(--muted);f
   function shareBtn(e){
     const b=document.createElement('button'); b.type='button'; b.className='share'; b.textContent='שיתוף';
     b.addEventListener('click',async()=>{
-      const url=location.origin+location.pathname+'#'+shortKey(e.id);
+      const url=location.origin+location.pathname+'?d='+shortKey(e.id);   // כתובת נפרדת לכל דבר תורה: וואטסאפ לא שומר תצוגה ישנה (את החלק שאחרי # הוא לא סופר)
       const title=e.title||('דבר תורה לפרשת '+(e.parasha||'').replace(/^פרשו?ת\s+/,''));
       const text='והאר עינינו בתורתך: "'+title+'"'+(e.author?', '+e.author:'');
       if(navigator.share && matchMedia('(pointer:coarse)').matches){ try{ await navigator.share({title:'והאר עינינו בתורתך', text, url}); }catch(err){} return; }
@@ -165,7 +165,8 @@ footer{border-top:1px solid var(--line);padding:26px 0 44px;color:var(--muted);f
     groups.forEach((g,k)=>{ const sec=document.createElement('section'); sec.className='group'; sec.id='p-'+k; const h=document.createElement('h2'); h.textContent='פרשת '+g.name; sec.append(h); g.items.forEach(e=>{ const art=render(e,false); if(mine.includes(e)) art.id=''; sec.append(art); }); el('groups').append(sec); });
   }
   // קישור ישיר לדבר תורה (#id) או לפרשה (#p-...)
-  if(location.hash.length>1){ let id=''; try{ id=decodeURIComponent(location.hash.slice(1)); }catch(e){ id=location.hash.slice(1); } if(/^t-[0-9a-z]+$/.test(id)){ const hit=list.find(x=>shortKey(x.id)===id); if(hit) id=hit.id; } const t=document.getElementById(id); if(t){ t.querySelectorAll('p[hidden]').forEach(p=>p.hidden=false); const m=t.querySelector('.more'); if(m) m.remove(); t.scrollIntoView({block:'start'}); } }
+  const qd=new URLSearchParams(location.search).get('d');
+  if(qd||location.hash.length>1){ let id=''; try{ id=qd||decodeURIComponent(location.hash.slice(1)); }catch(e){ id=location.hash.slice(1); } if(/^t-[0-9a-z]+$/.test(id)){ const hit=list.find(x=>shortKey(x.id)===id); if(hit) id=hit.id; } const t=document.getElementById(id); if(t){ t.querySelectorAll('p[hidden]').forEach(p=>p.hidden=false); const m=t.querySelector('.more'); if(m) m.remove(); t.scrollIntoView({block:'start'}); } }
 })();
 </script>
 <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "07d95a4b7bbb4b21aa67c3de7fd0d09a"}'></script><!-- End Cloudflare Web Analytics -->
