@@ -235,6 +235,15 @@ function runDivreiTorah_(token, label, uploads) {
         }
         return;
       }
+      if (!dvarParasha_(dvarSubject_(approved, msgs[0]))) {
+        thread.addLabel(label); thread.removeLabel(pending);
+        note_(`דבר תורה בלי שם פרשה: ${cleanSubject_(subject)}`);
+        sendReport_(`⚠️ דבר תורה לא פורסם: חסר שם הפרשה בנושא`, [
+          `המייל "${cleanSubject_(subject)}" אושר, אבל בנושא שלו אין שם פרשה, ולכן הוא לא פורסם.`,
+          `כדי לפרסם: לשלוח אותו שוב במייל חדש עם הנושא: ${CONFIG.dvarPrefix}: <פרשה> / <שם הכותב> / <כותרת>`,
+        ].join('\n'));
+        return;
+      }
       const entry = addDvar_(token, approved, msgs[0]);
       thread.addLabel(label); thread.removeLabel(pending);
       uploads.push({ kind: 'dvar', subject: cleanSubject_(approved.getSubject()), path: CONFIG.dvarJson, entry, kb: 0 });
@@ -248,10 +257,28 @@ function runDivreiTorah_(token, label, uploads) {
 }
 
 /** מוסיף רשומה ל-data/divrei-torah.json מתוך המייל המאושר (הטקסט מגוף המייל, קבצים מצורפים נשמרים ומקושרים). מחזיר את הרשומה. */
-function addDvar_(token, msg, firstMsg) {
-  const subj = cleanSubject_(msg.getSubject());
+/** הנושא שממנו נקראים פרשה / כותב / כותרת: הנושא של המייל, או - כשהוא רק "דבר תורה" - הנושא המקורי בתוך מייל שהועבר. */
+function dvarSubject_(msg, firstMsg) {
+  const own = cleanSubject_(msg.getSubject());
+  const rest = own.slice(CONFIG.dvarPrefix.length).replace(/^[\s:\-]+/, '');
+  if (rest.split(/\s*[\/|]\s*/)[0].trim()) return own;
+  for (const m of [msg, firstMsg]) {
+    const body = (m.getPlainBody() || '').replace(/[\u200e\u200f\u202a-\u202e\u2066-\u2069]/g, '');
+    const hit = body.match(/^\s*(?:Subject|נושא)\s*:\s*(.+)$/m);
+    if (hit && cleanSubject_(hit[1]).startsWith(CONFIG.dvarPrefix)) return cleanSubject_(hit[1]);
+  }
+  return own;
+}
+function dvarParasha_(subj) {
   const parts = subj.slice(CONFIG.dvarPrefix.length).replace(/^[\s:\-]+/, '').split(/\s*[\/|]\s*/).map(s => s.trim()).filter(Boolean);
-  const parasha = (parts[0] || '').replace(/^פרשת\s+/, '').replace(/[\s,]+$/, '') || 'השבוע';
+  return (parts[0] || '').replace(/^פרשת\s+/, '').replace(/[\s,]+$/, '');
+}
+
+function addDvar_(token, msg, firstMsg) {
+  const subj = dvarSubject_(msg, firstMsg);
+  const parts = subj.slice(CONFIG.dvarPrefix.length).replace(/^[\s:\-]+/, '').split(/\s*[\/|]\s*/).map(s => s.trim()).filter(Boolean);
+  const parasha = dvarParasha_(subj);
+  if (!parasha) throw new Error('NO_PARASHA');
   let author = parts[1] || '';
   const title = parts[2] || '';
   const raw = msg.getPlainBody() || '';
@@ -275,9 +302,10 @@ function addDvar_(token, msg, firstMsg) {
   try { list = JSON.parse(file.text); } catch (e) { list = []; }
   if (!Array.isArray(list)) list = [];
   list = list.filter(e => e.id !== base);
-  const entry = { id: base, parasha, author, title, date: dateStr, paragraphs, files };
+  const added = Utilities.formatDate(new Date(), 'Asia/Jerusalem', "yyyy-MM-dd'T'HH:mm:ss");   // שעת ההעלאה: קובעת מי "החדש" כשיש כמה באותו יום
+  const entry = { id: base, parasha, author, title, date: dateStr, added, paragraphs, files };
   list.push(entry);
-  list.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+  list.sort((a, b) => (b.date || '').localeCompare(a.date || '') || (b.added || '').localeCompare(a.added || ''));
   putFile_(token, CONFIG.dvarJson, JSON.stringify(list, null, 2) + '\n', `Dvar Torah from email: ${subj}`, file.sha);
   return entry;
 }
@@ -288,7 +316,7 @@ function paragraphs_(body) {
   const out = []; let cur = [];
   const flush = () => { if (cur.length) out.push(cur.join(' ').replace(/\s{2,}/g, ' ')); cur = []; };
   (body || '').split(/\r?\n/).forEach(line => {
-    const l = line.trim();
+    const l = line.replace(/[\u200e\u200f\u202a-\u202e\u2066-\u2069]/g, '').trim();   // סימני כיוון בלתי נראים מסתירים שורות כמו "Subject:"
     if (!l) { flush(); return; }
     if (/^>/.test(l) || /^-{2,}/.test(l) || /wrote:$/.test(l) || /כתב\/ה:$/.test(l)) { flush(); return; }
     if (/forwarded message|הודעה שהועברה|begin forwarded/i.test(l)) { flush(); return; }

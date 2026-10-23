@@ -213,7 +213,7 @@ async function build(){
   });
   // דבר תורה לפרשת השבוע
   if(sh && Array.isArray(dv)){
-    const cur=norm(sh.parasha), mine=dv.filter(e=>norm(e.parasha)===cur).sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+    const pos=new Map(dv.map((e,i)=>[e,i])); const cur=norm(sh.parasha), mine=dv.filter(e=>norm(e.parasha)===cur).sort((a,b)=>(b.date||'').localeCompare(a.date||'') || (b.added||'').localeCompare(a.added||'') || pos.get(b)-pos.get(a));
     mine.slice(0,2).forEach((e,i)=>{
       const wc=t=>t.split(/\s+/).filter(Boolean).length;
       const paras=(e.paragraphs||[]).filter(Boolean), words=wc(paras.join(' '));

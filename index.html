@@ -773,7 +773,8 @@ Promise.all([fetch('data/shabbat.json',{cache:'no-store'}).then(r=>r.ok?r.json()
   if(!sh||!Array.isArray(list)||!list.length) return;
   const norm=t=>(t||'').replace(/^פרשו?ת\s+/,'').replace(/[\u0591-\u05C7]/g,'').replace(/[\s\-–־'"״׳]/g,'');
   const cur=norm(sh.parasha); if(!cur) return;
-  const mine=list.filter(e=>norm(e.parasha)===cur).sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+  const pos=new Map(list.map((e,i)=>[e,i]));
+  const mine=list.filter(e=>norm(e.parasha)===cur).sort((a,b)=>(b.date||'').localeCompare(a.date||'') || (b.added||'').localeCompare(a.added||'') || pos.get(b)-pos.get(a));   // החדש ביותר: תאריך, שעת העלאה, מיקום בקובץ
   if(!mine.length) return;
   const e=mine[0], g=id=>document.getElementById(id);
   g('dv-parasha').textContent=(sh.parasha||'').replace(/^פרשו?ת\s+/,'');
