@@ -72,11 +72,54 @@ function setup() {
 let RUNLOG_ = null;
 let RUN_STARTED_ = Date.now();
 function run() {
+  // נעילה: ריצה מהטלפון והריצה השעתית לא רצות יחד (אחרת אותו מייל עלול לעלות פעמיים)
+  const lock = LockService.getScriptLock();
+  if (!lock.tryLock(1000)) { Logger.log('another run is in progress, skipping'); return false; }
   const started = new Date(); RUN_STARTED_ = started.getTime();
   RUNLOG_ = { found: 0, dvar: 0, uploads: [], notes: [], errors: [] };
-  try { runMain_(); }
+  try { runMain_(); return true; }
   catch (e) { RUNLOG_.errors.push(String(e)); throw e; }
-  finally { try { writeRunLog_(started, RUNLOG_); } catch (e2) { Logger.log('run log failed: %s', e2); } }
+  finally {
+    try { writeRunLog_(started, RUNLOG_); } catch (e2) { Logger.log('run log failed: %s', e2); }
+    lock.releaseLock();
+  }
+}
+
+/**
+ * הרצה מהטלפון: פותחים את כתובת ה-Web App עם ?key=<המפתח>.
+ * המפתח שמור ב-Script Properties בשם RUN_KEY, לא בקוד: הקוד הזה ציבורי ב-GitHub.
+ * הדוח הרגיל במייל יוצא כמו בכל ריצה; הדף מציג סיכום קצר.
+ */
+function doGet(e) {
+  const key = PropertiesService.getScriptProperties().getProperty('RUN_KEY');
+  if (!key || !e || !e.parameter || e.parameter.key !== key) return runPage_('⛔ אין הרשאה', 'הקישור חסר או שגוי.');
+  try {
+    if (!run()) return runPage_('⏳ ריצה אחרת כבר רצה', 'אפשר לנסות שוב בעוד דקה או שתיים.');
+    const L = RUNLOG_;
+    const lines = [
+      `מיילים שנבדקו: ${L.found}`,
+      `דברי תורה שנבדקו: ${L.dvar}`,
+      L.uploads.length ? `עלו לאתר: ${L.uploads.map(u => u.subject).join(' · ')}` : 'לא היה מה להעלות.',
+    ].concat(L.notes, L.errors.map(x => '❌ ' + x));
+    return runPage_(L.errors.length ? '⚠️ הריצה הסתיימה עם שגיאות' : '✅ הריצה הסתיימה', lines.join('\n'));
+  } catch (err) {
+    return runPage_('❌ הריצה נכשלה', String(err));
+  }
+}
+/** פעם אחת, אחרי ה-Deploy: יוצר מפתח ומדפיס ביומן את הקישור לטלפון. הרצה נוספת מחליפה את המפתח (הקישור הישן מפסיק לעבוד). */
+function makeRunKey() {
+  const key = Utilities.getUuid().replace(/-/g, '');
+  PropertiesService.getScriptProperties().setProperty('RUN_KEY', key);
+  const url = ScriptApp.getService().getUrl();
+  Logger.log(url ? `הקישור לטלפון: ${url}?key=${key}` : `המפתח נשמר. קודם Deploy כ-Web App, ואז להריץ שוב כדי לקבל את הקישור.`);
+}
+function runPage_(title, text) {
+  const esc = t => String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  return HtmlService.createHtmlOutput(
+    `<div dir="rtl" style="font-family:Arial,sans-serif;font-size:20px;padding:20px;line-height:1.6">` +
+    `<h2>${esc(title)}</h2><div style="white-space:pre-line">${esc(text)}</div>` +
+    `<p style="color:#888;font-size:16px">${esc(Utilities.formatDate(new Date(), 'Asia/Jerusalem', 'dd.MM HH:mm'))}</p></div>`)
+    .setTitle('הרצת אתר הכיפה').addMetaTag('viewport', 'width=device-width, initial-scale=1');
 }
 function note_(text) { if (RUNLOG_) RUNLOG_.notes.push(text); }
 function noteError_(subject, e) { if (RUNLOG_) RUNLOG_.errors.push(`${subject}: ${e}`); }
