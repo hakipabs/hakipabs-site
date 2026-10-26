@@ -3,18 +3,18 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>והאר עינינו בתורתך · בית הכנסת הכיפה</title>
-<meta name="description" content="והאר עינינו בתורתך: דבר תורה קצר על פרשת השבוע מחברי קהילת בית הכנסת העל-עדתי הכיפה, באר שבע, לשולחן השבת.">
+<title>דבר תורה קהילתי · בית הכנסת הכיפה</title>
+<meta name="description" content="דבר תורה קהילתי: דבר תורה קצר על פרשת השבוע מחברי קהילת בית הכנסת העל-עדתי הכיפה, באר שבע, לשולחן השבת.">
 <link rel="canonical" href="https://hakipabs.org/divrei-torah.html">
 <meta property="og:type" content="website">
-<meta property="og:title" content="והאר עינינו בתורתך · דבר תורה מחברי הקהילה · בית הכנסת הכיפה">
+<meta property="og:title" content="דבר תורה קהילתי · בית הכנסת הכיפה">
 <meta property="og:description" content="חברי הקהילה כותבים על הפרשה, כל שבוע כותבים אחרים.">
 <meta property="og:image" content="https://hakipabs.org/images/og-share.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="he_IL">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="והאר עינינו בתורתך · דבר תורה מחברי הקהילה · בית הכנסת הכיפה">
+<meta name="twitter:title" content="דבר תורה קהילתי · בית הכנסת הכיפה">
 <meta name="twitter:image" content="https://hakipabs.org/images/og-share.jpg">
 <link rel="icon" type="image/png" href="images/favicon.png">
 <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
@@ -66,6 +66,9 @@ h2{font-size:26px;margin:44px 0 14px}
 .send code{background:#fff;border:1px solid var(--line);border-radius:6px;padding:1px 8px;font-family:inherit;font-size:15px}
 .btn{display:inline-block;padding:11px 20px;border-radius:10px;font-weight:700;text-decoration:none;background:var(--navy);color:#fff}
 .btn:hover{background:var(--navy-2)}
+.btn-ghost{background:#fff;color:var(--navy);border:1px solid var(--navy)}
+.btn-ghost:hover{background:var(--sand-2);color:var(--navy)}
+.send .plan-h{font-family:"Frank Ruhl Libre",serif;color:var(--navy);font-size:20px;margin:26px 0 6px}
 .empty{background:var(--paper);border:1px dashed var(--line);border-radius:16px;padding:28px;text-align:center;color:var(--muted)}
 footer{border-top:1px solid var(--line);padding:26px 0 44px;color:var(--muted);font-size:14px}
 @media (max-width:600px){.dvar{padding:18px 18px 18px 16px}.send{padding:18px}}
@@ -82,8 +85,8 @@ footer{border-top:1px solid var(--line);padding:26px 0 44px;color:var(--muted);f
 </div></header>
 
 <main id="main" class="wrap">
-  <span class="eyebrow">דבר תורה מחברי הקהילה</span>
-  <h1>והאר עינינו בתורתך</h1>
+  <span class="eyebrow">מחברי הקהילה, לשולחן השבת</span>
+  <h1>דבר תורה קהילתי</h1>
   <p class="muted">דבר תורה קצר על פרשת השבוע, לשולחן השבת. כל שבוע כותבים אחרים, והדברים על דעת הכותבים.</p>
 
   <section id="week">
@@ -108,6 +111,9 @@ footer{border-top:1px solid var(--line);padding:26px 0 44px;color:var(--muted);f
       <li>חבר ועדה עובר על הדברים ומעביר הלאה. תוך כשעה דבר התורה כאן, ובשבוע של הפרשה גם בדף הבית.</li>
     </ol>
     <a class="btn" id="send-btn" href="mailto:vaad@hakipabs.org?subject=%D7%93%D7%91%D7%A8%20%D7%AA%D7%95%D7%A8%D7%94%3A%20">שליחת דבר תורה</a>
+    <h3 class="plan-h">לוח תכנון דבר תורה קהילתי</h3>
+    <p>רוצים לכתוב על פרשה מסוימת? אפשר להירשם מראש בלוח: לכתוב את השם ליד הפרשה. ההרשמה לא מחייבת, ועוזרת לנו לראות אילו שבתות עוד פתוחות.</p>
+    <a class="btn btn-ghost" href="https://docs.google.com/spreadsheets/d/1_yHO3afEQsAjQZMpmzWdPko_qRaMaAgjBE0ob-jznUQ/edit?usp=sharing" target="_blank" rel="noopener">ללוח התכנון (גוגל שיטס)</a>
   </section>
 </main>
 
@@ -135,8 +141,8 @@ footer{border-top:1px solid var(--line);padding:26px 0 44px;color:var(--muted);f
     b.addEventListener('click',async()=>{
       const url=location.origin+location.pathname+'?d='+shortKey(e.id);   // כתובת נפרדת לכל דבר תורה: וואטסאפ לא שומר תצוגה ישנה (את החלק שאחרי # הוא לא סופר)
       const title=e.title||('דבר תורה לפרשת '+(e.parasha||'').replace(/^פרשו?ת\s+/,''));
-      const text='והאר עינינו בתורתך: "'+title+'"'+(e.author?', '+e.author:'');
-      if(navigator.share && matchMedia('(pointer:coarse)').matches){ try{ await navigator.share({title:'והאר עינינו בתורתך', text, url}); }catch(err){} return; }
+      const text='דבר תורה קהילתי: "'+title+'"'+(e.author?', '+e.author:'');
+      if(navigator.share && matchMedia('(pointer:coarse)').matches){ try{ await navigator.share({title:'דבר תורה קהילתי', text, url}); }catch(err){} return; }
       try{ await navigator.clipboard.writeText(text+'\n'+url); b.textContent='הקישור הועתק'; }catch(err){ window.prompt('העתיקו את הקישור:', url); }
       setTimeout(()=>{ b.textContent='שיתוף'; },2500);
     });

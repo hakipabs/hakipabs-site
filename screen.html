@@ -228,7 +228,7 @@ async function build(){
       pages.forEach((pg,pn)=>{
       const pw=wc(pg.join(' ')); const fs=pw>170?2.9:3.2;
       const key=(id=>{ let h=2166136261; for(const c of (id||'')){ h^=c.codePointAt(0); h=Math.imul(h,16777619); } return 't-'+(h>>>0).toString(36); })(e.id);
-      S.push({dur:Math.max(SEC+6, Math.round(pw/2.6)),html:`<div class="eyebrow">והאר עינינו בתורתך · דבר תורה מחברי הקהילה · פרשת ${esc((sh.parasha||'').replace(/^פרשו?ת\s+/,''))}${pages.length>1?` · ${pn+1}/${pages.length}`:''}</div>
+      S.push({dur:Math.max(SEC+6, Math.round(pw/2.6)),html:`<div class="eyebrow">דבר תורה קהילתי · פרשת ${esc((sh.parasha||'').replace(/^פרשו?ת\s+/,''))}${pages.length>1?` · ${pn+1}/${pages.length}`:''}</div>
         <div class="dvar"><div class="main"><div class="dhead"><div><h1>${esc(e.title||'דבר תורה')}${pn?' <span class="cont">(המשך)</span>':''}</h1><div class="by">${esc(e.author||'')}${e.written?' · '+esc(e.written):''}</div></div>${qrSlot('qr-dv'+i+'-'+pn, SITE+'/divrei-torah.html?d='+key, 'לקריאה ולשיתוף')}</div><div class="txt" style="--fs:${fs}vmin">${pg.map(p=>`<p>${esc(p)}</p>`).join('')}${pn<pages.length-1?'<p class="more">← המשך בשקף הבא</p>':''}</div></div></div>`});
       });
     });
