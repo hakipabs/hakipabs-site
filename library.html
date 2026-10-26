@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ספריית הקודש · בית הכנסת הכיפה</title>
+<meta name="description" content="חיפוש ספר בספריית הקודש של בית הכנסת העל-עדתי הכיפה, באר שבע: לפי שם הספר, המחבר או הנושא, ובאיזה מדף הוא נמצא.">
+<link rel="canonical" href="https://hakipabs.org/library.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="ספריית הקודש · בית הכנסת הכיפה">
+<meta property="og:description" content="מחפשים ספר? כאן רואים אם הוא בספרייה ובאיזה מדף.">
+<meta property="og:image" content="https://hakipabs.org/images/og-share.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="he_IL">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ספריית הקודש · בית הכנסת הכיפה">
+<meta name="twitter:image" content="https://hakipabs.org/images/og-share.jpg">
+<link rel="icon" type="image/png" href="images/favicon.png">
+<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700&family=Frank+Ruhl+Libre:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#faf8f3;--paper:#fff;--ink:#1d2430;--muted:#5d6675;--line:#e6e1d6;--navy:#1e3a5f;--navy-2:#2b5283;--sand:#c9a86a;--sand-2:#f1e7cf;--teal:#2f7f7a;--shadow:0 1px 2px rgba(20,30,50,.06),0 8px 24px rgba(20,30,50,.06)}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Heebo,system-ui,Arial,sans-serif;font-size:17px;line-height:1.7}
+.skip{position:absolute;top:-100px;right:16px;background:var(--navy);color:#fff;padding:10px 16px;border-radius:0 0 10px 10px;z-index:100;text-decoration:none}
+.skip:focus{top:0}
+a{color:var(--navy-2)} a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--sand);outline-offset:2px}
+header{position:sticky;top:0;z-index:20;background:rgba(250,248,243,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.wrap{max-width:900px;margin:0 auto;padding:0 20px}
+.nav{display:flex;align-items:center;justify-content:space-between;height:66px;gap:16px;max-width:1120px}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--navy);font-weight:700}
+.brand small{display:block;font-weight:400;font-size:12px;color:var(--muted)}
+.brand svg{flex:none}
+.back{text-decoration:none;font-weight:500;padding:8px 12px;border-radius:8px}
+.back:hover{background:var(--sand-2)}
+main{padding:40px 0 80px}
+h1,h2,h3{font-family:"Frank Ruhl Libre",serif;color:var(--navy);line-height:1.2}
+h1{font-size:clamp(28px,4vw,40px);margin:0 0 6px}
+h2{font-size:24px;margin:40px 0 12px}
+.eyebrow{display:inline-block;font-size:13px;letter-spacing:.06em;color:var(--teal);font-weight:700;margin-bottom:8px}
+.muted{color:var(--muted)}
+.small{font-size:14px}
+.note{background:var(--sand-2);border-radius:12px;padding:10px 16px;font-size:15px;margin:14px 0 22px}
+.search{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 8px}
+.search input{flex:1 1 260px;font:inherit;font-size:19px;padding:12px 16px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);box-shadow:var(--shadow)}
+.search select{flex:0 1 auto;font:inherit;font-size:16px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink)}
+.count{margin:6px 0 16px;color:var(--muted);font-size:15px}
+.book{background:var(--paper);border:1px solid var(--line);border-right:5px solid var(--sand);border-radius:14px;padding:14px 18px;margin:0 0 10px;box-shadow:var(--shadow)}
+.book h3{font-size:20px;margin:0}
+.book .st{color:var(--muted);font-size:15px;margin:2px 0 0}
+.book .meta{font-size:15px;margin:4px 0 0}
+.book .n{font-size:14px;color:var(--muted);margin:6px 0 0}
+.where{display:inline-flex;align-items:center;gap:6px;margin-top:8px;background:none;border:1px solid var(--line);border-radius:999px;padding:3px 12px;font:inherit;font-size:15px;font-weight:500;color:var(--teal);cursor:pointer}
+.where:hover{border-color:var(--teal)}
+.where.none{color:var(--muted);cursor:default;border-style:dashed}
+.more{display:block;margin:16px auto 0;background:var(--navy);color:#fff;border:0;border-radius:10px;padding:10px 20px;font:inherit;font-weight:700;cursor:pointer}
+.empty{background:var(--paper);border:1px dashed var(--line);border-radius:16px;padding:24px;text-align:center;color:var(--muted)}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.tips{font-size:15px;color:var(--muted)}
+.tips button{background:none;border:0;padding:0;font:inherit;color:var(--navy-2);text-decoration:underline;cursor:pointer}
+footer{border-top:1px solid var(--line);padding:26px 0 44px;color:var(--muted);font-size:14px}
+</style>
+</head>
+<body>
+<a class="skip" href="#q">דילוג לחיפוש</a>
+<header><div class="wrap nav">
+  <a class="brand" href="./">
+    <svg viewBox="0 0 64 48" width="44" height="33" aria-hidden="true"><path d="M6 36 C6 18 18 8 32 8 C46 8 58 18 58 36 Z" fill="#1e3a5f"/><rect x="22" y="22" width="20" height="14" rx="2" fill="#c9a86a"/><rect x="2" y="36" width="60" height="5" rx="1.5" fill="#2b5283"/><rect x="8" y="41" width="48" height="2.5" rx="1" fill="#c9a86a"/></svg>
+    <span>בית הכנסת הכיפה<small>העל-עדתי, שכונה ה', באר שבע</small></span>
+  </a>
+  <a class="back" href="./">לדף הבית</a>
+</div></header>
+
+<main id="main" class="wrap">
+  <span class="eyebrow">ספריית בית הכנסת</span>
+  <h1>ספריית הקודש</h1>
+  <p class="muted">מחפשים ספר? כתבו את שם הספר, המחבר או הנושא, ותראו אם הוא בספרייה ובאיזה מדף.</p>
+  <p class="note" id="src-note">הרשימה מבוססת על קטלוג הספרייה מתשרי תשע"ה (2014), ואנחנו מעדכנים אותה בימים אלה. ייתכן שספרים הוזזו, נוספו או חסרים.</p>
+
+  <form class="search" role="search" onsubmit="return false">
+    <label for="q" class="vh">חיפוש ספר</label>
+    <input id="q" type="search" placeholder="למשל: משנה ברורה, רמב&quot;ם, הלכות שבת" autocomplete="off" enterkeyhint="search">
+    <select id="shelf" aria-label="עיון לפי מדף"><option value="">כל המדפים</option></select>
+  </form>
+  <p class="count" id="count" aria-live="polite"></p>
+  <div id="results"></div>
+  <button type="button" class="more" id="more" hidden>להציג עוד</button>
+  <div id="none" class="empty" hidden>לא מצאנו ספר כזה ברשימה. ייתכן שהוא בספרייה ועוד לא נרשם. <a href="mailto:vaad@hakipabs.org?subject=%D7%A9%D7%90%D7%9C%D7%94%20%D7%A2%D7%9C%20%D7%A1%D7%A4%D7%A8%20%D7%91%D7%A1%D7%A4%D7%A8%D7%99%D7%99%D7%94">אפשר לשאול אותנו</a>.</div>
+  <p class="tips" id="tips">אפשר לחפש גם כמה מילים יחד, בכתיב מלא או חסר ("שולחן ערוך" או "שלחן ערך"). דוגמאות: <button type="button">משנה ברורה</button> · <button type="button">רמב"ם</button> · <button type="button">הגדה</button> · <button type="button">תהלים</button></p>
+</main>
+
+<footer><div class="wrap">בית הכנסת העל-עדתי "הכיפה", באר שבע · <a href="./">לדף הבית</a> · <a href="mailto:vaad@hakipabs.org?subject=%D7%94%D7%A2%D7%A8%D7%94%20%D7%A2%D7%9C%20%D7%94%D7%A1%D7%A4%D7%A8%D7%99%D7%99%D7%94">מצאתם טעות ברשימה? כתבו לנו</a></div></footer>
+
+<script>
+(async function(){
+  const el=id=>document.getElementById(id);
+  const PAGE=60;
+  // נרמול לחיפוש: בלי ניקוד וגרשיים, אותיות סופיות כרגילות, פיסוק לרווח
+  const FIN={'ך':'כ','ם':'מ','ן':'נ','ף':'פ','ץ':'צ'};
+  const norm=t=>(t||'').toLowerCase().replace(/[֑-ׇ]/g,'').replace(/['"`״׳]/g,'').replace(/[ךםןףץ]/g,c=>FIN[c]).replace(/[^\p{L}\p{N}]+/gu,' ').trim();
+  // כתיב חסר: בלי ו' ו-י' באמצע מילה ("שולחן" = "שלחן")
+  const thin=t=>t.split(' ').map(w=>w.length>2?w[0]+w.slice(1).replace(/[וי]/g,''):w).join(' ');
+  const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+  let data={books:[],locations:{}};
+  try{ const r=await fetch('data/library.json',{cache:'no-store'}); if(r.ok) data=await r.json(); }catch(e){}
+  const LOC=data.locations||{};
+  const books=(data.books||[]).map(b=>{
+    const T=norm([b.t,b.st].join(' ')), A=norm(b.a), N=norm(b.n);
+    return Object.assign({},b,{T,A,N,tT:thin(T),tA:thin(A),tN:thin(N)});
+  });
+  if(data.source) el('src-note').textContent=`הרשימה מבוססת על ${data.source}, ואנחנו מעדכנים אותה בימים אלה. ייתכן שספרים הוזזו, נוספו או חסרים.`;
+
+  // מדפים לבחירה, לפי מקום
+  const shelves=new Map();
+  books.forEach(b=>{ if(b.s==null) return; const k=(b.l||'')+':'+b.s; shelves.set(k,(shelves.get(k)||0)+1); });
+  [...shelves.keys()].sort((x,y)=>{ const [lx,sx]=x.split(':'),[ly,sy]=y.split(':'); return lx.localeCompare(ly)||(+sx)-(+sy); }).forEach(k=>{
+    const [l,s]=k.split(':'); const o=document.createElement('option'); o.value=k; o.textContent=`${LOC[l]||'מקום לא רשום'} · מדף ${s} (${shelves.get(k)})`; el('shelf').appendChild(o);
+  });
+
+  const whereText=b=> b.s!=null ? `${LOC[b.l]||'מקום לא רשום'} · מדף ${b.s}` : b.l ? `${LOC[b.l]} · מדף לא רשום` : 'מיקום לא רשום';
+  function card(b){
+    const meta=[b.a,b.y].filter(Boolean).map(esc).join(' · ');
+    const shelfKey=b.s!=null?(b.l||'')+':'+b.s:'';
+    return `<article class="book"><h3>${esc(b.t||'(ללא שם)')}</h3>${b.st?`<p class="st">${esc(b.st)}</p>`:''}${meta?`<p class="meta">${meta}</p>`:''}${b.n?`<p class="n">${esc(b.n)}</p>`:''}`+
+      `<button type="button" class="where${shelfKey?'':' none'}" ${shelfKey?`data-shelf="${shelfKey}" title="כל הספרים במדף הזה"`:'disabled'}>📍 ${esc(whereText(b))}</button></article>`;
+  }
+
+  function score(b,toks){
+    let sc=0;
+    for(const w of toks){
+      const tw=thin(w); let s=0;
+      if(b.T.startsWith(w)) s=6; else if((' '+b.T).includes(' '+w)) s=5; else if(b.T.includes(w)) s=4;
+      else if(b.A.includes(w)) s=3; else if(b.tT.includes(tw)) s=3; else if(b.tA.includes(tw)) s=2;
+      else if(b.N.includes(w)||b.tN.includes(tw)) s=1;
+      if(!s) return 0;
+      sc+=s;
+    }
+    return sc;
+  }
+
+  let shown=0, current=[];
+  function render(more){
+    if(!more){ el('results').innerHTML=''; shown=0; }
+    const next=current.slice(shown,shown+PAGE);
+    el('results').insertAdjacentHTML('beforeend',next.map(card).join(''));
+    shown+=next.length;
+    el('more').hidden=shown>=current.length;
+  }
+  function run(){
+    const q=el('q').value, sh=el('shelf').value, toks=norm(q).split(' ').filter(Boolean);
+    const params=new URLSearchParams(); if(q.trim()) params.set('q',q.trim()); if(sh) params.set('shelf',sh);
+    history.replaceState(null,'',location.pathname+(params.toString()?'?'+params:''));
+    if(!toks.length && !sh){ current=[]; render(); el('count').textContent=`${books.length} ספרים בקטלוג.`; el('none').hidden=true; el('tips').hidden=false; return; }
+    let list=books;
+    if(sh){ const [l,s]=sh.split(':'); list=list.filter(b=>(b.l||'')===l && String(b.s)===s); }
+    if(toks.length){ list=list.map(b=>[b,score(b,toks)]).filter(x=>x[1]>0).sort((x,y)=>y[1]-x[1]||(y[0].s!=null)-(x[0].s!=null)||(x[0].t||'').localeCompare(y[0].t||'','he')).map(x=>x[0]); }
+    current=list; render();
+    el('count').textContent=list.length?`${list.length} ${list.length===1?'ספר':'ספרים'}${sh?' במדף':''}`:'';
+    el('none').hidden=list.length>0; el('tips').hidden=list.length>0;
+  }
+
+  let timer=null;
+  el('q').addEventListener('input',()=>{ clearTimeout(timer); timer=setTimeout(run,150); });
+  el('shelf').addEventListener('change',run);
+  el('more').addEventListener('click',()=>render(true));
+  el('results').addEventListener('click',e=>{ const b=e.target.closest('[data-shelf]'); if(!b) return; el('q').value=''; el('shelf').value=b.dataset.shelf; run(); window.scrollTo({top:el('main').offsetTop,behavior:'smooth'}); });
+  el('tips').addEventListener('click',e=>{ if(e.target.tagName==='BUTTON'){ el('q').value=e.target.textContent; run(); } });
+
+  const qs=new URLSearchParams(location.search);
+  if(qs.get('q')) el('q').value=qs.get('q');
+  if(qs.get('shelf')) el('shelf').value=qs.get('shelf');
+  run();
+})();
+</script>
+</body>
+</html>
