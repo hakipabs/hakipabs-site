@@ -106,6 +106,26 @@ function doGet(e) {
     return runPage_('❌ הריצה נכשלה', String(err));
   }
 }
+/**
+ * שאלה מבוט הוואטסאפ (Cloudflare Worker) שהבוט לא ידע לענות עליה: נשלחת במייל לוועד.
+ * כתובת: כתובת ה-Web App עם ?key=<RUN_KEY>, אותו מפתח של ההרצה מהטלפון.
+ */
+function doPost(e) {
+  const key = PropertiesService.getScriptProperties().getProperty('RUN_KEY');
+  if (!key || !e || !e.parameter || e.parameter.key !== key) return ContentService.createTextOutput('forbidden');
+  let d = {};
+  try { d = JSON.parse(e.postData.contents); } catch (err) { return ContentService.createTextOutput('bad json'); }
+  if (d.kind === 'whatsapp' && d.text) {
+    const who = d.name ? `${d.name} (${d.from})` : String(d.from || '');
+    sendReport_(`💬 שאלה בוואטסאפ של בית הכנסת: ${who}`, [
+      `${who} כתב/ה לבוט:`, '', String(d.text).slice(0, 3000), '',
+      `הבוט לא ידע לענות והשיב שהשאלה הועברה לוועד.`,
+      `לענות ישירות בוואטסאפ: https://wa.me/${String(d.from || '').replace(/\D/g, '')}`,
+    ].join('\n'));
+  }
+  return ContentService.createTextOutput('ok');
+}
+
 /** פעם אחת, אחרי ה-Deploy: יוצר מפתח ומדפיס ביומן את הקישור לטלפון. הרצה נוספת מחליפה את המפתח (הקישור הישן מפסיק לעבוד). */
 function makeRunKey() {
   const key = Utilities.getUuid().replace(/-/g, '');
