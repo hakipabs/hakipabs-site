@@ -51,12 +51,13 @@ async function handleUpdate_(body, env) {
     const names = Object.fromEntries((v.contacts || []).map(c => [c.wa_id, (c.profile || {}).name || '']));
     for (const m of v.messages || []) {
       if (await seen_(m.id)) continue;   // מטא לפעמים שולחת את אותה הודעה פעמיים
+      const tap = m.type === 'interactive' ? ((m.interactive || {}).list_reply || (m.interactive || {}).button_reply || {}) : null;
       const text = m.type === 'text' ? (m.text || {}).body || ''
-        : m.type === 'interactive' ? ((m.interactive || {}).button_reply || (m.interactive || {}).list_reply || {}).title || ''
+        : tap ? (TOPICS[tap.id] || tap.title || '')
         : '';
       const reply = text ? await answer_(text, { from: m.from, name: names[m.from] || '' }, env)
         : 'אני יודע לענות רק על הודעות כתובות. כתבו "תפריט" כדי לראות מה אפשר לשאול.';
-      await send_(env, m.from, reply);
+      await send_(env, m.from, typeof reply === 'string' ? withMenuButton_(reply) : reply);
     }
   }
 }
@@ -69,14 +70,33 @@ async function seen_(id) {
   return false;
 }
 
-async function send_(env, to, text) {
+async function send_(env, to, msg) {
   const ver = env.GRAPH_VERSION || 'v23.0';
-  const r = await fetch(`https://graph.facebook.com/${ver}/${env.PHONE_NUMBER_ID}/messages`, {
+  const post = payload => fetch(`https://graph.facebook.com/${ver}/${env.PHONE_NUMBER_ID}/messages`, {
     method: 'POST',
     headers: { 'authorization': 'Bearer ' + env.WA_TOKEN, 'content-type': 'application/json' },
-    body: JSON.stringify({ messaging_product: 'whatsapp', to, type: 'text', text: { body: text.slice(0, 4000), preview_url: false } }),
+    body: JSON.stringify(Object.assign({ messaging_product: 'whatsapp', to }, payload)),
   });
+  const asText = t => ({ type: 'text', text: { body: t.slice(0, 4000), preview_url: false } });
+  let payload, fallback = null;
+  if (typeof msg === 'string') payload = asText(msg);
+  else if (msg.kind === 'list') {
+    payload = { type: 'interactive', interactive: { type: 'list', body: { text: msg.body }, footer: { text: 'hakipabs.org' },
+      action: { button: msg.button, sections: [{ title: 'נושאים', rows: msg.rows }] } } };
+    fallback = msg.text;
+  } else {
+    payload = { type: 'interactive', interactive: { type: 'button', body: { text: msg.body },
+      action: { buttons: msg.buttons.map(b => ({ type: 'reply', reply: b })) } } };
+    fallback = msg.body;
+  }
+  let r = await post(payload);
+  if (!r.ok && fallback) { console.log('interactive refused', r.status, await r.text()); r = await post(asText(fallback)); }
   if (!r.ok) console.log('send failed', r.status, await r.text());
+}
+
+// תשובה קצרה מקבלת כפתור "תפריט" מתחתיה (גוף הודעה עם כפתורים מוגבל ל-1024 תווים)
+function withMenuButton_(text) {
+  return text.length <= 1000 ? { kind: 'buttons', body: text, buttons: [{ id: 'menu', title: 'תפריט' }] } : text;
 }
 
 async function data_(name) {
@@ -95,7 +115,22 @@ const thin = t => t.split(' ').map(w => w.length > 2 ? w[0] + w.slice(1).replace
 const esc_ = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const has = (q, ...words) => words.some(w => new RegExp('(^| )[ובהלמשכ]{0,2}' + esc_(norm(w))).test(q));
 
-const MENU = [
+// כל שורה ברשימה = נושא; הלחיצה נכנסת לבוט כאילו נכתבה המילה שבצד ימין
+const TOPICS = { menu: 'תפריט', shabbat: 'שבת', weekday: 'חול', zmanim: 'זמני היום', shiurim: 'שיעורים', events: 'אירועים',
+  library: 'ספרייה', dvar: 'דבר תורה', vaad: 'ועד', donate: 'תרומה' };
+const MENU_ROWS = [
+  ['shabbat', 'שבת', 'זמני התפילות והדלקת נרות'],
+  ['weekday', 'יום חול', 'מנייני שחרית, מנחה וערבית'],
+  ['zmanim', 'זמני היום', 'הנץ, סוף זמן ק"ש, שקיעה'],
+  ['shiurim', 'שיעורים', 'השיעורים הקבועים'],
+  ['events', 'אירועים', 'מה קורה בקרוב'],
+  ['library', 'ספרייה', 'איך מחפשים ספר ובאיזה מדף הוא'],
+  ['dvar', 'דבר תורה', 'דבר תורה קהילתי לפרשת השבוע'],
+  ['vaad', 'ועד', 'אנשי קשר'],
+  ['donate', 'תרומה', 'תרומה לבית הכנסת'],
+].map(([id, title, description]) => ({ id, title, description }));
+
+const MENU_TEXT = [
   'שלום! אני הבוט של בית הכנסת הכיפה. אפשר לשאול למשל:',
   '• *שבת*: זמני התפילות והדלקת נרות',
   '• *חול*: מנייני שחרית, מנחה וערבית',
@@ -109,6 +144,8 @@ const MENU = [
   'כל שאלה אחרת מועברת לוועד, ונחזור אליכם.',
   `האתר: ${SITE}`,
 ].join('\n');
+const MENU = { kind: 'list', button: 'בחירת נושא', rows: MENU_ROWS, text: MENU_TEXT,
+  body: 'שלום! אני הבוט של בית הכנסת הכיפה.\nבחרו נושא מהרשימה, או כתבו שאלה, למשל "ספר משנה ברורה".\nשאלה שאין לי עליה תשובה עוברת לוועד.' };
 
 async function answer_(text, who, env) {
   const q = norm(text);
