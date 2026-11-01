@@ -178,6 +178,7 @@ nav .sub:hover ul.sub-list,nav .sub.open ul.sub-list,nav .sub:focus-within ul.su
 .board td{padding:7px 8px}
 .board td:first-child{color:var(--muted);white-space:nowrap}
 .board a{text-decoration:none;font-variant-numeric:tabular-nums;white-space:nowrap}
+.board .bnote{font-size:12px;color:var(--teal);font-weight:500;white-space:normal}
 .sh-day h3{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
 .sh-day h3 .small{font-family:Heebo;font-weight:500;color:var(--muted)}
 .sh-item{padding:10px 0;border-bottom:1px dashed var(--line)}
@@ -821,6 +822,7 @@ fetch('data/board.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(b=>
   b.members.forEach(m=>{
     const tr=document.createElement('tr');
     const role=document.createElement('td'); role.textContent=m.role||'';
+    if(m.note){const s=document.createElement('span'); s.className='bnote'; s.textContent=m.note; role.append(document.createElement('br'),s);}   // למשל: לחברי הקהילה בלבד
     const name=document.createElement('td'); name.textContent=m.name||'';
     const tel=document.createElement('td');
     if(m.phone){const a=document.createElement('a'); a.href='tel:+972'+m.phone.replace(/\D/g,'').replace(/^0/,''); a.textContent=m.phone; tel.append(a);}

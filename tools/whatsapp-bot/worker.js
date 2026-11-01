@@ -228,7 +228,7 @@ async function events_() {
 
 async function board_() {
   const b = await data_('board');
-  return ['*ועד בית הכנסת*', ...(b.members || []).map(m => `${m.role}: ${m.name}${m.phone ? ' · ' + m.phone : ''}`), '', `מייל: ${b.email || 'vaad@hakipabs.org'}`].join('\n');
+  return ['*ועד בית הכנסת*', ...(b.members || []).map(m => `${m.role}${m.note ? ` (${m.note})` : ''}: ${m.name}${m.phone ? ' · ' + m.phone : ''}`), '', `מייל: ${b.email || 'vaad@hakipabs.org'}`].join('\n');
 }
 
 const shortKey = id => { let h = 2166136261; for (const c of (id || '')) { h ^= c.codePointAt(0); h = Math.imul(h, 16777619); } return 't-' + (h >>> 0).toString(36); };
