@@ -11,6 +11,7 @@
 // משתנה רגיל (לא סוד): GRAPH_VERSION, ברירת מחדל v23.0
 
 const SITE = 'https://hakipabs.org';
+const VAAD_WA = '97286433865';   // המספר העסקי של הוועד (וואטסאפ ביזנס, הודעות ידניות)
 
 export default {
   async fetch(request, env, ctx) {
@@ -80,6 +81,7 @@ async function send_(env, to, msg) {
   const asText = t => ({ type: 'text', text: { body: t.slice(0, 4000), preview_url: false } });
   let payload, fallback = null;
   if (typeof msg === 'string') payload = asText(msg);
+  else if (msg.kind === 'plain') payload = asText(msg.text);   // טקסט עם קישור: בלי כפתורים, כדי שהקישור יהיה לחיץ
   else if (msg.kind === 'list') {
     payload = { type: 'interactive', interactive: { type: 'list', body: { text: msg.body }, footer: { text: 'hakipabs.org' },
       action: { button: msg.button, sections: [{ title: 'נושאים', rows: msg.rows }] } } };
@@ -166,8 +168,10 @@ async function answer_(text, who, env) {
     console.log('answer failed', e && e.stack || e);
     return `מצטער, לא הצלחתי לקרוא את הנתונים כרגע. אפשר לראות הכול באתר: ${SITE}`;
   }
-  await forward_(env, who, text);
-  return 'תודה! את השאלה הזו העברתי לוועד בית הכנסת, ונחזור אליכם בהקדם.\nכתבו "תפריט" כדי לראות על מה אני יודע לענות מיד.';
+  await forward_(env, who, text);   // עותק במייל לוועד, למקרה שהשואל לא ילחץ על הקישור
+  // הקישור פותח שיחה עם המספר העסקי של הוועד, והשאלה כבר כתובה: השואל לוחץ "שלח" והוועד עונה משם
+  const link = `https://wa.me/${VAAD_WA}?text=${encodeURIComponent(String(text).slice(0, 500))}`;
+  return { kind: 'plain', text: `את השאלה הזו עדיף לשאול את הוועד. לחצו על הקישור, ואז "שלח", והיא תגיע אליהם בוואטסאפ:\n${link}\n\nכתבו "תפריט" כדי לראות על מה אני יודע לענות מיד.` };
 }
 
 // ---------- התשובות ----------
