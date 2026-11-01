@@ -149,9 +149,13 @@ const MENU_TEXT = [
 const MENU = { kind: 'list', button: 'בחירת נושא', rows: MENU_ROWS, text: MENU_TEXT,
   body: 'שלום! אני הבוט של בית הכנסת הכיפה.\nבחרו נושא מהרשימה, או כתבו שאלה, למשל "ספר משנה ברורה".\nשאלה שאין לי עליה תשובה עוברת לוועד.' };
 
+const GREET_ = new Set(['תפריט', 'עזרה', 'שלום', 'היי', 'הי', 'הלו', 'menu', 'help', 'hi', 'hello', 'start'].map(norm));
+
 async function answer_(text, who, env) {
   const q = norm(text);
-  if (!q || has(q, 'תפריט', 'עזרה', 'שלום', 'היי', 'הי', 'בוקר טוב', 'ערב טוב', 'menu', 'help', 'hi', 'hello') && q.split(' ').length <= 3) return MENU;
+  // ברכה / בקשת תפריט: מילה שלמה בלבד (אחרת "הי" תופס גם את "היום" ו"זמני היום" מחזיר תפריט)
+  const words = q.split(' ');
+  if (!q || words.length <= 3 && (words.some(w => GREET_.has(w)) || /^(בוקר|ערב|לילה|שבוע) טוב/.test(q))) return MENU;
   try {
     if (has(q, 'דבר תורה', 'דברי תורה', 'דבת')) return await dvar_();
     if (has(q, 'שיעור', 'שיעורים', 'לימוד', 'דף יומי')) return await shiurim_();
