@@ -22,4 +22,4 @@
 
 שולחים "שלום" למספר. אמור לחזור התפריט. אם לא: Worker > Logs (Begin log stream) ושולחים שוב.
 
-אחרי שינוי בקוד: מדביקים מחדש ב-Edit code ו-Deploy. אחרי שינוי ב-`gmail-to-github.gs`: Deploy > Manage deployments > עריכה > New version, כדי שהקישור יישאר.
+אחרי שינוי בקוד: אם ה-Worker מחובר ל-GitHub (Settings > Build: Root directory `tools/whatsapp-bot`, Deploy command `npx wrangler deploy`, לפי `wrangler.toml`), כל העלאה ל-main מעדכנת אותו לבד. אחרת: מדביקים מחדש ב-Edit code ו-Deploy. אחרי שינוי ב-`gmail-to-github.gs`: Deploy > Manage deployments > עריכה > New version, כדי שהקישור יישאר.

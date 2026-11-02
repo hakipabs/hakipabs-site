@@ -1,0 +1,6 @@
+# Cloudflare Workers Builds: כל העלאה ל-main שמשנה את התיקייה הזו מעדכנת את הבוט (Worker בשם hakipa-wa).
+# הסודות (VERIFY_TOKEN, WA_TOKEN, PHONE_NUMBER_ID, APP_SECRET, FORWARD_URL) נשארים ב-Cloudflare ולא כאן.
+name = "hakipa-wa"
+main = "worker.js"
+compatibility_date = "2025-09-01"
+keep_vars = true
