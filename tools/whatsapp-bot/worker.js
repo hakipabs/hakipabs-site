@@ -177,6 +177,8 @@ async function answer_(text, who, env) {
       const day = (wd + (has(q, 'מחר') ? 1 : 0)) % 7;
       return day >= 5 ? shabbat_(sh) : weekday_(sh);
     }
+    // שחרית ביום שישי היא שחרית של חול (ברשימת השבת יש רק שחרית של שבת בבוקר)
+    if (has(q, 'שחרית') && has(q, 'שישי') && !has(q, 'שבת')) return weekday_(sh);
     if (has(q, 'חול', 'יום חול', 'שחרית', 'ערבית', 'מניין', 'מנין', 'מניינים') && !has(q, 'שבת', 'שישי', 'ליל שבת')) return weekday_(sh);
     if (has(q, 'מנחה') && !has(q, 'שבת', 'שישי')) return weekday_(sh);
     if (has(q, 'שבת', 'שישי', 'נרות', 'הדלקת', 'כניסת', 'יציאת', 'הבדלה', 'צאת', 'פרשה', 'פרשת', 'קבלת שבת', 'רבנו תם')) return shabbat_(sh);
@@ -207,8 +209,9 @@ function shabbat_(sh) {
   return [
     `*שבת פרשת ${p}*${sh.hebrew_date ? ` (${sh.hebrew_date})` : ''}`,
     `הדלקת נרות: *${sh.candles || '?'}*`, '',
-    '*ערב שבת*', lines(sh.friday, ([n, t]) => `${n}: ${t}`), '',
-    '*שבת*', lines(sh.shabbat, ([n, t]) => `${n}: ${t}`), '',
+    // אותן כותרות כמו באתר: ברשימה הראשונה גם שחרית של שבת בבוקר, לא רק ערב שבת
+    '*ליל שבת ובוקר*', lines(sh.friday, ([n, t]) => `${n}: ${t}`), '',
+    '*אחר הצהריים ומוצ"ש*', lines(sh.shabbat, ([n, t]) => `${n}: ${t}`), '',
     `צאת השבת: *${sh.havdala || '?'}*${sh.rabbeinu_tam ? ` · ר"ת: ${sh.rabbeinu_tam}` : ''}`,
     ...(sh.note ? ['', sh.note] : []),
     '', `לפי הדף השבועי. הכול באתר: ${SITE}/#tefila`,
