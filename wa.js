@@ -7,15 +7,15 @@
 
   const css = `
 .wa-fab{position:fixed;left:max(16px,env(safe-area-inset-left));bottom:max(16px,env(safe-area-inset-bottom));z-index:40;direction:rtl;font-family:inherit}
-.wa-fab-btn{width:56px;height:56px;border-radius:50%;border:2px solid var(--sand,#c9a86a);background:var(--navy,#1e3a5f);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 6px 18px rgba(20,30,50,.28);padding:0;transition:transform .15s,background .15s}
-.wa-fab-btn:hover{background:var(--navy-2,#2b5283);transform:translateY(-2px)}
-.wa-fab-btn svg{width:28px;height:28px}
+.wa-fab-btn{width:58px;height:58px;border-radius:50%;border:0;background:#25d366;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 6px 18px rgba(20,30,50,.28);padding:0;transition:transform .15s,background .15s}
+.wa-fab-btn:hover{background:#1ebe5b;transform:translateY(-2px)}
+.wa-fab-btn svg{width:30px;height:30px}
 .wa-fab-btn:focus-visible,.wa-fab-menu a:focus-visible{outline:3px solid var(--sand,#c9a86a);outline-offset:3px}
 .wa-fab-menu{position:absolute;left:0;bottom:68px;width:max-content;max-width:calc(100vw - 32px);background:#fff;border:1px solid #e4d4ab;border-radius:14px;box-shadow:0 10px 30px rgba(20,30,50,.22);padding:6px;display:none}
 .wa-fab.open .wa-fab-menu{display:block}
 .wa-fab-menu a{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;text-decoration:none;color:var(--navy,#1e3a5f);line-height:1.35}
 .wa-fab-menu a:hover{background:var(--sand-2,#f1e7cf)}
-.wa-fab-menu a svg{width:22px;height:22px;flex:none;color:var(--sand,#c9a86a)}
+.wa-fab-menu a svg{width:22px;height:22px;flex:none;color:#25d366}
 .wa-fab-menu b{display:block;font-size:16px}
 .wa-fab-menu small{display:block;font-size:13px;color:#5b6474}
 @media (max-width:760px){footer{padding-bottom:88px}}
