@@ -151,7 +151,7 @@ const MENU = { kind: 'list', button: 'בחירת נושא', rows: MENU_ROWS, tex
 
 const THANKS_ = new Set(['תודה', 'תודות', 'אמן', 'סבבה', 'אוקיי', 'אוקי', 'בסדר', 'מעולה', 'יופי', 'מצוין', 'ok', 'okay', 'thanks', 'תנקס'].map(norm));
 const THANKS_FILL_ = new Set(['רבה', 'שבת', 'שלום', 'טוב', 'לך', 'לכם', 'ממש'].map(norm));   // "תודה רבה", "תודה ושבת שלום"
-const GREET_ = new Set(['תפריט', 'עזרה', 'שלום', 'היי', 'הי', 'הלו', 'בדיקה', 'ניסיון', 'menu', 'help', 'hi', 'hello', 'start', 'test'].map(norm));
+const GREET_ = new Set(['תפריט', 'עזרה', 'שלום', 'היי', 'הי', 'הלו', 'אהלן', 'אהלאן', 'הלוא', 'נשמע', 'בדיקה', 'ניסיון', 'menu', 'help', 'hi', 'hello', 'hey', 'shalom', 'start', 'test'].map(norm));
 
 async function answer_(text, who, env) {
   const q = norm(text);
