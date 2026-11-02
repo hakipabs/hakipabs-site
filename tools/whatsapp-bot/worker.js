@@ -161,6 +161,7 @@ async function answer_(text, who, env) {
   // "תודה", "אמן", "סבבה": לא שאלה, לא מעבירים לוועד
   if (words.length <= 4 && words.some(w => THANKS_.has(w)) && words.every(w => THANKS_.has(w) || THANKS_FILL_.has(w))) return 'בשמחה! כתבו "תפריט" בכל זמן.';
   try {
+    if (has(q, 'מזג', 'תחזית', 'גשם', 'טמפרטורה', 'מעלות', 'מזגן', 'מזגנים')) return await weather_();
     if (has(q, 'דבר תורה', 'דברי תורה', 'דבת')) return await dvar_();
     if (has(q, 'שיעור', 'שיעורים', 'לימוד', 'דף יומי')) return await shiurim_();
     if (has(q, 'אירוע', 'אירועים', 'אורייתא', 'מה קורה')) return await events_();
@@ -169,6 +170,12 @@ async function answer_(text, who, env) {
     if (has(q, 'ועד', 'גבאי', 'אנשי קשר', 'טלפון', 'יצירת קשר', 'השאלת ציוד', 'ציוד', 'גזבר', 'גזבן', 'יור', 'יושב ראש', 'מי אחראי', 'מי הרב', 'רב הקהילה', 'רב בית הכנסת', 'הרב של', 'מוביל', 'מנהל', 'מי עומד')) return await board_();
     if (has(q, 'הנץ', 'זריחה', 'שקיעה', 'קש', 'קריאת שמע', 'סוף זמן', 'חצות', 'עלות', 'זמנים', 'זמני היום', 'טלית')) return await zmanim_();
     const sh = await data_('shabbat');
+    // "תפילות היום", "מניינים מחר": לפי היום בישראל. שישי ושבת: זמני השבת (כוללים את ערב שבת), שאר הימים: חול
+    if (has(q, 'תפילה', 'תפילות', 'מניין', 'מנין', 'מניינים', 'מתפללים', 'זמני תפילה') && has(q, 'היום', 'הערב', 'עכשיו', 'מחר')) {
+      const wd = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Jerusalem', weekday: 'short' }).format(new Date()));
+      const day = (wd + (has(q, 'מחר') ? 1 : 0)) % 7;
+      return day >= 5 ? shabbat_(sh) : weekday_(sh);
+    }
     if (has(q, 'חול', 'יום חול', 'שחרית', 'ערבית', 'מניין', 'מנין', 'מניינים') && !has(q, 'שבת', 'שישי', 'ליל שבת')) return weekday_(sh);
     if (has(q, 'מנחה') && !has(q, 'שבת', 'שישי')) return weekday_(sh);
     if (has(q, 'שבת', 'שישי', 'נרות', 'הדלקת', 'כניסת', 'יציאת', 'הבדלה', 'צאת', 'פרשה', 'פרשת', 'קבלת שבת', 'רבנו תם')) return shabbat_(sh);
@@ -216,6 +223,29 @@ function weekday_(sh) {
     `\nלפי הדף השבועי של פרשת ${(sh.parasha || '').replace(/^פרשו?ת\s+/, '')}. ${SITE}/#tefila`,
     'לזמני השבת כתבו "שבת".',
   ].join('\n');
+}
+
+// מזג האוויר בבאר שבע: Open-Meteo (חינמי, בלי מפתח), אותו מקור כמו שורת התחזית באתר
+async function weather_() {
+  const r = await fetch('https://api.open-meteo.com/v1/forecast?latitude=31.262&longitude=34.786&current=temperature_2m' +
+    '&hourly=temperature_2m&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=Asia%2FJerusalem&forecast_days=7');
+  if (!r.ok) throw new Error('open-meteo ' + r.status);
+  const w = await r.json(), d = w.daily || {};
+  const t = v => `${Math.round(v)}°`;
+  const rain = i => { const p = (d.precipitation_probability_max || [])[i]; return p >= 30 ? ` · סיכוי לגשם ${p}%` : ''; };
+  const out = ['*מזג האוויר בבאר שבע*'];
+  if (w.current && w.current.temperature_2m != null) out.push(`עכשיו: ${t(w.current.temperature_2m)}`);
+  ['היום', 'מחר'].forEach((label, i) => { if (d.time && d.time[i]) out.push(`${label}: ${t(d.temperature_2m_min[i])} עד ${t(d.temperature_2m_max[i])}${rain(i)}`); });
+  // שבת הקרובה: הלילה (שישי 20:00 עד שבת 06:00) והיום, בשביל שעוני המזגן
+  const sat = (d.time || []).findIndex((x, i) => i > 0 && new Date(x + 'T12:00:00Z').getUTCDay() === 6);
+  if (sat > 0 && w.hourly) {
+    const S = d.time[sat], F = d.time[sat - 1];
+    const night = w.hourly.time.map((x, k) => [x, w.hourly.temperature_2m[k]])
+      .filter(([x]) => (x.startsWith(F) && x.slice(11, 13) >= '20') || (x.startsWith(S) && x.slice(11, 13) <= '06')).map(v => v[1]).filter(v => v != null);
+    if (night.length) out.push(`שבת: בלילה עד ${t(Math.min(...night))}, ביום עד ${t(d.temperature_2m_max[sat])}${rain(sat)}`);
+  }
+  out.push('', 'תחזית: Open-Meteo');
+  return out.join('\n');
 }
 
 async function zmanim_() {
