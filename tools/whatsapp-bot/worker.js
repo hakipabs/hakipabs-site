@@ -149,25 +149,37 @@ const MENU_TEXT = [
 const MENU = { kind: 'list', button: 'בחירת נושא', rows: MENU_ROWS, text: MENU_TEXT,
   body: 'שלום! אני הבוט של בית הכנסת הכיפה.\nבחרו נושא מהרשימה, או כתבו שאלה, למשל "ספר משנה ברורה".\nשאלה שאין לי עליה תשובה עוברת לוועד.' };
 
-const GREET_ = new Set(['תפריט', 'עזרה', 'שלום', 'היי', 'הי', 'הלו', 'menu', 'help', 'hi', 'hello', 'start'].map(norm));
+const THANKS_ = new Set(['תודה', 'תודות', 'אמן', 'סבבה', 'אוקיי', 'אוקי', 'בסדר', 'מעולה', 'יופי', 'מצוין', 'ok', 'okay', 'thanks', 'תנקס'].map(norm));
+const THANKS_FILL_ = new Set(['רבה', 'שבת', 'שלום', 'טוב', 'לך', 'לכם', 'ממש'].map(norm));   // "תודה רבה", "תודה ושבת שלום"
+const GREET_ = new Set(['תפריט', 'עזרה', 'שלום', 'היי', 'הי', 'הלו', 'בדיקה', 'ניסיון', 'menu', 'help', 'hi', 'hello', 'start', 'test'].map(norm));
 
 async function answer_(text, who, env) {
   const q = norm(text);
   // ברכה / בקשת תפריט: מילה שלמה בלבד (אחרת "הי" תופס גם את "היום" ו"זמני היום" מחזיר תפריט)
   const words = q.split(' ');
   if (!q || words.length <= 3 && (words.some(w => GREET_.has(w)) || /^(בוקר|ערב|לילה|שבוע) טוב/.test(q))) return MENU;
+  // "תודה", "אמן", "סבבה": לא שאלה, לא מעבירים לוועד
+  if (words.length <= 4 && words.some(w => THANKS_.has(w)) && words.every(w => THANKS_.has(w) || THANKS_FILL_.has(w))) return 'בשמחה! כתבו "תפריט" בכל זמן.';
   try {
     if (has(q, 'דבר תורה', 'דברי תורה', 'דבת')) return await dvar_();
     if (has(q, 'שיעור', 'שיעורים', 'לימוד', 'דף יומי')) return await shiurim_();
     if (has(q, 'אירוע', 'אירועים', 'אורייתא', 'מה קורה')) return await events_();
     if (has(q, 'ספר', 'ספרים', 'ספרייה', 'ספריה', 'ספריית', 'מדף')) return await library_(q);
     if (has(q, 'תרומה', 'לתרום', 'תרומות')) return `אפשר לתרום לבית הכנסת דרך האתר: ${SITE}/#truma\nתודה רבה!`;
-    if (has(q, 'ועד', 'גבאי', 'אנשי קשר', 'טלפון', 'יצירת קשר', 'השאלת ציוד', 'ציוד')) return await board_();
+    if (has(q, 'ועד', 'גבאי', 'אנשי קשר', 'טלפון', 'יצירת קשר', 'השאלת ציוד', 'ציוד', 'גזבר', 'גזבן', 'יור', 'יושב ראש', 'מי אחראי', 'מי הרב', 'רב הקהילה', 'רב בית הכנסת', 'הרב של', 'מוביל', 'מנהל', 'מי עומד')) return await board_();
     if (has(q, 'הנץ', 'זריחה', 'שקיעה', 'קש', 'קריאת שמע', 'סוף זמן', 'חצות', 'עלות', 'זמנים', 'זמני היום', 'טלית')) return await zmanim_();
     const sh = await data_('shabbat');
     if (has(q, 'חול', 'יום חול', 'שחרית', 'ערבית', 'מניין', 'מנין', 'מניינים') && !has(q, 'שבת', 'שישי', 'ליל שבת')) return weekday_(sh);
     if (has(q, 'מנחה') && !has(q, 'שבת', 'שישי')) return weekday_(sh);
     if (has(q, 'שבת', 'שישי', 'נרות', 'הדלקת', 'כניסת', 'יציאת', 'הבדלה', 'צאת', 'פרשה', 'פרשת', 'קבלת שבת', 'רבנו תם')) return shabbat_(sh);
+    // "זמני תפילות" בלי לומר איזה יום: שלושה כפתורים לבחירה
+    if (has(q, 'תפילה', 'תפילות', 'מתפללים')) return { kind: 'buttons', body: 'אילו זמנים?',
+      buttons: [{ id: 'shabbat', title: 'שבת' }, { id: 'weekday', title: 'יום חול' }, { id: 'zmanim', title: 'זמני היום' }] };
+    // "מה אתה יכול לעשות?", "במה אתה יכול לעזור?": התפריט
+    if (has(q, 'לעזור', 'עזרה', 'יכול לעשות', 'יכולה לעשות', 'מה אתה', 'מה את', 'מה יש לך', 'מה אפשר', 'איך זה עובד')) return MENU;
+    // שם ספר בלי המילה "ספר" ("היכן אני מוצא קיצור שולחן ערוך"): עונים רק אם כל המילים נמצאות בשם של ספר
+    const lib = await library_(q, true);
+    if (lib) return lib;
   } catch (e) {
     console.log('answer failed', e && e.stack || e);
     return `מצטער, לא הצלחתי לקרוא את הנתונים כרגע. אפשר לראות הכול באתר: ${SITE}`;
@@ -236,7 +248,7 @@ async function events_() {
 
 async function board_() {
   const b = await data_('board');
-  return ['*ועד בית הכנסת*', ...(b.members || []).map(m => `${m.role}${m.note ? ` (${m.note})` : ''}: ${m.name}${m.phone ? ' · ' + m.phone : ''}`), '', `מייל: ${b.email || 'vaad@hakipabs.org'}`].join('\n');
+  return [...(b.rabbi ? [`*רב הקהילה:* ${b.rabbi}`, ''] : []), '*ועד בית הכנסת*', ...(b.members || []).map(m => `${m.role}${m.note ? ` (${m.note})` : ''}: ${m.name}${m.phone ? ' · ' + m.phone : ''}`), '', `מייל: ${b.email || 'vaad@hakipabs.org'}`].join('\n');
 }
 
 const shortKey = id => { let h = 2166136261; for (const c of (id || '')) { h ^= c.codePointAt(0); h = Math.imul(h, 16777619); } return 't-' + (h >>> 0).toString(36); };
@@ -253,13 +265,16 @@ async function dvar_() {
 }
 
 // מילים שאינן חלק משם הספר
-const STOP = new Set(['ספר', 'ספרים', 'ספרייה', 'ספריה', 'ספריית', 'בספרייה', 'בספריה', 'יש', 'האם', 'את', 'של', 'לכם', 'אצלכם', 'בבית', 'הכנסת', 'כנסת', 'איפה', 'איפוא', 'נמצא', 'מחפש', 'מחפשת', 'רוצה', 'מדף', 'הספר', 'בבקשה', 'תודה'].map(norm));
+const STOP = new Set(['ספר', 'ספרים', 'ספרייה', 'ספריה', 'ספריית', 'בספרייה', 'בספריה', 'יש', 'האם', 'את', 'של', 'לכם', 'אצלכם', 'בבית', 'הכנסת', 'כנסת', 'איפה', 'איפוא', 'נמצא', 'מחפש', 'מחפשת', 'רוצה', 'מדף', 'הספר', 'בבקשה', 'תודה',
+  'היכן', 'אני', 'מוצא', 'מוצאים', 'למצוא', 'אפשר', 'ניתן', 'לי', 'מה', 'לקבל', 'להשיג'].map(norm));
 
-async function library_(q) {
+// strict: בלי המילה "ספר" בשאלה. מחזיר null אם אין ספר שכל המילים מופיעות בשם שלו (ואז השאלה ממשיכה לוועד)
+async function library_(q, strict) {
   const d = await data_('library');
   const LOC = d.locations || {};
   const toks = q.split(' ').filter(w => w && !STOP.has(w));
   const shelf = q.match(/(?:^| )[בהל]?מדפ (\d+)/);   // "מדף 14", "מה יש במדף 14" (אחרי norm האות ף היא פ)
+  if (strict && (shelf || !toks.length || toks.length > 6)) return null;
   if (shelf) {
     const on = (d.books || []).filter(b => String(b.s) === shelf[1]);
     if (!on.length) return `לא מצאתי ספרים במדף ${shelf[1]}.`;
@@ -278,8 +293,9 @@ async function library_(q) {
       sc += s;
     }
     return [b, sc];
-  }).filter(x => x[1] > 0).sort((x, y) => y[1] - x[1] || (y[0].s != null) - (x[0].s != null)).map(x => x[0]);
+  }).filter(x => x[1] > (strict ? 5 * toks.length - 1 : 0)).sort((x, y) => y[1] - x[1] || (y[0].s != null) - (x[0].s != null)).map(x => x[0]);
   const link = `${SITE}/library.html?q=${encodeURIComponent(toks.join(' '))}`;
+  if (!scored.length && strict) return null;
   if (!scored.length) return `לא מצאתי "${toks.join(' ')}" ברשימת הספרייה. ייתכן שהספר נמצא ועוד לא נרשם (הרשימה מתעדכנת). אפשר לשאול את הוועד: כתבו את השאלה במילים אחרות, בלי המילה "ספר".`;
   const where = b => b.s != null ? `${LOC[b.l] || 'מקום לא רשום'}, מדף ${b.s}` : b.l ? `${LOC[b.l]}, מדף לא רשום` : 'מיקום לא רשום';
   return [`מצאתי ${scored.length} ${scored.length === 1 ? 'ספר' : 'ספרים'}:`, ...scored.slice(0, 6).map(b => `\n*${b.t}*${b.st ? ' · ' + b.st : ''}${b.a ? '\n' + b.a : ''}\n📍 ${where(b)}`),
