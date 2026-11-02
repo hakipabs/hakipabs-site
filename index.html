@@ -309,6 +309,7 @@ footer a{color:var(--navy)}
           <button type="button" class="sub-btn" aria-expanded="false">הקהילה <span aria-hidden="true">▾</span></button>
           <ul class="sub-list">
             <li><a href="#kehila">על הקהילה</a></li>
+            <li><a href="oraita.html">אורייתא (צעירים)</a></li>
             <li><a href="gallery.html">גלריה</a></li>
             <li><a href="library.html">ספריית הקודש</a></li>
             <li><a href="#contact">יצירת קשר</a></li>
@@ -669,7 +670,7 @@ footer a{color:var(--navy)}
       <span dir="ltr" style="display:inline-block;margin-top:6px">HaKipa Synagogue (Beit HaKnesset HaAl-Adati) · HaTsvi St 22, Be'er Sheva 8473349, Israel · +972 8-860-9056 · Reg. nonprofit 58-002982-5</span>
     </div>
     <div>
-      <a href="#tefila">זמני תפילה</a><br><a href="#shiurim">שיעורים</a><br><a href="divrei-torah.html">דבר תורה קהילתי</a><br><a href="#kids">ילדים ונוער</a><br><a href="#talmud-torah">תלמוד תורה</a>
+      <a href="#tefila">זמני תפילה</a><br><a href="#shiurim">שיעורים</a><br><a href="oraita.html">אורייתא, בית מדרש לצעירים</a><br><a href="divrei-torah.html">דבר תורה קהילתי</a><br><a href="#kids">ילדים ונוער</a><br><a href="#talmud-torah">תלמוד תורה</a>
     </div>
     <div>
       <a href="#kehila">הקהילה</a><br><a href="minhagim.html">מנהגי בית הכנסת</a><br><a href="archive.html">ההיסטוריה שלנו</a><br><a href="gallery.html">גלריה</a><br><a href="library.html">ספריית הקודש</a><br><a href="https://www.youtube.com/@HakipaBS" target="_blank" rel="noopener">ערוץ היוטיוב</a><br><a href="#truma">תרומה</a><br><a href="#contact">יצירת קשר</a><br><a href="mailto:vaad@hakipabs.org?subject=%D7%94%D7%A2%D7%A8%D7%94%20%D7%A2%D7%9C%20%D7%94%D7%90%D7%AA%D7%A8">מצאתם טעות? כתבו לנו</a><br><a href="privacy.html">מדיניות פרטיות</a>
@@ -839,7 +840,7 @@ fetch('data/shiurim.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(d
   const el=(tag,cls,txt)=>{const e=document.createElement(tag); if(cls) e.className=cls; if(txt!=null) e.textContent=txt; return e;};
   const item=(it)=>{const li=el('div','sh-item'); const t=el('div','t',it.title); if(it.tag){const tg=el('span','tag',it.tag); t.append(tg);} li.append(t);
     li.append(el('div','when',it.when||'')); const meta=[it.who,it.place,it.days].filter(Boolean).join(' · ');
-    const m=el('div','m',meta); if(it.link){m.append(' · '); const a=el('a',null,'קישור'); a.href=it.link; a.target='_blank'; a.rel='noopener'; m.append(a);} li.append(m); return li;};
+    const m=el('div','m',meta); if(it.link){m.append(' · '); const ext=/^https?:/.test(it.link); const a=el('a',null,ext?'קישור':'לפרטים'); a.href=it.link; if(ext){a.target='_blank'; a.rel='noopener';} m.append(a);} li.append(m); return li;};
   if(Array.isArray(d.daily)&&d.daily.length){const c=el('div','card sh-day'); c.append(el('h3',null,'כל יום')); d.daily.forEach(it=>c.append(item(it))); grid.append(c);}
   (d.weekly||[]).forEach(day=>{const c=el('div','card sh-day'); const h=el('h3',null,'יום '+day.day); if(day.day==='שבת') h.textContent='שבת'; if(day.label) h.append(el('span','small',day.label)); c.append(h); (day.items||[]).forEach(it=>c.append(item(it))); grid.append(c);});
   const u=document.getElementById('shiurim-updated'); u.textContent=[d.note, d.updated?('עודכן: '+d.updated):''].filter(Boolean).join(' · ');

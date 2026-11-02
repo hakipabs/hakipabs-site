@@ -165,7 +165,8 @@ async function answer_(text, who, env) {
     if (has(q, 'מזג', 'תחזית', 'גשם', 'טמפרטורה', 'מעלות', 'מזגן', 'מזגנים')) return await weather_();
     if (has(q, 'דבר תורה', 'דברי תורה', 'דבת')) return await dvar_();
     if (has(q, 'שיעור', 'שיעורים', 'לימוד', 'דף יומי')) return await shiurim_();
-    if (has(q, 'אירוע', 'אירועים', 'אורייתא', 'מה קורה')) return await events_();
+    if (has(q, 'אורייתא')) return await oraita_();
+    if (has(q, 'אירוע', 'אירועים', 'מה קורה')) return await events_();
     if (has(q, 'ספר', 'ספרים', 'ספרייה', 'ספריה', 'ספריית', 'מדף')) return await library_(q);
     if (has(q, 'תרומה', 'לתרום', 'תרומות')) return `אפשר לתרום לבית הכנסת דרך האתר: ${SITE}/#truma\nתודה רבה!`;
     if (has(q, 'ועד', 'גבאי', 'אנשי קשר', 'טלפון', 'יצירת קשר', 'השאלת ציוד', 'ציוד', 'גזבר', 'גזבן', 'יור', 'יושב ראש', 'מי אחראי', 'מי הרב', 'רב הקהילה', 'רב בית הכנסת', 'הרב של', 'מוביל', 'מנהל', 'מי עומד', 'תפקיד', 'תפקידים', 'בעלי תפקידים', 'בעל תפקיד', 'הנהלה')) return await board_();
@@ -278,6 +279,16 @@ async function events_() {
   const up = (ev || []).filter(e => (e.date || '') >= today).sort((a, b) => a.date.localeCompare(b.date));
   if (!up.length) return `אין כרגע אירועים קרובים באתר. ${SITE}`;
   return ['*אירועים קרובים*', ...up.slice(0, 5).map(e => `\n*${e.title}*\n${[e.when, e.place].filter(Boolean).join(' · ')}${e.text ? '\n' + e.text : ''}`), `\n${SITE}`].join('\n');
+}
+
+// אורייתא: הפרטים הקבועים, והערב הקרוב מ-events.json (מגיע מהמייל השבועי)
+async function oraita_() {
+  const ev = await data_('events');
+  const today = new Date(Date.now() + 3 * 3600e3).toISOString().slice(0, 10);
+  const next = (ev || []).filter(e => /אורייתא/.test(e.title || '') && (e.date || '') >= today).sort((a, b) => a.date.localeCompare(b.date))[0];
+  return ['*אורייתא, באר של תורה*', 'בית מדרש ערב לצעירים, גילאי 20-35. בימי חמישי, 20:00, בבית הכנסת. ללא תשלום, עזרת הנשים פתוחה.',
+    ...(next ? ['', `*הערב הקרוב:* ${[next.when, next.place].filter(Boolean).join(' · ')}`, ...(next.text ? [next.text] : [])] : []),
+    '', `${SITE}/oraita.html`].join('\n');
 }
 
 async function board_() {
