@@ -51,6 +51,7 @@ async function handleUpdate_(body, env) {
     const v = change.value || {};
     const names = Object.fromEntries((v.contacts || []).map(c => [c.wa_id, (c.profile || {}).name || '']));
     for (const m of v.messages || []) {
+      if (m.type === 'reaction') continue;   // אימוג'י על הודעה של הבוט: לא עונים
       if (await seen_(m.id)) continue;   // מטא לפעמים שולחת את אותה הודעה פעמיים
       const tap = m.type === 'interactive' ? ((m.interactive || {}).list_reply || (m.interactive || {}).button_reply || {}) : null;
       const text = m.type === 'text' ? (m.text || {}).body || ''
