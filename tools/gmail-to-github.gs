@@ -117,9 +117,9 @@ function doPost(e) {
   try { d = JSON.parse(e.postData.contents); } catch (err) { return ContentService.createTextOutput('bad json'); }
   if (d.kind === 'whatsapp' && d.text) {
     const who = d.name ? `${d.name} (${d.from})` : String(d.from || '');
-    sendReport_(`💬 שאלה בוואטסאפ של בית הכנסת: ${who}`, [
+    sendReport_(d.subject || `💬 שאלה בוואטסאפ של בית הכנסת: ${who}`, [
       `${who} כתב/ה לבוט:`, '', String(d.text).slice(0, 3000), '',
-      `הבוט לא ידע לענות והשיב שהשאלה הועברה לוועד.`,
+      d.note || `הבוט לא ידע לענות והשיב שהשאלה הועברה לוועד.`,
       `לענות ישירות בוואטסאפ: https://wa.me/${String(d.from || '').replace(/\D/g, '')}`,
     ].join('\n'));
   }

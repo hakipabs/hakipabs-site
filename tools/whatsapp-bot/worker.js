@@ -120,7 +120,7 @@ const has = (q, ...words) => words.some(w => new RegExp('(^| )[ובהלמשכ]{0
 
 // כל שורה ברשימה = נושא; הלחיצה נכנסת לבוט כאילו נכתבה המילה שבצד ימין
 const TOPICS = { menu: 'תפריט', shabbat: 'שבת', weekday: 'חול', zmanim: 'זמני היום', shiurim: 'שיעורים', events: 'אירועים',
-  library: 'ספרייה', dvar: 'דבר תורה', vaad: 'ועד', donate: 'תרומה' };
+  library: 'ספרייה', dvar: 'דבר תורה', vaad: 'ועד', donate: 'תרומה', groups: 'קבוצות' };
 const MENU_ROWS = [
   ['shabbat', 'שבת', 'זמני התפילות והדלקת נרות'],
   ['weekday', 'יום חול', 'מנייני שחרית, מנחה וערבית'],
@@ -131,6 +131,7 @@ const MENU_ROWS = [
   ['dvar', 'דבר תורה', 'דבר תורה קהילתי לפרשת השבוע'],
   ['vaad', 'ועד', 'אנשי קשר'],
   ['donate', 'תרומה', 'תרומה לבית הכנסת'],
+  ['groups', 'קבוצות', 'עדכונים בוואטסאפ ובמייל'],
 ].map(([id, title, description]) => ({ id, title, description }));
 
 const MENU_TEXT = [
@@ -144,6 +145,7 @@ const MENU_TEXT = [
   '• *דבר תורה* לפרשת השבוע',
   '• *ועד*: אנשי קשר',
   '• *תרומה*',
+  '• *קבוצות*: הצטרפות לקבוצת העדכונים בוואטסאפ ולקבוצת המייל',
   'כל שאלה אחרת מועברת לוועד, ונחזור אליכם.',
   `האתר: ${SITE}`,
 ].join('\n');
@@ -162,6 +164,14 @@ async function answer_(text, who, env) {
   // "תודה", "אמן", "סבבה": לא שאלה, לא מעבירים לוועד
   if (words.length <= 4 && words.some(w => THANKS_.has(w)) && words.every(w => THANKS_.has(w) || THANKS_FILL_.has(w))) return 'בשמחה! כתבו "תפריט" בכל זמן.';
   try {
+    // כתובת מייל בהודעה = בקשת הצטרפות לקבוצת המייל (הבוט ביקש אותה ב"קבוצת מייל")
+    const email = (String(text).match(/[\w.+-]+@[\w-]+(?:\.[\w-]+)+/) || [])[0];
+    if (email) {
+      await forward_(env, who, `בקשת הצטרפות לקבוצת המייל: ${email}`,
+        { subject: `✉️ הצטרפות לקבוצת המייל: ${email}`, note: 'הבוט אישר לשואל/ת שהבקשה הועברה לוועד. נשאר רק לצרף את הכתובת לקבוצת המייל.' });
+      return `קיבלתי, תודה! הבקשה לצרף את ${email} לקבוצת המייל הועברה לוועד.`;
+    }
+    if (has(q, 'קבוצה', 'קבוצות', 'קבוצת', 'להצטרף', 'הצטרפות', 'מצטרפים', 'עדכונים', 'תפוצה', 'רשימת תפוצה')) return await groups_(q);
     if (has(q, 'מזג', 'תחזית', 'גשם', 'טמפרטורה', 'מעלות', 'מזגן', 'מזגנים')) return await weather_();
     if (has(q, 'דבר תורה', 'דברי תורה', 'דבת')) return await dvar_();
     if (has(q, 'שיעור', 'שיעורים', 'לימוד', 'דף יומי')) return await shiurim_();
@@ -291,6 +301,19 @@ async function oraita_() {
     '', `${SITE}/oraita.html`].join('\n');
 }
 
+// קבוצת הוואטסאפ השקטה (הקישור ב-board.json, הוועד מעדכן אותו שם) וקבוצת המייל (הצטרפות דרך הוועד)
+async function groups_(q) {
+  if (has(q, 'מייל', 'אימייל', 'תפוצה', 'דואר')) return { kind: 'plain', text:
+    'כדי להצטרף לקבוצת המייל של הקהילה (הודעות קהילתיות, עזרה הדדית ועוד), שלחו לי כאן את כתובת המייל שלכם בהודעה נפרדת, ואעביר אותה לוועד שיצרף אתכם.' };
+  const b = await data_('board');
+  return { kind: 'plain', text: [
+    '*קבוצת העדכונים בוואטסאפ* (קבוצה שקטה: הודעות מהוועד בלבד)',
+    b.whatsapp_group ? `להצטרפות לחצו: ${b.whatsapp_group}` : 'להצטרפות פנו לוועד.',
+    '',
+    '*קבוצת המייל של הקהילה* (הודעות קהילתיות ועזרה הדדית): כתבו לי "קבוצת מייל".',
+  ].join('\n') };
+}
+
 async function board_() {
   const b = await data_('board');
   return [...(b.rabbi ? [`*רב הקהילה:* ${b.rabbi}`, ''] : []), '*ועד בית הכנסת*', ...(b.members || []).map(m => `${m.role}${m.note ? ` (${m.note})` : ''}: ${m.name}${m.phone ? ' · ' + m.phone : ''}`), '', `מייל: ${b.email || 'vaad@hakipabs.org'}`].join('\n');
@@ -347,9 +370,9 @@ async function library_(q, strict) {
     scored.length > 6 ? `\nכל התוצאות: ${link}` : '', '\n(לפי קטלוג הספרייה, שמתעדכן בימים אלה)'].filter(Boolean).join('\n');
 }
 
-async function forward_(env, who, text) {
+async function forward_(env, who, text, extra) {
   if (!env.FORWARD_URL) return;
   try {
-    await fetch(env.FORWARD_URL, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ kind: 'whatsapp', from: who.from, name: who.name, text }) });
+    await fetch(env.FORWARD_URL, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(Object.assign({ kind: 'whatsapp', from: who.from, name: who.name, text }, extra || {})) });
   } catch (e) { console.log('forward failed', e); }
 }
