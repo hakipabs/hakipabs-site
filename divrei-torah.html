@@ -148,12 +148,14 @@ footer{border-top:1px solid var(--line);padding:26px 0 44px;color:var(--muted);f
     });
     return b;
   }
+  // *טקסט* (הדגשה שמגיעה מ-Gmail כטקסט פשוט) מוצג מודגש
+  function bold(el, t){ t.split(/\*([^*\n]+)\*/).forEach((s,i)=>{ if(!s) return; if(i%2){ const b=document.createElement('strong'); b.textContent=s; el.append(b); } else el.append(s); }); }
   function render(e, hl){
     const art=document.createElement('article'); art.className='dvar'+(hl?' hl':''); art.id=e.id||'';
     const h=document.createElement('h3'); h.textContent=e.title||('דבר תורה לפרשת '+(e.parasha||'').replace(/^פרשו?ת\s+/,'')); art.append(h);
     const by=document.createElement('p'); by.className='by'; const b=document.createElement('b'); b.textContent=e.author||''; by.append(b); const d=e.written||fmtDate(e.date); if(d) by.append(' · '+d); if(!hl&&e.parasha) by.append(' · פרשת '+e.parasha.replace(/^פרשו?ת\s+/,'')); art.append(by);
     const ps=(e.paragraphs||[]).filter(Boolean); const LIMIT=3; const long=ps.length>LIMIT;
-    ps.forEach((t,i)=>{ const p=document.createElement('p'); p.textContent=t; if(long&&i>=LIMIT-1&&!hl) p.hidden=true; art.append(p); });
+    ps.forEach((t,i)=>{ const p=document.createElement('p'); bold(p,t); if(long&&i>=LIMIT-1&&!hl) p.hidden=true; art.append(p); });
     if(long&&!hl){ const btn=document.createElement('button'); btn.className='more'; btn.type='button'; btn.textContent='להמשך קריאה'; btn.addEventListener('click',()=>{ art.querySelectorAll('p[hidden]').forEach(p=>p.hidden=false); btn.remove(); }); art.append(btn); }
     if(e.id) art.append(shareBtn(e));
     if(Array.isArray(e.files)&&e.files.length){ const f=document.createElement('div'); f.className='files'; f.textContent='קבצים: '; e.files.forEach((path,i)=>{ const a=document.createElement('a'); a.href=path; a.target='_blank'; a.rel='noopener'; a.textContent=/\.pdf$/i.test(path)?'PDF':'Word'; if(e.files.length>1) a.textContent+=' '+(i+1); f.append(a); }); art.append(f); }

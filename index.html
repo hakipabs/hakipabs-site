@@ -786,7 +786,8 @@ Promise.all([fetch('data/shabbat.json',{cache:'no-store'}).then(r=>r.ok?r.json()
   g('dv-parasha').textContent=(sh.parasha||'').replace(/^פרשו?ת\s+/,'');
   g('dv-title').textContent=e.title||('דבר תורה לפרשת '+e.parasha);
   g('dv-by').textContent=e.author||'';
-  g('dv-text').textContent=(e.paragraphs&&e.paragraphs[0])||'';
+  const ps=(e.paragraphs||[]).filter(Boolean), lead=ps.find(p=>p.split(/\s+/).length>6)||ps[0]||'';   // פסקת פתיחה אמיתית, לא כותרת ביניים כמו "*שאלה:*"
+  g('dv-text').textContent=lead.replace(/\*([^*\n]+)\*/g,'$1');
   g('dv-link').href='divrei-torah.html#'+encodeURIComponent(e.id);
   if(mine.length>1) g('dv-more').textContent='וגם: '+mine.slice(1).map(x=>x.author).join(', ');
   g('dvar').hidden=false;
