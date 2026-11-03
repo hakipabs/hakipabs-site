@@ -164,14 +164,7 @@ async function answer_(text, who, env) {
   // "תודה", "אמן", "סבבה": לא שאלה, לא מעבירים לוועד
   if (words.length <= 4 && words.some(w => THANKS_.has(w)) && words.every(w => THANKS_.has(w) || THANKS_FILL_.has(w))) return 'בשמחה! כתבו "תפריט" בכל זמן.';
   try {
-    // כתובת מייל בהודעה = בקשת הצטרפות לקבוצת המייל (הבוט ביקש אותה ב"קבוצת מייל")
-    const email = (String(text).match(/[\w.+-]+@[\w-]+(?:\.[\w-]+)+/) || [])[0];
-    if (email) {
-      await forward_(env, who, `בקשת הצטרפות לקבוצת המייל: ${email}`,
-        { subject: `✉️ הצטרפות לקבוצת המייל: ${email}`, note: 'הבוט אישר לשואל/ת שהבקשה הועברה לוועד. נשאר רק לצרף את הכתובת לקבוצת המייל.' });
-      return `קיבלתי, תודה! הבקשה לצרף את ${email} לקבוצת המייל הועברה לוועד.`;
-    }
-    if (has(q, 'קבוצה', 'קבוצות', 'קבוצת', 'להצטרף', 'הצטרפות', 'מצטרפים', 'עדכונים', 'תפוצה', 'רשימת תפוצה')) return await groups_(q);
+    if (has(q, 'קבוצה', 'קבוצות', 'קבוצת', 'להצטרף', 'הצטרפות', 'מצטרפים', 'עדכונים', 'תפוצה', 'רשימת תפוצה')) return await groups_();
     if (has(q, 'מזג', 'תחזית', 'גשם', 'טמפרטורה', 'מעלות', 'מזגן', 'מזגנים')) return await weather_();
     if (has(q, 'דבר תורה', 'דברי תורה', 'דבת')) return await dvar_();
     if (has(q, 'שיעור', 'שיעורים', 'לימוד', 'דף יומי')) return await shiurim_();
@@ -302,15 +295,13 @@ async function oraita_() {
 }
 
 // קבוצת הוואטסאפ השקטה (הקישור ב-board.json, הוועד מעדכן אותו שם) וקבוצת המייל (הצטרפות דרך הוועד)
-async function groups_(q) {
-  if (has(q, 'מייל', 'אימייל', 'תפוצה', 'דואר')) return { kind: 'plain', text:
-    'כדי להצטרף לקבוצת המייל של הקהילה (הודעות קהילתיות, עזרה הדדית ועוד), שלחו לי כאן את כתובת המייל שלכם בהודעה נפרדת, ואעביר אותה לוועד שיצרף אתכם.' };
+async function groups_() {
   const b = await data_('board');
   return { kind: 'plain', text: [
     '*קבוצת העדכונים בוואטסאפ* (קבוצה שקטה: הודעות מהוועד בלבד)',
     b.whatsapp_group ? `להצטרפות לחצו: ${b.whatsapp_group}` : 'להצטרפות פנו לוועד.',
     '',
-    '*קבוצת המייל של הקהילה* (הודעות קהילתיות ועזרה הדדית): כתבו לי "קבוצת מייל".',
+    `להצטרפות לקבוצת המייל של הקהילה שלחו מייל ל-${b.email || 'vaad@hakipabs.org'}`,
   ].join('\n') };
 }
 
@@ -370,9 +361,9 @@ async function library_(q, strict) {
     scored.length > 6 ? `\nכל התוצאות: ${link}` : '', '\n(לפי קטלוג הספרייה, שמתעדכן בימים אלה)'].filter(Boolean).join('\n');
 }
 
-async function forward_(env, who, text, extra) {
+async function forward_(env, who, text) {
   if (!env.FORWARD_URL) return;
   try {
-    await fetch(env.FORWARD_URL, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(Object.assign({ kind: 'whatsapp', from: who.from, name: who.name, text }, extra || {})) });
+    await fetch(env.FORWARD_URL, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ kind: 'whatsapp', from: who.from, name: who.name, text }) });
   } catch (e) { console.log('forward failed', e); }
 }
