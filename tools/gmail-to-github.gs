@@ -49,6 +49,7 @@ const CONFIG = {
   dvarJson: 'data/divrei-torah.json',
   dvarFiles: 'divrei-torah',          // קבצים שצורפו לדבר תורה (PDF/Word)
   dvarPendingLabel: 'hakipa-dvar-torah-pending',
+  dvarCallPhrases: ['מוזמנים לשלוח', 'מי יכול לכתוב', 'איך שולחים', 'שלחו לנו'],   // קול קורא לציבור ("שלחו דבר תורה"): מייל עם 2 מהביטויים האלה לא עולה כדבר תורה
   label: 'hakipa-site-uploaded',
   lookbackDays: 10,
   ackSenders: ['hakipa.zmanim@gmail.com'],   // מי מקבל תשובה אוטומטית על דף שבועי/לוח חג ששלח (עלה / יש מה לבדוק / נכשל). לא להוסיף קבוצות גוגל
@@ -272,13 +273,16 @@ function runDivreiTorah_(token, label, uploads) {
   const threads = GmailApp.search(query, 0, 20);
   Logger.log('dvar query: %s -> %s thread(s)', query, threads.length);
   if (RUNLOG_) RUNLOG_.dvar = threads.length;
-  const isDvar = m => cleanSubject_(m.getSubject()).startsWith(CONFIG.dvarPrefix);
+  const isDvar = m => cleanSubject_(m.getSubject()).startsWith(CONFIG.dvarPrefix) && !isDvarCall_(m);
   const isReviewer = m => CONFIG.dvarReviewers.some(r => (m.getFrom() || '').toLowerCase().includes(r.toLowerCase()));
   threads.forEach(thread => {
     const subject = thread.getFirstMessageSubject();
     try {
       const msgs = thread.getMessages().filter(isDvar);
-      if (!msgs.length) { thread.addLabel(label); return; }                      // הדוחות של הסקריפט עצמו וכדומה
+      if (!msgs.length) {                                                        // הדוחות של הסקריפט עצמו, קול קורא לציבור וכדומה
+        if (thread.getMessages().some(isDvarCall_)) note_(`קול קורא לדברי תורה, לא פורסם: ${cleanSubject_(subject)}`);
+        thread.addLabel(label); return;
+      }
       const approved = msgs.slice().reverse().find(isReviewer);
       if (!approved) {
         if (!thread.getLabels().some(l => l.getName() === CONFIG.dvarPendingLabel)) {
@@ -334,7 +338,12 @@ function dvarSubject_(msg, firstMsg) {
 }
 function dvarParasha_(subj) {
   const parts = subj.slice(CONFIG.dvarPrefix.length).replace(/^[\s:\-]+/, '').split(/\s*[\/|]\s*/).map(s => s.trim()).filter(Boolean);
-  return (parts[0] || '').replace(/^פרשת\s+/, '').replace(/[\s,]+$/, '');
+  return (parts[0] || '').replace(/^ל?פרשת\s+/, '').replace(/[\s,]+$/, '');   // "לפרשת וירא" -> "וירא"
+}
+/** קול קורא לציבור ("מוזמנים לשלוח דבר תורה...") ולא דבר תורה: לפחות 2 מ-CONFIG.dvarCallPhrases בגוף המייל. */
+function isDvarCall_(m) {
+  const body = m.getPlainBody() || '';
+  return CONFIG.dvarCallPhrases.filter(p => body.includes(p)).length >= 2;
 }
 
 function addDvar_(token, msg, firstMsg) {
