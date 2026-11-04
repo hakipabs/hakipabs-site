@@ -8,7 +8,7 @@
  *   נושא שמתחיל ב"אלבום" + תמונות    -> gallery/<שם האלבום>/ (דף הגלריה; כמה מיילים עם אותו נושא = אותו אלבום)
  *   נושא שמתחיל ב"ארכיון" + קישור יוטיוב בגוף -> פריט וידאו באוסף (הסרטון עצמו יושב בערוץ היוטיוב של בית הכנסת, @HakipaBS)
  *   כל PDF אחר                        -> holidays/      (לוח חג: מוצג באתר כתמונה, 45 יום)
- *   נושא שמתחיל ב"דבר תורה"          -> data/divrei-torah.json (מכל שולח; מתפרסם רק אחרי שחבר ועדה מעביר או עונה על המייל)
+ *   נושא שמתחיל ב"דבר תורה"          -> data/divrei-torah.json (מכל שולח; מתפרסם רק אחרי שהוועד מסמן את השרשור בתווית "דבר תורה לפרסום")
  * אחרי ההעלאה ממתין כ-3 דקות לאוטומציה של גיטהאב, בודק מה האתר מציג, ושולח דוח לוועד.
  * כל ריצה (גם בלי מיילים, גם כשנכשלת) נרשמת כשורה בגיליון "אתר הכיפה: יומן ריצות" בדרייב של הוועד.
  *
@@ -42,8 +42,9 @@ const CONFIG = {
   eventsFolder: 'images/events',
   eventsJson: 'data/events.json',
   eventDefaultDays: 14,                // אירוע בלי תאריך בנושא מוצג כך וכך ימים
-  dvarPrefix: 'דבר תורה',             // דבר תורה: <פרשה> / <שם הכותב> -> data/divrei-torah.json (מתפרסם רק אחרי שחבר ועדה מעביר את המייל)
-  dvarReviewers: ['vaad@hakipabs.org', 'shmueltaub@gmail.com', 'hakipa.zmanim@gmail.com'],   // מי מאשר דברי תורה: הטקסט עולה רק כשהוא מגיע (או מועבר, או נענה) מכתובת ברשימה
+  dvarPrefix: 'דבר תורה',             // דבר תורה: <פרשה> / <שם הכותב> -> data/divrei-torah.json (מתפרסם רק אחרי סימון בתווית האישור)
+  dvarApproveLabel: 'דבר תורה לפרסום', // התווית שהוועד שם על שרשור כדי לפרסם אותו (הסקריפט מוריד אותה אחרי הפרסום)
+  mailbox: 'vaad@hakipabs.org',        // התיבה שהסקריפט רץ בה
   dvarMaxWords: 200,                  // היעד לאורך דבר תורה כפי שמופיע באתר (2-3 דקות קריאה)
   dvarWarnWords: 250,                 // מעל זה ההודעה לוועד מסמנת ⚠️; אף פעם לא חוסם
   dvarJson: 'data/divrei-torah.json',
@@ -64,6 +65,7 @@ const CONFIG = {
 
 function setup() {
   GmailApp.createLabel(CONFIG.label);
+  if (!GmailApp.getUserLabelByName(CONFIG.dvarApproveLabel)) GmailApp.createLabel(CONFIG.dvarApproveLabel);
   ScriptApp.getProjectTriggers().forEach(t => { if (t.getHandlerFunction() === 'run') ScriptApp.deleteTrigger(t); });
   ScriptApp.newTrigger('run').timeBased().everyHours(1).create();
   Logger.log('setup done: label "%s", hourly trigger on run()', CONFIG.label);
@@ -266,59 +268,87 @@ function runMain_() {
   }
 }
 
-/** דברי תורה: כל אחד יכול לשלוח; מתפרסם רק אחרי שחבר ועדה (CONFIG.dvarReviewers) מעביר את המייל (Forward) או עונה עליו (Reply all). */
+/**
+ * דברי תורה: כל אחד יכול לשלוח, ושום דבר לא עולה בלי אישור.
+ * אישור = תווית CONFIG.dvarApproveLabel על השרשור בתיבת הוועד. תשובות (Re:) לא נחשבות לעולם כנוסח לפרסום.
+ * עריכה = להעביר (Forward) ל-vaad@ עם התיקונים בגוף ובנושא, ולסמן בתווית את ההעברה: עולה הנוסח האחרון שאינו תשובה.
+ * פרסום חוזר של אותה פרשה ואותו כותב מחליף את הרשומה הקודמת (אותו קישור).
+ */
 function runDivreiTorah_(token, label, uploads) {
   const pending = GmailApp.getUserLabelByName(CONFIG.dvarPendingLabel) || GmailApp.createLabel(CONFIG.dvarPendingLabel);
-  const query = `subject:"${CONFIG.dvarPrefix}" newer_than:${CONFIG.lookbackDays}d -label:${CONFIG.label}`;
-  const threads = GmailApp.search(query, 0, 20);
-  Logger.log('dvar query: %s -> %s thread(s)', query, threads.length);
-  if (RUNLOG_) RUNLOG_.dvar = threads.length;
+  const approve = GmailApp.getUserLabelByName(CONFIG.dvarApproveLabel) || GmailApp.createLabel(CONFIG.dvarApproveLabel);
   const isDvar = m => cleanSubject_(m.getSubject()).startsWith(CONFIG.dvarPrefix) && !isDvarCall_(m);
-  const isReviewer = m => CONFIG.dvarReviewers.some(r => (m.getFrom() || '').toLowerCase().includes(r.toLowerCase()));
-  threads.forEach(thread => {
+  const isReply = m => /^\s*(re|השב|תשובה)\s*:/i.test(m.getSubject() || '');
+  const fromMailbox = m => (m.getFrom() || '').toLowerCase().includes(CONFIG.mailbox);
+
+  // 1. מה שסומן בתווית: מתפרסם עכשיו
+  const approved = approve.getThreads(0, 20);
+  Logger.log('dvar approved: %s thread(s)', approved.length);
+  approved.forEach(thread => {
     const subject = thread.getFirstMessageSubject();
     try {
-      const msgs = thread.getMessages().filter(isDvar);
-      if (!msgs.length) {                                                        // הדוחות של הסקריפט עצמו, קול קורא לציבור וכדומה
-        if (thread.getMessages().some(isDvarCall_)) note_(`קול קורא לדברי תורה, לא פורסם: ${cleanSubject_(subject)}`);
-        thread.addLabel(label); return;
-      }
-      const approved = msgs.slice().reverse().find(isReviewer);
-      if (!approved) {
-        if (!thread.getLabels().some(l => l.getName() === CONFIG.dvarPendingLabel)) {
-          thread.addLabel(pending);
-          note_(`דבר תורה ממתין לאישור: ${cleanSubject_(subject)}`);
-          const from = msgs[0].getFrom();
-          const words = cleanBody_(msgs[0].getPlainBody()).join(' ').split(/\s+/).filter(Boolean).length;
-          const lengthLine = words > CONFIG.dvarWarnWords
-            ? `⚠️ אורך: ${words} מילים, ארוך מהיעד של ${CONFIG.dvarMaxWords}. אפשר לבקש מהכותב לקצר, או לאשר כמו שהוא.`
-            : `אורך: ${words} מילים (היעד: עד ${CONFIG.dvarMaxWords}).`;
-          sendReport_(`📝 דבר תורה ממתין לאישור: ${cleanSubject_(subject)}`, [
-            `התקבל דבר תורה מאת ${from}.`, `נושא: ${cleanSubject_(msgs[0].getSubject())}`, lengthLine, '',
-            'הוא יתפרסם באתר רק אחרי שחבר ועדה יאשר: לפתוח את המייל, לקרוא, ואז להעביר אותו (Forward) ל-vaad@hakipabs.org או להשיב עליו (Reply all) מתוך תיבת הוועד. הריצה הבאה (עד שעה) תפרסם.',
-            `כדאי לוודא לפני: שם הכותב בנושא (${CONFIG.dvarPrefix}: <פרשה> / <שם>), עד ${CONFIG.dvarMaxWords} מילים, בלי פרטים אישיים של אחרים.`, '',
-            `מי רשאי לאשר: ${CONFIG.dvarReviewers.join(', ')}`,
-          ].join('\n'));
-        }
+      const dvars = thread.getMessages().filter(isDvar);
+      const msg = dvars.filter(m => !isReply(m)).pop() || dvars[0];
+      thread.removeLabel(approve);
+      if (!msg) {
+        note_(`תווית לפרסום בלי דבר תורה: ${cleanSubject_(subject)}`);
+        sendReport_(`⚠️ דבר תורה לא פורסם: ${cleanSubject_(subject)}`,
+          `השרשור סומן לפרסום, אבל אין בו מייל שהנושא שלו מתחיל ב"${CONFIG.dvarPrefix}". לא פורסם כלום.`);
         return;
       }
-      if (!dvarParasha_(dvarSubject_(approved, msgs[0]))) {
+      if (!dvarParasha_(dvarSubject_(msg, dvars[0]))) {
         thread.addLabel(label); thread.removeLabel(pending);
         note_(`דבר תורה בלי שם פרשה: ${cleanSubject_(subject)}`);
         sendReport_(`⚠️ דבר תורה לא פורסם: חסר שם הפרשה בנושא`, [
-          `המייל "${cleanSubject_(subject)}" אושר, אבל בנושא שלו אין שם פרשה, ולכן הוא לא פורסם.`,
-          `כדי לפרסם: לשלוח אותו שוב במייל חדש עם הנושא: ${CONFIG.dvarPrefix}: <פרשה> / <שם הכותב> / <כותרת>`,
+          `המייל "${cleanSubject_(subject)}" סומן לפרסום, אבל בנושא שלו אין שם פרשה, ולכן הוא לא פורסם.`,
+          `כדי לפרסם: להעביר אותו ל-vaad@ עם הנושא ${CONFIG.dvarPrefix}: <פרשה> / <שם הכותב> / <כותרת>, ולסמן את ההעברה בתווית "${CONFIG.dvarApproveLabel}".`,
         ].join('\n'));
         return;
       }
-      const entry = addDvar_(token, approved, msgs[0]);
+      const entry = addDvar_(token, msg, dvars[0]);
       thread.addLabel(label); thread.removeLabel(pending);
-      uploads.push({ kind: 'dvar', subject: cleanSubject_(approved.getSubject()), path: CONFIG.dvarJson, entry, kb: 0 });
+      uploads.push({ kind: 'dvar', subject: cleanSubject_(msg.getSubject()), path: CONFIG.dvarJson, entry, kb: 0 });
       Logger.log('dvar torah added: %s / %s', entry.parasha, entry.author);
     } catch (e) {
       Logger.log('ERROR on dvar "%s": %s', subject, e);
       noteError_(subject, e);
       sendReport_(`❌ אתר הכיפה: דבר התורה "${subject}" לא עלה`, `המייל: ${subject}\nשגיאה: ${e}\n\n${howToFix_()}`);
+    }
+  });
+
+  // 2. מה שהגיע ועוד לא טופל: הודעה לוועד שממתין לאישור (פעם אחת לשרשור; תשובות שמגיעות אחר כך לא מעירות אותו)
+  const query = `subject:"${CONFIG.dvarPrefix}" newer_than:${CONFIG.lookbackDays}d -label:${CONFIG.label}`;
+  const threads = GmailApp.search(query, 0, 20);
+  Logger.log('dvar query: %s -> %s thread(s)', query, threads.length);
+  if (RUNLOG_) RUNLOG_.dvar = threads.length + approved.length;
+  threads.forEach(thread => {
+    const subject = thread.getFirstMessageSubject();
+    try {
+      const names = thread.getLabels().map(l => l.getName());
+      if ([CONFIG.label, CONFIG.dvarPendingLabel, CONFIG.dvarApproveLabel].some(n => names.includes(n))) return;
+      const msgs = thread.getMessages().filter(isDvar);
+      if (!msgs.length) {                                                        // הדוחות של הסקריפט עצמו, קול קורא לציבור וכדומה
+        if (thread.getMessages().some(isDvarCall_)) note_(`קול קורא לדברי תורה, לא פורסם: ${cleanSubject_(subject)}`);
+        thread.addLabel(label); return;
+      }
+      thread.addLabel(pending);
+      if (msgs.every(fromMailbox)) return;                                       // העברה של הוועד לעצמו (עריכה): אין צורך בהודעה
+      note_(`דבר תורה ממתין לאישור: ${cleanSubject_(subject)}`);
+      const from = msgs[0].getFrom();
+      const words = cleanBody_(msgs[0].getPlainBody()).join(' ').split(/\s+/).filter(Boolean).length;
+      const lengthLine = words > CONFIG.dvarWarnWords
+        ? `⚠️ אורך: ${words} מילים, ארוך מהיעד של ${CONFIG.dvarMaxWords}. אפשר לבקש מהכותב לקצר, או לאשר כמו שהוא.`
+        : `אורך: ${words} מילים (היעד: עד ${CONFIG.dvarMaxWords}).`;
+      sendReport_(`📝 דבר תורה ממתין לאישור: ${cleanSubject_(subject)}`, [
+        `התקבל דבר תורה מאת ${from}.`, `נושא: ${cleanSubject_(msgs[0].getSubject())}`, lengthLine, '',
+        `כדי לפרסם כמו שהוא: לסמן את השרשור בתיבת vaad@ בתווית "${CONFIG.dvarApproveLabel}". הריצה הבאה (עד שעה) תפרסם.`,
+        `כדי לתקן קודם (טעויות, כותרת): להעביר (Forward) את המייל ל-vaad@hakipabs.org, לתקן בגוף ההודעה ובנושא (${CONFIG.dvarPrefix}: <פרשה> / <שם> / <כותרת>), ולסמן בתווית את ההעברה.`,
+        'תשובה לכותב (Reply) לא משנה כלום באתר. גם אחרי פרסום אפשר לתקן: מעבירים שוב עם התיקון ומסמנים שוב, והנוסח החדש מחליף את הקודם.', '',
+        `כדאי לוודא: שם הכותב בנושא, עד ${CONFIG.dvarMaxWords} מילים, בלי פרטים אישיים של אחרים, בלי הערות לעורך בגוף הטקסט.`,
+      ].join('\n'));
+    } catch (e) {
+      Logger.log('ERROR on dvar "%s": %s', subject, e);
+      noteError_(subject, e);
     }
   });
 }
@@ -352,15 +382,22 @@ function addDvar_(token, msg, firstMsg) {
   const parasha = dvarParasha_(subj);
   if (!parasha) throw new Error('NO_PARASHA');
   let author = parts[1] || '';
-  const title = parts[2] || '';
+  let title = parts[2] || '';
   const raw = msg.getPlainBody() || '';
   if (!author) { const m = raw.match(/^\s*(?:מאת|כותב|כתב|כתבה)\s*:\s*(.+)$/m); if (m && !/@/.test(m[1])) author = m[1].trim(); }
   if (!author) { const m = raw.match(/^\s*(?:From|מאת)\s*:\s*(.+?)\s*<[^>]+>/m); if (m) author = m[1].replace(/^["']|["']$/g, '').trim(); }
   if (!author) author = firstMsg.getFrom().replace(/<.*>/, '').replace(/^["']|["']$/g, '').trim() || 'חבר קהילה';
   const paragraphs = paragraphs_(raw);
   if (!paragraphs.length) throw new Error('לא נמצא טקסט בגוף המייל (דבר התורה צריך להיות כתוב בגוף ההודעה)');
-  const dateStr = Utilities.formatDate(msg.getDate(), 'Asia/Jerusalem', 'yyyy-MM-dd');
-  const base = `${slug_(parasha) || 'parasha'}-${dateStr}-${slug_(author) || 'x'}`;
+  const head = (paragraphs[0].match(/^\*([^*\n]+)\*$/) || [])[1];   // בלי כותרת בנושא: שורה ראשונה מודגשת וקצרה היא הכותרת
+  if (!title && head && !/:\s*$/.test(head) && paragraphs.length > 1 && head.split(/\s+/).length >= 3 && head.split(/\s+/).length <= 15) { title = head.trim(); paragraphs.shift(); }
+  const file = getFile_(token, CONFIG.dvarJson);
+  let list = [];
+  try { list = JSON.parse(file.text); } catch (e) { list = []; }
+  if (!Array.isArray(list)) list = [];
+  const prev = list.find(e => e.parasha === parasha && e.author === author);   // פרסום חוזר (תיקון): אותה רשומה, אותו קישור
+  const dateStr = prev ? prev.date : Utilities.formatDate(msg.getDate(), 'Asia/Jerusalem', 'yyyy-MM-dd');
+  const base = prev ? prev.id : `${slug_(parasha) || 'parasha'}-${dateStr}-${slug_(author) || 'x'}`;
   const files = [];
   msg.getAttachments().forEach((a, i) => {
     const ext = ((a.getName() || '').match(/\.(pdf|docx?)$/i) || [])[1];
@@ -369,10 +406,7 @@ function addDvar_(token, msg, firstMsg) {
     uploadToGitHub_(token, path, a.getBytes(), `Dvar Torah file from email: ${subj}`);
     files.push(path);
   });
-  const file = getFile_(token, CONFIG.dvarJson);
-  let list = [];
-  try { list = JSON.parse(file.text); } catch (e) { list = []; }
-  if (!Array.isArray(list)) list = [];
+  if (!files.length && prev) files.push(...(prev.files || []));
   list = list.filter(e => e.id !== base);
   const added = Utilities.formatDate(new Date(), 'Asia/Jerusalem', "yyyy-MM-dd'T'HH:mm:ss");   // שעת ההעלאה: קובעת מי "החדש" כשיש כמה באותו יום
   const entry = { id: base, parasha, author, title, date: dateStr, added, paragraphs, files };
@@ -386,7 +420,7 @@ function addDvar_(token, msg, firstMsg) {
 function paragraphs_(body) {
   const HEADER = /^(from|date|subject|to|cc|sent|מאת|תאריך|נושא|אל|עותק|כותב|כתב|כתבה)\s*:/i;
   const out = []; let cur = [];
-  const flush = () => { if (cur.length) out.push(cur.join(' ').replace(/\s{2,}/g, ' ')); cur = []; };
+  const flush = () => { if (cur.length) out.push(cur.join(' ').replace(/\s{2,}/g, ' ').replace(/\*\*/g, '')); cur = []; };   // "**" = שני קטעים מודגשים צמודים בג'ימייל
   (body || '').split(/\r?\n/).forEach(line => {
     const l = line.replace(/[\u200e\u200f\u202a-\u202e\u2066-\u2069]/g, '').trim();   // סימני כיוון בלתי נראים מסתירים שורות כמו "Subject:"
     if (!l) { flush(); return; }
@@ -428,7 +462,7 @@ function youtubeIds_(body) {
 }
 
 function cleanSubject_(subject) {
-  return (subject || '').replace(/^(re|fwd?|fw)\s*:\s*/i, '').trim();
+  return (subject || '').replace(/^(re|fwd?|fw|השב|העבר|תשובה)\s*:\s*/i, '').trim();
 }
 
 /** "זמני השבוע- נח" -> "נח-2026-10-14.pdf";  "לוח זמני סוכות תשפ"ז" -> "לוח-זמני-סוכות-תשפז-2026-09-22.pdf" */
