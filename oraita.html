@@ -64,6 +64,10 @@ h2{font-size:26px;margin:44px 0 14px}
 .gal{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
 .gal a{display:block;border-radius:10px;overflow:hidden;aspect-ratio:4/3;background:var(--line)}
 .gal img{width:100%;height:100%;object-fit:cover;display:block}
+.past{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px}
+.past a{display:block;text-decoration:none;color:var(--ink)}
+.past img{width:100%;aspect-ratio:1/1.41;object-fit:cover;object-position:top;border-radius:10px;border:1px solid var(--line);box-shadow:var(--shadow);display:block;background:var(--line)}
+.past span{display:block;font-size:14px;color:var(--muted);margin-top:6px;text-align:center}
 .btn{display:inline-block;padding:11px 20px;border-radius:10px;font-weight:700;text-decoration:none;background:var(--navy);color:#fff}
 .btn:hover{background:var(--navy-2)}
 .btn-ghost{background:#fff;color:var(--navy);border:1px solid var(--navy)}
@@ -118,6 +122,11 @@ footer{border-top:1px solid var(--line);padding:26px 0 44px;color:var(--muted);f
     <p class="small muted">השיעורים של מרצים אורחים, ומתחלפים מערב לערב. מדי פעם הערב מתקיים במקום אחר, ואז זה כתוב כאן. ההזמנה לכל ערב יוצאת גם ב<a href="https://chat.whatsapp.com/CCDFX7Iv6GoHdUq1n2WExm" target="_blank" rel="noopener">קבוצת הוואטסאפ של אורייתא</a>.</p>
   </section>
 
+  <section id="past" hidden>
+    <h2>ערבים קודמים</h2>
+    <div class="past" id="past-box"></div>
+  </section>
+
   <section id="gallery" hidden>
     <h2>מהערבים שלנו</h2>
     <div class="gal" id="gal"></div>
@@ -147,6 +156,15 @@ footer{border-top:1px solid var(--line);padding:26px 0 44px;color:var(--muted);f
     if(next.poster){ const a=document.createElement('a'); a.href=next.poster; a.target='_blank'; a.rel='noopener'; const img=document.createElement('img'); img.src=next.poster; img.alt='המודעה של הערב'; img.loading='lazy'; a.append(img); box.append(a); }
     el('week-box').append(box);
   } else el('week-empty').hidden=false;
+
+  // ערבים קודמים: הפליירים של ערבי אורייתא שעברו, החדש ראשון
+  const past=(Array.isArray(events)?events:[]).filter(e=>/אורייתא/.test(e.title||'')&&e.poster&&new Date((e.date||'')+'T00:00:00')<today)
+    .sort((a,b)=>(b.date||'').localeCompare(a.date||'')).slice(0,12);
+  past.forEach(e=>{ const a=document.createElement('a'); a.href=e.poster; a.target='_blank'; a.rel='noopener';
+    const img=document.createElement('img'); img.src=e.poster; img.loading='lazy'; img.alt='המודעה של אורייתא, '+(e.date||'');
+    const [y,m,d]=(e.date||'').split('-'); const s=document.createElement('span'); s.textContent=d&&m?(+d)+'.'+(+m)+'.'+y:'';
+    a.append(img,s); el('past-box').append(a); });
+  if(past.length) el('past').hidden=false;
 
   // תמונות מאלבום אורייתא בגלריה
   const album=((gallery&&gallery.albums)||[]).find(a=>a.slug==='אורייתא');
