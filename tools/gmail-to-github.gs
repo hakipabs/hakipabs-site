@@ -335,7 +335,7 @@ function runDivreiTorah_(token, label, uploads) {
       if (msgs.every(fromMailbox)) return;                                       // העברה של הוועד לעצמו (עריכה): אין צורך בהודעה
       note_(`דבר תורה ממתין לאישור: ${cleanSubject_(subject)}`);
       const from = msgs[0].getFrom();
-      const words = cleanBody_(msgs[0].getPlainBody()).join(' ').split(/\s+/).filter(Boolean).length;
+      const words = dvarParagraphs_(msgs[0]).join(' ').split(/\s+/).filter(Boolean).length;
       const lengthLine = words > CONFIG.dvarWarnWords
         ? `⚠️ אורך: ${words} מילים, ארוך מהיעד של ${CONFIG.dvarMaxWords}. אפשר לבקש מהכותב לקצר, או לאשר כמו שהוא.`
         : `אורך: ${words} מילים (היעד: עד ${CONFIG.dvarMaxWords}).`;
@@ -387,8 +387,8 @@ function addDvar_(token, msg, firstMsg) {
   if (!author) { const m = raw.match(/^\s*(?:מאת|כותב|כתב|כתבה)\s*:\s*(.+)$/m); if (m && !/@/.test(m[1])) author = m[1].trim(); }
   if (!author) { const m = raw.match(/^\s*(?:From|מאת)\s*:\s*(.+?)\s*<[^>]+>/m); if (m) author = m[1].replace(/^["']|["']$/g, '').trim(); }
   if (!author) author = firstMsg.getFrom().replace(/<.*>/, '').replace(/^["']|["']$/g, '').trim() || 'חבר קהילה';
-  const paragraphs = paragraphs_(raw);
-  if (!paragraphs.length) throw new Error('לא נמצא טקסט בגוף המייל (דבר התורה צריך להיות כתוב בגוף ההודעה)');
+  const paragraphs = dvarParagraphs_(msg);
+  if (!paragraphs.length) throw new Error('לא נמצא טקסט בגוף המייל או בקובץ Word מצורף (docx). קובץ doc ישן או PDF: להעתיק את הטקסט לגוף ההודעה');
   const head = (paragraphs[0].match(/^\*([^*\n]+)\*$/) || [])[1];   // בלי כותרת בנושא: שורה ראשונה מודגשת וקצרה היא הכותרת
   if (!title && head && !/:\s*$/.test(head) && paragraphs.length > 1 && head.split(/\s+/).length >= 3 && head.split(/\s+/).length <= 15) { title = head.trim(); paragraphs.shift(); }
   const file = getFile_(token, CONFIG.dvarJson);
@@ -414,6 +414,39 @@ function addDvar_(token, msg, firstMsg) {
   list.sort((a, b) => (b.date || '').localeCompare(a.date || '') || (b.added || '').localeCompare(a.added || ''));
   putFile_(token, CONFIG.dvarJson, JSON.stringify(list, null, 2) + '\n', `Dvar Torah from email: ${subj}`, file.sha);
   return entry;
+}
+
+/** הטקסט של דבר התורה: גוף המייל, או קובץ Word מצורף (docx) כשיש בו יותר טקסט מבגוף ("מצורף דבר תורה, בברכה"). */
+function dvarParagraphs_(msg) {
+  const words = ps => ps.join(' ').split(/\s+/).filter(Boolean).length;
+  let best = paragraphs_(msg.getPlainBody() || '');
+  msg.getAttachments().forEach(a => {
+    if (!/\.docx$/i.test(a.getName() || '')) return;
+    let ps = [];
+    try { ps = docxParagraphs_(a); } catch (e) { Logger.log('docx read failed "%s": %s', a.getName(), e); }
+    if (words(ps) > words(best)) best = ps;
+  });
+  return best;
+}
+
+/** פסקאות מקובץ docx (zip עם word/document.xml). פסקה ראשונה מודגשת או בסגנון כותרת מסומנת *כך*, כמו הדגשה בג'ימייל. */
+function docxParagraphs_(blob) {
+  const doc = Utilities.unzip(blob.copyBlob().setContentType('application/zip')).find(b => b.getName() === 'word/document.xml');
+  return doc ? docxXmlParagraphs_(doc.getDataAsString('UTF-8')) : [];
+}
+
+function docxXmlParagraphs_(xml) {
+  const ent = s => s.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&#(\d+);/g, (m, n) => String.fromCharCode(+n)).replace(/&amp;/g, '&');
+  const body = (xml.match(/<w:body>([\s\S]*)<\/w:body>/) || [, xml])[1];
+  const out = [];
+  (body.match(/<w:p[ >][\s\S]*?<\/w:p>/g) || []).forEach(p => {
+    const text = ent((p.match(/<w:t(?:\s[^>]*)?>[^<]*<\/w:t>|<w:tab\/>|<w:br\/>/g) || [])
+      .map(x => /^<w:t[ >]/.test(x) ? x.replace(/<[^>]+>/g, '') : ' ').join('')).replace(/[‎‏‪-‮⁦-⁩]/g, '').replace(/\s{2,}/g, ' ').trim();
+    if (!text) return;
+    const head = /<w:pStyle w:val="(Title|Heading\d?|[^"]*כותרת[^"]*)"/i.test(p) || (/<w:b\/>|<w:b w:val="(1|true)"\/>/.test(p) && !/<w:b w:val="(0|false)"\/>/.test(p));
+    out.push(!out.length && head ? `*${text}*` : text);
+  });
+  return out;
 }
 
 /** גוף המייל כפסקאות: בלי כותרות העברה, ציטוטים וחתימות; שורות סמוכות מתחברות לפסקה, שורה ריקה מפרידה. */
