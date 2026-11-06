@@ -320,8 +320,13 @@ async function dvar_() {
   const mine = (list || []).filter(e => key(e.parasha) === cur)
     .sort((a, b) => (b.date || '').localeCompare(a.date || '') || (b.added || '').localeCompare(a.added || ''));
   const p = (sh.parasha || '').replace(/^פרשו?ת\s+/, '');
-  if (!mine.length) return `עדיין אין דבר תורה לפרשת ${p}. רוצים לכתוב? כל הפרטים כאן: ${SITE}/divrei-torah.html#send`;
-  return [`*דבר תורה קהילתי · פרשת ${p}*`, ...mine.map(e => `\n*${e.title || 'דבר תורה'}*\n${e.author || ''}\n${SITE}/divrei-torah.html?d=${shortKey(e.id)}`)].join('\n');
+  // ההודעה מועברת הלאה לקבוצות: בסוף שני קישורים, לקבל מהבוט ולשלוח
+  const more = [
+    '', `לקבלת דבר התורה של השבוע בוואטסאפ: https://wa.me/97288609056?text=${encodeURIComponent('דבר תורה')}`,
+    `לשליחת דבר תורה: ${SITE}/divrei-torah.html#send`,
+  ];
+  if (!mine.length) return [`עדיין אין דבר תורה לפרשת ${p}.`, ...more].join('\n');
+  return [`*דבר תורה קהילתי · פרשת ${p}*`, ...mine.map(e => `\n*${e.title || 'דבר תורה'}*\n${e.author || ''}\n${SITE}/divrei-torah.html?d=${shortKey(e.id)}`), ...more].join('\n');
 }
 
 // מילים שאינן חלק משם הספר
