@@ -1242,7 +1242,7 @@
    "description": "מה שלא נכנס לאוספים ההיסטוריים ועדיין מספר מי אנחנו: סיומי מסכת, פורים, הגעלת כלים לפני פסח, מסורות ושירה. האוסף גדל עם הסרטונים בערוץ היוטיוב של בית הכנסת ועם מה שתשלחו ל-vaad@hakipabs.org.",
    "contributor": "",
    "cover": "archive/tarbut-vekehila/thumb/11-siyum-masechet-1.jpg",
-   "count": 24,
+   "count": 29,
    "items": [
     {
      "web": "https://www.youtube-nocookie.com/embed/8OBb2mwhqR4",
@@ -1265,6 +1265,16 @@
      "group": ""
     },
     {
+     "web": "https://www.youtube-nocookie.com/embed/gMno8UPEEg4",
+     "thumb": "https://i.ytimg.com/vi/gMno8UPEEg4/hqdefault.jpg",
+     "file": "https://youtu.be/gMno8UPEEg4",
+     "caption": "סרטון: שמחת בית השואבה תשפ\"ו בסוכה שבבית הרב אהרון דרשביץ שליט\"א.",
+     "year": "סוכות תשפ\"ו, 2025",
+     "text": "",
+     "kind": "video",
+     "group": ""
+    },
+    {
      "web": "https://www.youtube-nocookie.com/embed/WH3zGVMBhv0",
      "thumb": "https://i.ytimg.com/vi/WH3zGVMBhv0/hqdefault.jpg",
      "file": "https://youtu.be/WH3zGVMBhv0",
@@ -1282,6 +1292,36 @@
      "year": "כ\"א בתשרי תשס\"ה, 6.10.2004 (לפי חותמת המצלמה)",
      "text": "",
      "kind": "photo",
+     "group": ""
+    },
+    {
+     "web": "https://www.youtube-nocookie.com/embed/RJp4Xt5bzmU",
+     "thumb": "https://i.ytimg.com/vi/RJp4Xt5bzmU/hqdefault.jpg",
+     "file": "https://youtu.be/RJp4Xt5bzmU",
+     "caption": "סרטון: מסיבת חתנים תשפ\"ב בבית המדרש, לכבוד החתנים הרב אבישי בן דוד ור' עמיטל בראלי: ריקודים סביב השולחנות.",
+     "year": "תשפ\"ב, 2021",
+     "text": "",
+     "kind": "video",
+     "group": ""
+    },
+    {
+     "web": "https://www.youtube-nocookie.com/embed/RzVK7bOMpYE",
+     "thumb": "https://i.ytimg.com/vi/RzVK7bOMpYE/hqdefault.jpg",
+     "file": "https://youtu.be/RzVK7bOMpYE",
+     "caption": "סרטון: מסיבת חתנים תשפ\"ב, הנגנים בכינור ובגיטרה.",
+     "year": "תשפ\"ב, 2021",
+     "text": "",
+     "kind": "video",
+     "group": ""
+    },
+    {
+     "web": "https://www.youtube-nocookie.com/embed/BZeqWyoJSmk",
+     "thumb": "https://i.ytimg.com/vi/BZeqWyoJSmk/hqdefault.jpg",
+     "file": "https://youtu.be/BZeqWyoJSmk",
+     "caption": "סרטון: מסיבת חתנים תשפ\"ב, נגינה וריקודים.",
+     "year": "תשפ\"ב, 2021",
+     "text": "",
+     "kind": "video",
      "group": ""
     },
     {
@@ -1322,6 +1362,16 @@
      "year": "י' כסלו תשפ\"ב, 14.11.2021",
      "text": "",
      "kind": "photo",
+     "group": ""
+    },
+    {
+     "web": "https://www.youtube-nocookie.com/embed/2EfRHbwGw8U",
+     "thumb": "https://i.ytimg.com/vi/2EfRHbwGw8U/hqdefault.jpg",
+     "file": "https://youtu.be/2EfRHbwGw8U",
+     "caption": "סרטון: הדלקת נר חנוכה בהיכל.",
+     "year": "חנוכה",
+     "text": "",
+     "kind": "video",
      "group": ""
     },
     {
