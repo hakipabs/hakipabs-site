@@ -100,7 +100,7 @@
    "cover": "gallery/peilut-vehartzaot/thumb/01.jpg",
    "description": "הרצאות ושיעורים בבית המדרש, ערבי שירה ונגינה, פעילויות לילדים ולנוער בחצר ובאולם: קהילה שלומדת ונפגשת, מגיל הגן ועד הוותיקים.",
    "when": "לאורך השנה, לכל הגילים",
-   "count": 8,
+   "count": 9,
    "photos": [
     {
      "web": "gallery/peilut-vehartzaot/web/01.jpg",
@@ -133,6 +133,10 @@
     {
      "web": "gallery/peilut-vehartzaot/web/09.jpg",
      "thumb": "gallery/peilut-vehartzaot/thumb/09.jpg"
+    },
+    {
+     "web": "gallery/peilut-vehartzaot/web/10.jpg",
+     "thumb": "gallery/peilut-vehartzaot/thumb/10.jpg"
     }
    ]
   },
