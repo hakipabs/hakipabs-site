@@ -608,7 +608,7 @@
    "description": "כשהתפילות התפצלו למניינים של עשרה, לחצר ולקפסולות, החליט ועד בית הכנסת דווקא אז לחדש את ההיכל: תקרה חדשה, תאורה חדשה וכיפת אור במרכזה. האוסף מביא את מסמכי התקופה (ההנחיות, מכתבי הרב והוועד, נוסחי התפילה המקוצרים, מפות הקפסולות) ואת רצף תמונות העבודות, מהפיגום הראשון בטבת תשפ\"א ועד חנוכת הבית המחודש ביום העצמאות תשפ\"א. פרטי קשר פרטיים הוסרו מהעותקים המפורסמים.",
    "contributor": "",
    "cover": "archive/korona-5780-5781/thumb/28-teura-20210319-093307.jpg",
-   "count": 46,
+   "count": 48,
    "items": [
     {
      "web": "archive/korona-5780-5781/web/00-siyum-hashas-5780.jpg",
@@ -756,6 +756,16 @@
      "file": "",
      "caption": "מניין הרחבה: ספר התורה על השולחן, ולידו עמדת נטילת הידיים, דלי וכוס.",
      "year": "סתיו תשפ\"א, 2020 (משוער)",
+     "text": "",
+     "kind": "photo",
+     "group": ""
+    },
+    {
+     "web": "archive/korona-5780-5781/web/07f-shiur-banot-bachatzer.jpg",
+     "thumb": "archive/korona-5780-5781/thumb/07f-shiur-banot-bachatzer.jpg",
+     "file": "",
+     "caption": "שיעור לבנות בחצר בית הכנסת, עם הרב דוד חדד שליט\"א. כולן במסכות.",
+     "year": "תקופת הקורונה (תאריך לא ידוע)",
      "text": "",
      "kind": "photo",
      "group": ""
@@ -1061,6 +1071,16 @@
      "group": "33-chanukat-habait-hamechudash-5781"
     },
     {
+     "web": "archive/korona-5780-5781/web/34-heichal-mechudash-gluya.jpg",
+     "thumb": "archive/korona-5780-5781/thumb/34-heichal-mechudash-gluya.jpg",
+     "file": "",
+     "caption": "ההיכל המחודש בגלויית ברכה לפסח מאת ריקי גרוזמן, האדריכלית של חידוש ההיכל.",
+     "year": "אחרי חידוש ההיכל (שנה לא ידועה)",
+     "text": "",
+     "kind": "photo",
+     "group": ""
+    },
+    {
      "web": "archive/korona-5780-5781/web/37-kitzur-tfilot-rosh-hashana-5782-p1.jpg",
      "thumb": "archive/korona-5780-5781/thumb/37-kitzur-tfilot-rosh-hashana-5782-p1.jpg",
      "file": "archive/korona-5780-5781/37-kitzur-tfilot-rosh-hashana-5782.pdf",
@@ -1073,6 +1093,148 @@
    ]
   },
   {
+   "slug": "arvei-limud",
+   "title": "ערבי לימוד בבית הכנסת",
+   "period": "תשפ\"ג, 2022-2023",
+   "year_sort": 2022,
+   "description": "ערבי לימוד בבית המדרש: ערבית, לימוד עצמי בחברותות ושיעור מפי רב אורח, עם פינת קפה וקוגל, ובית המדרש נשאר פתוח עד 23:00. כאן המודעות והתמונות מהערבים. מספרי הטלפון הוסרו מהמודעות המפורסמות. חסרים לנו תמונות ותאריכים מערבים נוספים: שלחו ל-vaad@hakipabs.org.",
+   "contributor": "",
+   "cover": "archive/arvei-limud/thumb/01-2022-11-30-ashkenazi-1.jpg",
+   "count": 13,
+   "items": [
+    {
+     "web": "archive/arvei-limud/web/01-2022-11-30-ashkenazi-1.jpg",
+     "thumb": "archive/arvei-limud/thumb/01-2022-11-30-ashkenazi-1.jpg",
+     "file": "",
+     "caption": "ערב לימוד וקוגל: שיחה מאת הרב שניאור אשכנזי שליט\"א בבית המדרש.",
+     "year": "ו' בכסלו תשפ\"ג, 30.11.2022",
+     "text": "",
+     "kind": "photo",
+     "group": ""
+    },
+    {
+     "web": "archive/arvei-limud/web/01-2022-11-30-ashkenazi-2.jpg",
+     "thumb": "archive/arvei-limud/thumb/01-2022-11-30-ashkenazi-2.jpg",
+     "file": "",
+     "caption": "הקהל בשיחת הרב שניאור אשכנזי שליט\"א.",
+     "year": "ו' בכסלו תשפ\"ג, 30.11.2022",
+     "text": "",
+     "kind": "photo",
+     "group": ""
+    },
+    {
+     "web": "archive/arvei-limud/web/01-2022-11-30-ashkenazi-3.jpg",
+     "thumb": "archive/arvei-limud/thumb/01-2022-11-30-ashkenazi-3.jpg",
+     "file": "",
+     "caption": "המשתתפים בבית המדרש.",
+     "year": "ו' בכסלו תשפ\"ג, 30.11.2022",
+     "text": "",
+     "kind": "photo",
+     "group": ""
+    },
+    {
+     "web": "archive/arvei-limud/web/01-2022-11-30-ashkenazi-4.jpg",
+     "thumb": "archive/arvei-limud/thumb/01-2022-11-30-ashkenazi-4.jpg",
+     "file": "",
+     "caption": "עזרת הנשים בערב הלימוד.",
+     "year": "ו' בכסלו תשפ\"ג, 30.11.2022",
+     "text": "",
+     "kind": "photo",
+     "group": ""
+    },
+    {
+     "web": "archive/arvei-limud/web/02-2023-01-26-modaa-auerbach.jpg",
+     "thumb": "archive/arvei-limud/thumb/02-2023-01-26-modaa-auerbach.jpg",
+     "file": "",
+     "caption": "מודעה: ערב לימוד עם הרב נתנאל אורבך ממכון התורה והארץ, על הלכות הקשורות לגינה ביתית, תרומות ומעשרות.",
+     "year": "ד' בשבט תשפ\"ג, 26.1.2023",
+     "text": "",
+     "kind": "photo",
+     "group": ""
+    },
+    {
+     "web": "archive/arvei-limud/web/03-2023-04-19-modaa-cohen.jpg",
+     "thumb": "archive/arvei-limud/thumb/03-2023-04-19-modaa-cohen.jpg",
+     "file": "",
+     "caption": "מודעה: ערב לימוד עם הרב שמעון כהן שליט\"א, לקראת יום העצמאות.",
+     "year": "כ\"ח בניסן תשפ\"ג, 19.4.2023",
+     "text": "",
+     "kind": "photo",
+     "group": ""
+    },
+    {
+     "web": "archive/arvei-limud/web/03a-2023-04-19-cohen-1.jpg",
+     "thumb": "archive/arvei-limud/thumb/03a-2023-04-19-cohen-1.jpg",
+     "file": "",
+     "caption": "ערב הלימוד לקראת יום העצמאות: הרב שמעון כהן שליט\"א.",
+     "year": "כ\"ח בניסן תשפ\"ג, 19.4.2023",
+     "text": "",
+     "kind": "photo",
+     "group": ""
+    },
+    {
+     "web": "archive/arvei-limud/web/03b-2023-04-19-cohen-2.jpg",
+     "thumb": "archive/arvei-limud/thumb/03b-2023-04-19-cohen-2.jpg",
+     "file": "",
+     "caption": "הקהל בשיעור של הרב שמעון כהן שליט\"א.",
+     "year": "כ\"ח בניסן תשפ\"ג, 19.4.2023",
+     "text": "",
+     "kind": "photo",
+     "group": ""
+    },
+    {
+     "web": "archive/arvei-limud/web/04-2023-07-04-modaa-turgeman.jpg",
+     "thumb": "archive/arvei-limud/thumb/04-2023-07-04-modaa-turgeman.jpg",
+     "file": "",
+     "caption": "מודעה: ערב לימוד עם הרב דוד תורג'מן שליט\"א, ראש ישיבת דימונה, בענייני י\"ז בתמוז.",
+     "year": "ט\"ו בתמוז תשפ\"ג, 4.7.2023",
+     "text": "",
+     "kind": "photo",
+     "group": ""
+    },
+    {
+     "web": "archive/arvei-limud/web/05-2023-08-31-modaa-deri.jpg",
+     "thumb": "archive/arvei-limud/thumb/05-2023-08-31-modaa-deri.jpg",
+     "file": "",
+     "caption": "מודעה: ערב לימוד עם הרב יהודה דרעי שליט\"א, רב העיר באר שבע.",
+     "year": "י\"ד באלול תשפ\"ג, 31.8.2023",
+     "text": "",
+     "kind": "photo",
+     "group": ""
+    },
+    {
+     "web": "archive/arvei-limud/web/10-abuhatzeira-1.jpg",
+     "thumb": "archive/arvei-limud/thumb/10-abuhatzeira-1.jpg",
+     "file": "",
+     "caption": "ערב לימוד עם הרב פנחס אבוחצירא שליט\"א.",
+     "year": "",
+     "text": "",
+     "kind": "photo",
+     "group": ""
+    },
+    {
+     "web": "archive/arvei-limud/web/11-abuhatzeira-2.jpg",
+     "thumb": "archive/arvei-limud/thumb/11-abuhatzeira-2.jpg",
+     "file": "",
+     "caption": "הרב פנחס אבוחצירא שליט\"א בשיעור.",
+     "year": "",
+     "text": "",
+     "kind": "photo",
+     "group": ""
+    },
+    {
+     "web": "archive/arvei-limud/web/12-harav-darshevitz.jpg",
+     "thumb": "archive/arvei-limud/thumb/12-harav-darshevitz.jpg",
+     "file": "",
+     "caption": "המרא דאתרא, הדיין הרב אהרון דרשביץ שליט\"א, נושא דברים בערב הלימוד.",
+     "year": "",
+     "text": "",
+     "kind": "photo",
+     "group": ""
+    }
+   ]
+  },
+  {
    "slug": "tarbut-vekehila",
    "title": "תרבות וקהילה",
    "period": "לאורך השנים",
@@ -1080,7 +1242,7 @@
    "description": "מה שלא נכנס לאוספים ההיסטוריים ועדיין מספר מי אנחנו: סיומי מסכת, פורים, הגעלת כלים לפני פסח, מסורות ושירה. האוסף גדל עם הסרטונים בערוץ היוטיוב של בית הכנסת ועם מה שתשלחו ל-vaad@hakipabs.org.",
    "contributor": "",
    "cover": "archive/tarbut-vekehila/thumb/11-siyum-masechet-1.jpg",
-   "count": 15,
+   "count": 24,
    "items": [
     {
      "web": "https://www.youtube-nocookie.com/embed/8OBb2mwhqR4",
@@ -1093,6 +1255,16 @@
      "group": ""
     },
     {
+     "web": "archive/tarbut-vekehila/web/00a-simchat-beit-hashoeva-5786.jpg",
+     "thumb": "archive/tarbut-vekehila/thumb/00a-simchat-beit-hashoeva-5786.jpg",
+     "file": "",
+     "caption": "שמחת בית השואבה וסיום מסכת בסוכה שבבית הרב אהרון דרשביץ שליט\"א: כינורות, גיטרה ובס, והקהל סביב.",
+     "year": "סוכות תשפ\"ו, 2025",
+     "text": "",
+     "kind": "photo",
+     "group": ""
+    },
+    {
      "web": "https://www.youtube-nocookie.com/embed/WH3zGVMBhv0",
      "thumb": "https://i.ytimg.com/vi/WH3zGVMBhv0/hqdefault.jpg",
      "file": "https://youtu.be/WH3zGVMBhv0",
@@ -1100,6 +1272,16 @@
      "year": "",
      "text": "",
      "kind": "video",
+     "group": ""
+    },
+    {
+     "web": "archive/tarbut-vekehila/web/05-hoshana-raba-5765.jpg",
+     "thumb": "archive/tarbut-vekehila/thumb/05-hoshana-raba-5765.jpg",
+     "file": "",
+     "caption": "הושענא רבה בהיכל כפי שנראה אז, עם הרב רבנשטיין זצ\"ל: ספרי התורה סביב הבימה, לולבים וערבות, ומאחור סורג המשושים.",
+     "year": "כ\"א בתשרי תשס\"ה, 6.10.2004 (לפי חותמת המצלמה)",
+     "text": "",
+     "kind": "photo",
      "group": ""
     },
     {
@@ -1193,6 +1375,26 @@
      "group": ""
     },
     {
+     "web": "archive/tarbut-vekehila/web/32-birkat-hailanot.jpg",
+     "thumb": "archive/tarbut-vekehila/thumb/32-birkat-hailanot.jpg",
+     "file": "",
+     "caption": "ברכת האילנות ב\"שדרת האילנות\": השלט שתלה בית הכנסת ליד עצי הפרי, ועליו נוסח הברכה לחודש ניסן.",
+     "year": "חודש ניסן",
+     "text": "",
+     "kind": "photo",
+     "group": ""
+    },
+    {
+     "web": "archive/tarbut-vekehila/web/35-yom-haatzmaut-5784-modaa.jpg",
+     "thumb": "archive/tarbut-vekehila/thumb/35-yom-haatzmaut-5784-modaa.jpg",
+     "file": "",
+     "caption": "מודעה: תפילת שחרית חגיגית ביום העצמאות ה-76, ואחריה תפילת הודיה והלל מוזיקלי עם הזמר אורי וורצמן ברחבת בית הכנסת, במעמד הרב שמעון הכהן, ראש מוסדות בית מוריה, והרב אהרון דרשביץ. בשיתוף חברת כיוונים, המחלקה לתרבות יהודית.",
+     "year": "ו' באייר תשפ\"ד, 14.5.2024",
+     "text": "",
+     "kind": "photo",
+     "group": ""
+    },
+    {
      "web": "https://www.youtube-nocookie.com/embed/vPJpyVDsYuM",
      "thumb": "https://i.ytimg.com/vi/vPJpyVDsYuM/hqdefault.jpg",
      "file": "https://youtu.be/vPJpyVDsYuM",
@@ -1230,6 +1432,56 @@
      "year": "",
      "text": "",
      "kind": "video",
+     "group": ""
+    },
+    {
+     "web": "archive/tarbut-vekehila/web/60-avot-uvanim-modaa.jpg",
+     "thumb": "archive/tarbut-vekehila/thumb/60-avot-uvanim-modaa.jpg",
+     "file": "",
+     "caption": "מודעה: \"אבות ובנים חוזר!\" עם המעבר לשעון חורף מתחדש לימוד מוצאי שבת: כל ילד וילדה מגיעים עם מבוגר ללמוד יחד שעה, עם פרסים והגרלות.",
+     "year": "",
+     "text": "",
+     "kind": "photo",
+     "group": ""
+    },
+    {
+     "web": "archive/tarbut-vekehila/web/61-avot-uvanim-beit-midrash.jpg",
+     "thumb": "archive/tarbut-vekehila/thumb/61-avot-uvanim-beit-midrash.jpg",
+     "file": "",
+     "caption": "הורים וילדים לומדים יחד בבית המדרש.",
+     "year": "",
+     "text": "",
+     "kind": "photo",
+     "group": ""
+    },
+    {
+     "web": "archive/tarbut-vekehila/web/62-beit-midrash-yeladim-modaa.jpg",
+     "thumb": "archive/tarbut-vekehila/thumb/62-beit-midrash-yeladim-modaa.jpg",
+     "file": "",
+     "caption": "מודעה: \"בית מדרש לילדים\" לכיתות ב'-ה', בימים ראשון עד שלישי: שיעור במידות, חברותות במשנה ושיעור מסכם. מספרי הטלפון הוסרו מהעותק המפורסם.",
+     "year": "מכ\"ב בטבת תשפ\"ג, 15.1.2023",
+     "text": "",
+     "kind": "photo",
+     "group": ""
+    },
+    {
+     "web": "archive/tarbut-vekehila/web/70-harav-darshevitz-baheichal.jpg",
+     "thumb": "archive/tarbut-vekehila/thumb/70-harav-darshevitz-baheichal.jpg",
+     "file": "",
+     "caption": "הדיין הרב אהרון דרשביץ שליט\"א, רב בית הכנסת, נושא דברים בהיכל.",
+     "year": "",
+     "text": "",
+     "kind": "photo",
+     "group": ""
+    },
+    {
+     "web": "archive/tarbut-vekehila/web/71-heichal-tfila.jpg",
+     "thumb": "archive/tarbut-vekehila/thumb/71-heichal-tfila.jpg",
+     "file": "",
+     "caption": "ההיכל בזמן תפילה, ומעליו כיפת האור.",
+     "year": "",
+     "text": "",
+     "kind": "photo",
      "group": ""
     }
    ]

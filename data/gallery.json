@@ -1,6 +1,33 @@
 {
  "albums": [
   {
+   "slug": "chanuka-leyeladim",
+   "title": "חנוכה לילדים",
+   "date": "2026-11-10",
+   "cover": "gallery/chanuka-leyeladim/thumb/01.jpg",
+   "description": "פעילות חנוכה לילדים: הדגמה ליד בית הבד בחצר, כתישה במכתש ועלי, והכנת נרות חרס סביב השולחנות בבית המדרש.",
+   "when": "חנוכה",
+   "count": 4,
+   "photos": [
+    {
+     "web": "gallery/chanuka-leyeladim/web/01.jpg",
+     "thumb": "gallery/chanuka-leyeladim/thumb/01.jpg"
+    },
+    {
+     "web": "gallery/chanuka-leyeladim/web/02.jpg",
+     "thumb": "gallery/chanuka-leyeladim/thumb/02.jpg"
+    },
+    {
+     "web": "gallery/chanuka-leyeladim/web/03.jpg",
+     "thumb": "gallery/chanuka-leyeladim/thumb/03.jpg"
+    },
+    {
+     "web": "gallery/chanuka-leyeladim/web/04.jpg",
+     "thumb": "gallery/chanuka-leyeladim/thumb/04.jpg"
+    }
+   ]
+  },
+  {
    "slug": "אורייתא",
    "title": "אורייתא",
    "date": "2026-10-18",
@@ -46,7 +73,7 @@
    "cover": "gallery/shuk-arbaat-haminim/thumb/02.jpg",
    "description": "שוק ארבעת המינים המסורתי בחצר הכיפה: אתרוגים, לולבים, הדסים וערבות, ובוחרים יחד, מבוגרים וילדים.",
    "when": "ערב סוכות, לאורך השנים",
-   "count": 3,
+   "count": 4,
    "photos": [
     {
      "web": "gallery/shuk-arbaat-haminim/web/01.jpg",
@@ -59,6 +86,10 @@
     {
      "web": "gallery/shuk-arbaat-haminim/web/03.jpg",
      "thumb": "gallery/shuk-arbaat-haminim/thumb/03.jpg"
+    },
+    {
+     "web": "gallery/shuk-arbaat-haminim/web/04.jpg",
+     "thumb": "gallery/shuk-arbaat-haminim/thumb/04.jpg"
     }
    ]
   },
@@ -69,7 +100,7 @@
    "cover": "gallery/peilut-vehartzaot/thumb/01.jpg",
    "description": "הרצאות ושיעורים בבית המדרש, ערבי שירה ונגינה, פעילויות לילדים ולנוער בחצר ובאולם: קהילה שלומדת ונפגשת, מגיל הגן ועד הוותיקים.",
    "when": "לאורך השנה, לכל הגילים",
-   "count": 5,
+   "count": 8,
    "photos": [
     {
      "web": "gallery/peilut-vehartzaot/web/01.jpg",
@@ -90,6 +121,18 @@
     {
      "web": "gallery/peilut-vehartzaot/web/06.jpg",
      "thumb": "gallery/peilut-vehartzaot/thumb/06.jpg"
+    },
+    {
+     "web": "gallery/peilut-vehartzaot/web/07.jpg",
+     "thumb": "gallery/peilut-vehartzaot/thumb/07.jpg"
+    },
+    {
+     "web": "gallery/peilut-vehartzaot/web/08.jpg",
+     "thumb": "gallery/peilut-vehartzaot/thumb/08.jpg"
+    },
+    {
+     "web": "gallery/peilut-vehartzaot/web/09.jpg",
+     "thumb": "gallery/peilut-vehartzaot/thumb/09.jpg"
     }
    ]
   },
@@ -117,9 +160,9 @@
    "title": "מסיבות חתנים",
    "date": "2021-10-30",
    "cover": "gallery/mesibat-chatanim/thumb/01.jpg",
-   "description": "מסורת הקהילה: במוצאי שבת פרשת נח, חתן תורה וחתן בראשית מזמינים את הקהל לסעודת מלווה מלכה חגיגית.",
+   "description": "מסורת הקהילה: במוצאי שבת פרשת נח, חתן תורה וחתן בראשית מזמינים את הקהל לסעודת מלווה מלכה חגיגית. בתמונות גם מסיבת תשפ\"ב, לכבוד החתנים הרב אבישי בן דוד ור' עמיטל בראלי, בהנחיית המנחה המיתולוגי דוד רוטלוי ז\"ל.",
    "when": "מוצאי שבת פרשת נח, לאורך השנים",
-   "count": 7,
+   "count": 12,
    "photos": [
     {
      "web": "gallery/mesibat-chatanim/web/01.jpg",
@@ -148,6 +191,26 @@
     {
      "web": "gallery/mesibat-chatanim/web/07.jpg",
      "thumb": "gallery/mesibat-chatanim/thumb/07.jpg"
+    },
+    {
+     "web": "gallery/mesibat-chatanim/web/08.jpg",
+     "thumb": "gallery/mesibat-chatanim/thumb/08.jpg"
+    },
+    {
+     "web": "gallery/mesibat-chatanim/web/09.jpg",
+     "thumb": "gallery/mesibat-chatanim/thumb/09.jpg"
+    },
+    {
+     "web": "gallery/mesibat-chatanim/web/10.jpg",
+     "thumb": "gallery/mesibat-chatanim/thumb/10.jpg"
+    },
+    {
+     "web": "gallery/mesibat-chatanim/web/11.jpg",
+     "thumb": "gallery/mesibat-chatanim/thumb/11.jpg"
+    },
+    {
+     "web": "gallery/mesibat-chatanim/web/12.jpg",
+     "thumb": "gallery/mesibat-chatanim/thumb/12.jpg"
     }
    ]
   },
