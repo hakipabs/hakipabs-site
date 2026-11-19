@@ -1,7 +1,7 @@
 /**
  * מהמייל של הוועד ישירות לאתר: הדף השבועי, לוחות חגים ואירועים, עם דוח במייל אחרי כל ריצה.
  *
- * רץ בתוך Google Apps Script של תיבת vaad@hakipabs.org, פעם בשעה, על מיילים מהשולחים המורשים (CONFIG.senders):
+ * רץ בתוך Google Apps Script של תיבת vaad@hakipabs.org, פעם בשעה, על מיילים מהשולחים המורשים (CONFIG.senders; אירועים גם מ-CONFIG.eventSenders):
  *   נושא שמתחיל ב"זמני השבוע" + PDF  -> weekly/        (זמני שבת, מנחה, זמני היום, מזל טוב מתעדכנים באתר)
  *   נושא שמתחיל ב"אירוע" + תמונה     -> images/events/ (כרטיס בבלוק "אירועים קרובים": פוסטר, כותרת, תאריך, טקסט)
  *   נושא שמכיל "אורייתא" + תמונה      -> אירוע של אותו יום (הפוסטר השבועי שמגיע מהקבוצה)
@@ -28,6 +28,7 @@
 
 const CONFIG = {
   senders: ['hakipa.zmanim@gmail.com', 'shmueltaub@gmail.com', 'reinerav@gmail.com'],   // מי רשאי לשלוח לאתר (זמנים, הוועד, אורייתא)
+  eventSenders: ['vaad@hakipabs.org'], // רשאים לשלוח אירועים בלבד (נושא "אירוע..." או "אורייתא" + תמונה). הדוחות של הסקריפט נשלחים מהתיבה הזו, לכן לא לכל הסוגים
   subjectPrefix: 'זמני השבוע',        // הדף השבועי -> weekly/
   archivePrefix: 'ארכיון',            // ארכיון: <שם האוסף> + תמונות/PDF -> archive/<שם>/ (נכנס כלא-מאושר עד אישור הוועד)
   archiveFolder: 'archive',
@@ -173,6 +174,16 @@ function runMain_() {
   const query = `from:(${CONFIG.senders.join(' OR ')}) newer_than:${CONFIG.lookbackDays}d -label:${CONFIG.label} (has:attachment OR subject:"${CONFIG.archivePrefix}" OR subject:"${CONFIG.albumPrefix}")`;
   const threads = GmailApp.search(query, 0, 10);
   Logger.log('query: %s -> %s thread(s)', query, threads.length);
+  // אירועים מהוועד: שאילתה נפרדת, רק נושא של אירוע/אורייתא עם קובץ מצורף
+  const evSenders = CONFIG.eventSenders || [];
+  const eventOnly = new Set();
+  if (evSenders.length) {
+    const kw = [CONFIG.eventPrefix].concat(CONFIG.eventKeywords).map(k => `subject:"${k}"`).join(' OR ');
+    const evQuery = `from:(${evSenders.join(' OR ')}) newer_than:${CONFIG.lookbackDays}d -label:${CONFIG.label} has:attachment (${kw})`;
+    const seen = new Set(threads.map(t => t.getId()));
+    GmailApp.search(evQuery, 0, 10).forEach(t => { if (!seen.has(t.getId())) { threads.push(t); eventOnly.add(t.getId()); } });
+    Logger.log('event query: %s -> %s thread(s)', evQuery, eventOnly.size);
+  }
   const uploads = [];
   if (RUNLOG_) { RUNLOG_.found = threads.length; RUNLOG_.uploads = uploads; }
   runDivreiTorah_(token, label, uploads);
@@ -185,6 +196,8 @@ function runMain_() {
       const msg = msgs[msgs.length - 1]; msgRef = msg;
       const subj = cleanSubject_(msg.getSubject());
       if (subj.startsWith(CONFIG.dvarPrefix)) return;   // דברי תורה מטופלים ב-runDivreiTorah_
+      const looksLikeEvent = subj.startsWith(CONFIG.eventPrefix) || CONFIG.eventKeywords.some(k => subj.includes(k));
+      if (eventOnly.has(thread.getId()) && !looksLikeEvent) { Logger.log('event-only sender, not an event: "%s"', subj); return; }
       const atts = msg.getAttachments();
       const pdf = atts.find(a => /\.pdf$/i.test(a.getName()) || a.getContentType() === 'application/pdf');
       const img = atts.find(a => /^image\/(jpeg|png|webp)$/i.test(a.getContentType()));
@@ -218,8 +231,7 @@ function runMain_() {
         return;
       }
 
-      const isEvent = subj.startsWith(CONFIG.eventPrefix) || CONFIG.eventKeywords.some(k => subj.includes(k));
-      if (isEvent) {
+      if (looksLikeEvent) {
         if (!img) { Logger.log('event without a poster image: "%s"', subj); note_(`אירוע בלי פוסטר: ${subj}`); thread.addLabel(label); return; }
         const ev = addEvent_(token, subj, msg.getPlainBody(), msg.getDate(), img);
         thread.addLabel(label);
@@ -471,7 +483,7 @@ function paragraphs_(body) {
 /** גוף המייל בלי כותרות של העברה (Forwarded message, From/Date/Subject/To, גם בעברית) ובלי ציטוטים. */
 function cleanBody_(body) {
   const HEADER = /^(from|date|subject|to|cc|sent|מאת|תאריך|נושא|אל|עותק)\s*:/i;
-  const FOOTER = /קיבלת הודעה זו|you received this message|googlegroups\.com|לביטול הרישום|unsubscribe/i;   // מכאן והלאה: שוליים של קבוצת גוגל
+  const FOOTER = /קיבלת הודעה זו|קיבלת את ההודעה הזו|you received this message|googlegroups\.com|לביטול הרישום|unsubscribe/i;   // מכאן והלאה: שוליים של קבוצת גוגל
   const raw = (body || '').split(/\r?\n/).map(l => l.replace(/[\u200e\u200f]/g, '').trim());
   const cut = raw.findIndex(l => FOOTER.test(l));
   const kept = cut >= 0 ? raw.slice(0, cut).concat([raw[cut].slice(0, raw[cut].search(FOOTER)).trim()]) : raw;   // מה שלפני השוליים באותה שורה נשמר
@@ -555,8 +567,10 @@ function addEvent_(token, subj, body, mailDate, img) {
   events = events.filter(e => e.poster !== poster);
   // אורייתא וכדומה: פוסטר שהועלה מוקדם (מוואטסאפ) והמייל הרגיל של אותו יום = אותו אירוע. החדש מחליף, לא מתווסף.
   const sameKw = e => e.date === dateStr && CONFIG.eventKeywords.some(k => (e.title || '').includes(k) || (e.poster || '').includes(k));
-  const prev = byKeyword ? events.find(sameKw) : null;               // מה שהועלה מוקדם (שעה/מקום שנכתבו ידנית) נשמר אם המייל החדש לא מביא אותם
-  if (byKeyword) events = events.filter(e => !sameKw(e));
+  // גם "אירוע: אורייתא 19.11" (עם הקידומת) מחליף את אורייתא של אותו יום, לא מוסיף כפילות. דף אורייתא מציג כל אירוע שבכותרת שלו "אורייתא"
+  const isKw = byKeyword || CONFIG.eventKeywords.some(k => title.includes(k));
+  const prev = isKw ? events.find(sameKw) : null;                    // מה שהועלה מוקדם (שעה/מקום שנכתבו ידנית) נשמר אם המייל החדש לא מביא אותם
+  if (isKw) events = events.filter(e => !sameKw(e));
   const entry = { title, date: dateStr, when: when || (prev && prev.when) || '', place: (prev && prev.place) || '', text: text || (prev && prev.text) || '', poster };
   events.push(entry);
   events.sort((a, b) => (a.date || '').localeCompare(b.date || ''));
